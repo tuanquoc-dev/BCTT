@@ -2,8 +2,11 @@ package be.security;
 
 import be.entity.User;
 import be.repository.UserRepository;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
+
+import java.util.stream.Collectors;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -18,16 +21,27 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException {
 
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() ->
-                        new UsernameNotFoundException("User not found with username: " + username)
-                );
+        User user = userRepository.findByUsernameWithRole(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        // ❗ Check account bị khóa
-        if (user.getStatus() != null && user.getStatus() == 0) {
+        if (user.getStatus() == 0) {
             throw new UsernameNotFoundException("Account is blocked");
         }
 
-        return new CustomUserDetails(user);
+        // 🔥 force load permissions
+        user.getRole().getPermissions().size();
+
+        var authorities = user.getRole().getPermissions().stream()
+                .map(p -> new SimpleGrantedAuthority(p.getCode()))
+                .collect(Collectors.toSet());
+
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole().getCode()));
+
+        return new CustomUserDetails(
+                user.getUsername(),
+                user.getPassword(),
+                true,
+                authorities
+        );
     }
 }

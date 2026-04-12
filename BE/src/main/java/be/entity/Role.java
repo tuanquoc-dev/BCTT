@@ -1,13 +1,14 @@
 package be.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
-@Data
+import java.util.HashSet;
+import java.util.Set;
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Getter
+@Setter
 @Entity
 @Table(name = "roles")
 @NoArgsConstructor
@@ -25,6 +26,14 @@ public class Role {
     // Mã vai trò (dùng cho security: ADMIN, STAFF, USER)
     @Column(length = 50, unique = true)
     private String code;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "role_permissions",
+            joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "permission_id")
+    )
+    private Set<Permission> permissions = new HashSet<>();
 
     @Column(name = "created_at",
             columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
