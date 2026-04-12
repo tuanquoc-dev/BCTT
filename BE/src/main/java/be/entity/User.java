@@ -1,13 +1,12 @@
 package be.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "users")
 @NoArgsConstructor
@@ -20,6 +19,9 @@ public class User {
 
     @Column(nullable = false)
     private String username;
+
+    @Column(name = "full_name")
+    private String fullName;
 
     // 🔗 FK role
     @ManyToOne
@@ -34,6 +36,8 @@ public class User {
 
     @Column(length = 255)
     private String avatar;
+
+    private LocalDate age; // ngày sinh
 
     @Column(length = 15)
     private String phone;

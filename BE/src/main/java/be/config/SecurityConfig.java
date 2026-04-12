@@ -4,11 +4,12 @@ import be.security.*;
 import org.springframework.context.annotation.*;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.*;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
+@EnableMethodSecurity
 @Configuration
 public class SecurityConfig {
 
@@ -31,14 +32,23 @@ public class SecurityConfig {
                 )
 
                 .authorizeHttpRequests(auth -> auth
-                        // public API
-                        .requestMatchers("/api/auth/**").permitAll()
+//                        // public API
+//                        .requestMatchers("/api/auth/**").permitAll()
+//
+//                        // ADMIN
+//                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+//
+//                        // STAFF
+//                        .requestMatchers("/api/auth/staff/**").hasAnyRole("ADMIN", "STAFF")
 
-                        // ADMIN
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                                // 🔥 phải đặt trước
+                                .requestMatchers("/api/auth/staff/**").hasAnyRole("ADMIN", "STAFF")
 
-                        // STAFF
-                        .requestMatchers("/api/auth/staff/**").hasAnyRole("ADMIN", "STAFF")
+                                // ADMIN
+                                .requestMatchers("/api/admin/**").hasRole("ADMIN")
+
+                                // public
+                                .requestMatchers("/api/auth/**").permitAll()
 
                         // tất cả request khác cần login
                         .anyRequest().authenticated()

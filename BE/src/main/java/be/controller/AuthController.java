@@ -57,7 +57,7 @@ public class AuthController {
     }
 
     @PostMapping("/staff/create-staff")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('CREATE_STAFF')")
     public ResponseEntity<ApiResponse<UserResponse>> createStaff(
             @Valid @RequestBody CreateStaffRequest request
     ) {

@@ -1,15 +1,17 @@
 package be.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
-@Data
+import java.util.HashSet;
+import java.util.Set;
+
+@Getter
+@Setter
 @Entity
 @Table(name = "permissions")
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -26,6 +28,9 @@ public class Permission {
     private String code;
 
     private String description;
+
+    @ManyToMany(mappedBy = "permissions")
+    private Set<Role> roles = new HashSet<>();
 
     @Column(name = "created_at",
             columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")

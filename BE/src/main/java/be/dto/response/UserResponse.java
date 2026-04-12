@@ -2,6 +2,8 @@ package be.dto.response;
 
 import lombok.*;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,4 +15,5 @@ public class UserResponse {
     private String phone;
     private String role;
     private Integer status;
+    private List<String> permissions;
 }

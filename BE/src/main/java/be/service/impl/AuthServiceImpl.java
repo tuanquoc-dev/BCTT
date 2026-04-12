@@ -4,18 +4,22 @@ import be.dto.request.CreateStaffRequest;
 import be.dto.request.LoginRequest;
 import be.dto.request.RegisterRequest;
 import be.dto.response.*;
+import be.entity.Permission;
 import be.entity.Role;
 import be.entity.User;
 import be.repository.RoleRepository;
 import be.repository.UserRepository;
+import be.security.CustomUserDetails;
 import be.security.JwtTokenProvider;
 import be.service.service.AuthService;
 import jakarta.annotation.PostConstruct;
 import org.springframework.security.authentication.*;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -38,29 +42,36 @@ public class AuthServiceImpl implements AuthService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    // 🔐 LOGIN
     @Override
     public LoginResponse login(LoginRequest request) {
 
-        // 🔥 xác thực
-        authenticationManager.authenticate(
+        Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getUsername(),
                         request.getPassword()
                 )
         );
 
-        // 🔥 lấy user từ DB
-        User user = userRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> new RuntimeException("User không tồn tại"));
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 
-        // 🔥 tạo token
-        String token = jwtTokenProvider.generateToken(user.getUsername());
+        String username = userDetails.getUsername();
+
+        User user = userRepository.findByUsernameWithRole(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+
+        List<String> permissions = user.getRole().getPermissions()
+                .stream()
+                .map(Permission::getCode)
+                .toList();
+
+        String token = jwtTokenProvider.generateToken(user);
 
         return LoginResponse.builder()
                 .token(token)
                 .username(user.getUsername())
                 .role(user.getRole().getCode())
+                .permissions(permissions)
                 .build();
     }
 
@@ -72,7 +83,9 @@ public class AuthServiceImpl implements AuthService {
             throw new RuntimeException("Password không khớp");
         }
 
-        if (userRepository.existsByUsername(request.getUsername())) {
+        String username = request.getUsername().trim();
+
+        if (userRepository.existsByUsername(username)) {
             throw new RuntimeException("Username đã tồn tại");
         }
 
@@ -80,13 +93,11 @@ public class AuthServiceImpl implements AuthService {
             throw new RuntimeException("Email đã tồn tại");
         }
 
-        // 🔥 lấy role CUSTOMER
         Role role = roleRepository.findByCode("CUSTOMER")
                 .orElseThrow(() -> new RuntimeException("Role CUSTOMER không tồn tại"));
 
-        // 🔥 tạo user
         User user = new User();
-        user.setUsername(request.getUsername());
+        user.setUsername(username);
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setPhone(request.getPhone());
@@ -97,12 +108,21 @@ public class AuthServiceImpl implements AuthService {
 
         userRepository.save(user);
 
+        // 🔥 map permissions từ role
+        List<String> permissions = role.getPermissions() == null
+                ? List.of()
+                : role.getPermissions()
+                .stream()
+                .map(Permission::getCode)
+                .toList();
+
         return UserResponse.builder()
                 .id(user.getId())
                 .username(user.getUsername())
                 .email(user.getEmail())
                 .phone(user.getPhone())
                 .role(role.getCode())
+                .permissions(permissions) // 🔥 thêm
                 .status(user.getStatus())
                 .build();
     }
@@ -110,7 +130,6 @@ public class AuthServiceImpl implements AuthService {
     // init Admin
     @PostConstruct
     public void initAdminAccount() {
-        // nếu đã có admin thì bỏ qua
         if (userRepository.existsByUsername("admin")) {
             return;
         }
@@ -128,13 +147,15 @@ public class AuthServiceImpl implements AuthService {
 
         userRepository.save(admin);
 
-        System.out.println("🔥 Admin mặc định đã được tạo!");
+        System.out.println("🔥 Admin created");
     }
 
     // create Staff
     public UserResponse createStaff(CreateStaffRequest request, String createdByUsername) {
 
-        if (userRepository.existsByUsername(request.getUsername())) {
+        String username = request.getUsername().trim().toLowerCase();
+
+        if (userRepository.existsByUsername(username)) {
             throw new RuntimeException("Username đã tồn tại");
         }
 
@@ -142,7 +163,6 @@ public class AuthServiceImpl implements AuthService {
             throw new RuntimeException("Email đã tồn tại");
         }
 
-        // 🔥 chỉ cho phép STAFF hoặc ADMIN
         if (!request.getRoleCode().equals("STAFF") && !request.getRoleCode().equals("ADMIN")) {
             throw new RuntimeException("Role không hợp lệ");
         }
@@ -154,7 +174,7 @@ public class AuthServiceImpl implements AuthService {
                 .orElseThrow(() -> new RuntimeException("Người tạo không tồn tại"));
 
         User user = new User();
-        user.setUsername(request.getUsername());
+        user.setUsername(username);
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setPhone(request.getPhone());
@@ -166,11 +186,20 @@ public class AuthServiceImpl implements AuthService {
 
         userRepository.save(user);
 
+        // 🔥 map permissions
+        List<String> permissions = role.getPermissions() == null
+                ? List.of()
+                : role.getPermissions()
+                .stream()
+                .map(Permission::getCode)
+                .toList();
+
         return UserResponse.builder()
                 .id(user.getId())
                 .username(user.getUsername())
                 .email(user.getEmail())
                 .role(role.getCode())
+                .permissions(permissions)
                 .status(user.getStatus())
                 .build();
     }
