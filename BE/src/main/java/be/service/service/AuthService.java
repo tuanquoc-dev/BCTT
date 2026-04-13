@@ -18,7 +18,7 @@ public interface AuthService {
     void forgotPassword(String email);
 
     void resetPassword(ResetPasswordRequest request);
-}
+
     Page<UserResponse> searchUsers(String keyword, int page, int size);
 
     UserResponse updateStatus(Integer userId, UserStatus status);

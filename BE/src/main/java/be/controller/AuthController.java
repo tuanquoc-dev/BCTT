@@ -107,6 +107,10 @@ public class AuthController {
                         .status(200)
                         .message("Nếu email tồn tại, chúng tôi đã gửi link reset")
                         .data(null)
+                        .build()
+        );
+    }
+
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<Page<UserResponse>>> getUsers(
@@ -138,6 +142,10 @@ public class AuthController {
                         .status(200)
                         .message("Reset mật khẩu thành công")
                         .data(null)
+                        .build()
+        );
+        }
+
     // 🔥 Block / Active user
     @PutMapping("/{id}/status")
     @PreAuthorize("hasRole('ADMIN')")

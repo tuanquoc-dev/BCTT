@@ -4,7 +4,6 @@ import be.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -35,7 +34,4 @@ WHERE u.username = :username
 """)
     Page<User> searchUsers(@Param("keyword") String keyword, Pageable pageable);
 
-//    @Modifying
-//    @Query("UPDATE User u SET u.status = :status WHERE u.id = :id")
-//    int updateUserStatus(@Param("id") Integer id, @Param("status") UserStatus status);
 }
