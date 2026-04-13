@@ -1,7 +1,9 @@
 package be.security;
 
 import be.entity.User;
+import be.enums.UserStatus;
 import be.repository.UserRepository;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
@@ -24,8 +26,8 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = userRepository.findByUsernameWithRole(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        if (user.getStatus() == 0) {
-            throw new UsernameNotFoundException("Account is blocked");
+        if (user.getStatus() == UserStatus.BLOCKED) {
+            throw new DisabledException("Account is blocked");
         }
 
         // 🔥 force load permissions

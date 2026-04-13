@@ -6,6 +6,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.*;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -27,30 +28,18 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
 
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint(entryPoint)
                 )
 
                 .authorizeHttpRequests(auth -> auth
-//                        // public API
-//                        .requestMatchers("/api/auth/**").permitAll()
-//
-//                        // ADMIN
-//                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
-//
-//                        // STAFF
-//                        .requestMatchers("/api/auth/staff/**").hasAnyRole("ADMIN", "STAFF")
-
-                                // 🔥 phải đặt trước
-                                .requestMatchers("/api/auth/staff/**").hasAnyRole("ADMIN", "STAFF")
-
-                                // ADMIN
-                                .requestMatchers("/api/admin/**").hasRole("ADMIN")
-
-                                // public
-                                .requestMatchers("/api/auth/**").permitAll()
-
-                        // tất cả request khác cần login
+                        .requestMatchers("/api/auth/staff/**").hasAnyRole("ADMIN", "STAFF")
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/auth/**").permitAll()
                         .anyRequest().authenticated()
                 )
 
