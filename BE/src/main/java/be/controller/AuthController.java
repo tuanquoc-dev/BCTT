@@ -4,8 +4,10 @@ import be.dto.request.*;
 import be.dto.response.ApiResponse;
 import be.dto.response.LoginResponse;
 import be.dto.response.UserResponse;
+import be.enums.UserStatus;
 import be.service.service.AuthService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -32,7 +34,7 @@ public class AuthController {
         return ResponseEntity.ok(
                 ApiResponse.<LoginResponse>builder()
                         .status(200)
-                        .message("Login successful")
+                        .message("Đăng nhập thành công")
                         .data(loginResponse)
                         .build()
         );
@@ -48,7 +50,7 @@ public class AuthController {
         return ResponseEntity.ok(
                 ApiResponse.<UserResponse>builder()
                         .status(200)
-                        .message("Register successful")
+                        .message("Đăng kí thành công")
                         .data(userResponse)
                         .build()
         );
@@ -105,6 +107,21 @@ public class AuthController {
                         .status(200)
                         .message("Nếu email tồn tại, chúng tôi đã gửi link reset")
                         .data(null)
+    @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<Page<UserResponse>>> getUsers(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+
+        Page<UserResponse> result = authService.searchUsers(keyword, page, size);
+
+        return ResponseEntity.ok(
+                ApiResponse.<Page<UserResponse>>builder()
+                        .status(200)
+                        .message("Lấy danh sách user thành công")
+                        .data(result)
                         .build()
         );
     }
@@ -121,6 +138,21 @@ public class AuthController {
                         .status(200)
                         .message("Reset mật khẩu thành công")
                         .data(null)
+    // 🔥 Block / Active user
+    @PutMapping("/{id}/status")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<UserResponse>> updateStatus(
+            @PathVariable Integer id,
+            @RequestParam UserStatus status
+    ) {
+
+        UserResponse response = authService.updateStatus(id, status);
+
+        return ResponseEntity.ok(
+                ApiResponse.<UserResponse>builder()
+                        .status(200)
+                        .message("Cập nhật trạng thái thành công")
+                        .data(response)
                         .build()
         );
     }

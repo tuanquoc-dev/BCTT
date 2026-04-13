@@ -1,5 +1,6 @@
 package be.entity;
 
+import be.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -48,8 +49,9 @@ public class User {
     private Integer createdBy;
     private Integer updatedBy;
 
-    @Column(columnDefinition = "TINYINT DEFAULT 1")
-    private Integer status;
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20)
+    private UserStatus status;
 
     @Column(name = "created_at", updatable = false,
             columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")

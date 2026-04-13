@@ -7,6 +7,7 @@ import be.entity.Permission;
 import be.entity.Role;
 import be.entity.User;
 import be.repository.PasswordResetTokenRepository;
+import be.enums.UserStatus;
 import be.repository.RoleRepository;
 import be.repository.UserRepository;
 import be.security.CustomUserDetails;
@@ -14,6 +15,10 @@ import be.security.JwtTokenProvider;
 import be.service.EmailService;
 import be.service.service.AuthService;
 import jakarta.annotation.PostConstruct;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -109,7 +114,7 @@ public class AuthServiceImpl implements AuthService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setPhone(request.getPhone());
         user.setAddress(request.getAddress());
-        user.setStatus(1);
+        user.setStatus(UserStatus.ACTIVE);
         user.setRole(role);
         user.setCreatedAt(LocalDateTime.now());
 
@@ -149,7 +154,7 @@ public class AuthServiceImpl implements AuthService {
         admin.setEmail("admin@gmail.com");
         admin.setPassword(passwordEncoder.encode("123456"));
         admin.setRole(adminRole);
-        admin.setStatus(1);
+        admin.setStatus(UserStatus.ACTIVE);
         admin.setCreatedAt(LocalDateTime.now());
 
         userRepository.save(admin);
@@ -187,7 +192,7 @@ public class AuthServiceImpl implements AuthService {
         user.setPhone(request.getPhone());
         user.setAddress(request.getAddress());
         user.setRole(role);
-        user.setStatus(1);
+        user.setStatus(UserStatus.ACTIVE);
         user.setCreatedBy(creator.getId());
         user.setCreatedAt(LocalDateTime.now());
 
@@ -282,5 +287,49 @@ public class AuthServiceImpl implements AuthService {
 
         // 🔥 xóa token sau khi dùng
         tokenRepository.delete(token);
+    // searchUser
+    public Page<UserResponse> searchUsers(String keyword, int page, int size) {
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+
+        Page<User> users = userRepository.searchUsers(keyword, pageable);
+
+        return users.map(user -> UserResponse.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .fullName(user.getFullName())
+                .email(user.getEmail())
+                .phone(user.getPhone())
+                .role(user.getRole() != null ? user.getRole().getCode() : null)
+                .status(user.getStatus())
+                .build()
+        );
+    }
+
+    //
+    @Override
+    public UserResponse updateStatus(Integer userId, UserStatus status) {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User không tồn tại"));
+
+        user.setStatus(status);
+        userRepository.save(user);
+
+        List<String> permissions = user.getRole() == null || user.getRole().getPermissions() == null
+                ? List.of()
+                : user.getRole().getPermissions()
+                .stream()
+                .map(Permission::getCode)
+                .toList();
+
+        return UserResponse.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .role(user.getRole() != null ? user.getRole().getCode() : null)
+                .status(user.getStatus())
+                .permissions(permissions)
+                .build();
     }
 }
