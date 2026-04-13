@@ -25,6 +25,7 @@ WHERE u.username = :username
 """)
     Optional<User> findByUsernameWithRole(String username);
 
+    Optional<User> findByEmail(String email);
     @Query("""
     SELECT u FROM User u
     WHERE (:keyword IS NULL OR 
