@@ -1,8 +1,6 @@
 package be.controller;
 
-import be.dto.request.CreateStaffRequest;
-import be.dto.request.LoginRequest;
-import be.dto.request.RegisterRequest;
+import be.dto.request.*;
 import be.dto.response.ApiResponse;
 import be.dto.response.LoginResponse;
 import be.dto.response.UserResponse;
@@ -72,6 +70,57 @@ public class AuthController {
                         .status(200)
                         .message("Tạo tài khoản thành công")
                         .data(response)
+                        .build()
+        );
+    }
+
+    @PutMapping("/change-password")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<ApiResponse<String>> changePassword(
+            @RequestBody ChangePasswordRequest request
+    ) {
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        authService.changePassword(username, request);
+
+        return ResponseEntity.ok(
+                ApiResponse.<String>builder()
+                        .status(200)
+                        .message("Đổi mật khẩu thành công")
+                        .data(null)
+                        .build()
+        );
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<ApiResponse<String>> forgotPassword(
+            @RequestBody ForgotPasswordRequest request
+    ) {
+
+        authService.forgotPassword(request.getEmail());
+
+        return ResponseEntity.ok(
+                ApiResponse.<String>builder()
+                        .status(200)
+                        .message("Nếu email tồn tại, chúng tôi đã gửi link reset")
+                        .data(null)
+                        .build()
+        );
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<ApiResponse<String>> resetPassword(
+            @RequestBody ResetPasswordRequest request
+    ) {
+
+        authService.resetPassword(request);
+
+        return ResponseEntity.ok(
+                ApiResponse.<String>builder()
+                        .status(200)
+                        .message("Reset mật khẩu thành công")
+                        .data(null)
                         .build()
         );
     }

@@ -1,8 +1,6 @@
 package be.service.service;
 
-import be.dto.request.CreateStaffRequest;
-import be.dto.request.LoginRequest;
-import be.dto.request.RegisterRequest;
+import be.dto.request.*;
 import be.dto.response.LoginResponse;
 import be.dto.response.UserResponse;
 
@@ -12,4 +10,10 @@ public interface AuthService {
     UserResponse register(RegisterRequest request);
 
     UserResponse createStaff(CreateStaffRequest request, String username);
+
+    void changePassword(String username, ChangePasswordRequest request);
+
+    void forgotPassword(String email);
+
+    void resetPassword(ResetPasswordRequest request);
 }

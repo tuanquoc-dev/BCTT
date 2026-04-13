@@ -20,4 +20,6 @@ LEFT JOIN FETCH r.permissions
 WHERE u.username = :username
 """)
     Optional<User> findByUsernameWithRole(String username);
+
+    Optional<User> findByEmail(String email);
 }
