@@ -2,11 +2,9 @@ package be.service.impl;
 
 import be.dto.request.*;
 import be.dto.response.*;
-import be.entity.PasswordResetToken;
 import be.entity.Permission;
 import be.entity.Role;
 import be.entity.User;
-import be.repository.PasswordResetTokenRepository;
 import be.enums.UserStatus;
 import be.repository.RoleRepository;
 import be.repository.UserRepository;
@@ -14,6 +12,8 @@ import be.security.CustomUserDetails;
 import be.security.JwtTokenProvider;
 import be.service.EmailService;
 import be.service.service.AuthService;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import jakarta.annotation.PostConstruct;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,7 +27,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -37,20 +36,18 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
-    private final PasswordResetTokenRepository tokenRepository;
     private final EmailService emailService;
 
     public AuthServiceImpl(AuthenticationManager authenticationManager,
                            JwtTokenProvider jwtTokenProvider,
                            UserRepository userRepository,
                            RoleRepository roleRepository,
-                           PasswordEncoder passwordEncoder, PasswordResetTokenRepository tokenRepository, EmailService emailService) {
+                           PasswordEncoder passwordEncoder, EmailService emailService) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
-        this.tokenRepository = tokenRepository;
         this.emailService = emailService;
     }
 
@@ -237,26 +234,15 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void forgotPassword(String email) {
 
-        // 🔥 không leak info
         Optional<User> optionalUser = userRepository.findByEmail(email);
 
         if (optionalUser.isEmpty()) {
-            return; // silent
+            return; // 🔥 không leak info
         }
 
         User user = optionalUser.get();
 
-        // 🔥 xóa token cũ
-        tokenRepository.deleteByUser(user);
-
-        String token = UUID.randomUUID().toString();
-
-        PasswordResetToken resetToken = new PasswordResetToken();
-        resetToken.setToken(token);
-        resetToken.setUser(user);
-        resetToken.setExpiryDate(LocalDateTime.now().plusMinutes(15));
-
-        tokenRepository.save(resetToken);
+        String token = jwtTokenProvider.generateResetToken(user.getEmail());
 
         String link = "http://localhost:3000/reset-password?token=" + token;
 
@@ -270,24 +256,25 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void resetPassword(ResetPasswordRequest request) {
 
-        PasswordResetToken token = tokenRepository.findByToken(request.getToken())
-                .orElseThrow(() -> new RuntimeException("Token không hợp lệ"));
+        try {
+            // 🔥 validate token
+            jwtTokenProvider.validateResetToken(request.getToken());
 
-        // 🔥 check expire
-        if (token.getExpiryDate().isBefore(LocalDateTime.now())) {
+            String email = jwtTokenProvider.getEmailFromToken(request.getToken());
+
+            User user = userRepository.findByEmail(email)
+                    .orElseThrow(() -> new RuntimeException("User không tồn tại"));
+
+            user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+            user.setUpdatedAt(LocalDateTime.now());
+
+            userRepository.save(user);
+
+        } catch (ExpiredJwtException e) {
             throw new RuntimeException("Token đã hết hạn");
+        } catch (JwtException e) {
+            throw new RuntimeException("Token không hợp lệ");
         }
-
-        User user = token.getUser();
-
-        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
-        user.setUpdatedAt(LocalDateTime.now());
-
-        userRepository.save(user);
-
-        // 🔥 xóa token sau khi dùng
-        tokenRepository.delete(token);
-
     }
     // searchUser
     public Page<UserResponse> searchUsers(String keyword, int page, int size) {
