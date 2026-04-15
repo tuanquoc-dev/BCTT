@@ -5,6 +5,7 @@ import be.dto.response.LoginResponse;
 import be.dto.response.UserResponse;
 import be.enums.UserStatus;
 import org.springframework.data.domain.Page;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface AuthService {
     LoginResponse login(LoginRequest request);
@@ -22,4 +23,8 @@ public interface AuthService {
     Page<UserResponse> searchUsers(String keyword, int page, int size);
 
     UserResponse updateStatus(Integer userId, UserStatus status);
+
+    UserResponse updateUserByAdmin(Integer id, UpdateProfileRequest request);
+
+    UserResponse updateProfile(String username, UpdateProfileRequest request, MultipartFile file);
 }

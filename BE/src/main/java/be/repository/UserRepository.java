@@ -27,11 +27,16 @@ WHERE u.username = :username
     Optional<User> findByEmail(String email);
     @Query("""
     SELECT u FROM User u
-    WHERE (:keyword IS NULL OR 
-           LOWER(u.username) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
-           LOWER(u.fullName) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
-           LOWER(u.email) LIKE LOWER(CONCAT('%', :keyword, '%')))
+    WHERE 
+        (:roleCode IS NULL OR u.role.code = :roleCode)
+    AND
+        (:keyword IS NULL OR 
+         LOWER(u.username) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
+         LOWER(u.fullName) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
+         LOWER(u.email) LIKE LOWER(CONCAT('%', :keyword, '%')))
 """)
-    Page<User> searchUsers(@Param("keyword") String keyword, Pageable pageable);
+    Page<User> searchUsers(@Param("keyword") String keyword,
+                           @Param("roleCode") String roleCode,
+                           Pageable pageable);
 
 }

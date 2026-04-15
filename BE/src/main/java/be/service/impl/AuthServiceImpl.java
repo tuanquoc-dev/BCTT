@@ -10,6 +10,7 @@ import be.repository.RoleRepository;
 import be.repository.UserRepository;
 import be.security.CustomUserDetails;
 import be.security.JwtTokenProvider;
+import be.service.CloudinaryService;
 import be.service.EmailService;
 import be.service.service.AuthService;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -21,8 +22,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -37,18 +40,20 @@ public class AuthServiceImpl implements AuthService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
+    private final CloudinaryService cloudinaryService;
 
     public AuthServiceImpl(AuthenticationManager authenticationManager,
                            JwtTokenProvider jwtTokenProvider,
                            UserRepository userRepository,
                            RoleRepository roleRepository,
-                           PasswordEncoder passwordEncoder, EmailService emailService) {
+                           PasswordEncoder passwordEncoder, EmailService emailService, CloudinaryService cloudinaryService) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.emailService = emailService;
+        this.cloudinaryService = cloudinaryService;
     }
 
     @Override
@@ -281,7 +286,17 @@ public class AuthServiceImpl implements AuthService {
 
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
 
-        Page<User> users = userRepository.searchUsers(keyword, pageable);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        String username = auth.getName(); // 🔥 lấy username
+
+        boolean isAdmin = auth.getAuthorities()
+                .stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+        String roleCode = isAdmin ? null : "CUSTOMER";
+
+        Page<User> users = userRepository.searchUsers(keyword, roleCode, pageable);
 
         return users.map(user -> UserResponse.builder()
                 .id(user.getId())
@@ -295,7 +310,7 @@ public class AuthServiceImpl implements AuthService {
         );
     }
 
-    //
+    // update status
     @Override
     public UserResponse updateStatus(Integer userId, UserStatus status) {
 
@@ -319,6 +334,64 @@ public class AuthServiceImpl implements AuthService {
                 .role(user.getRole() != null ? user.getRole().getCode() : null)
                 .status(user.getStatus())
                 .permissions(permissions)
+                .build();
+    }
+
+    // User update
+    @Override
+    public UserResponse updateProfile(String username,
+                                      UpdateProfileRequest request,
+                                      MultipartFile file) {
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User không tồn tại"));
+
+        user.setFullName(request.getFullName());
+        user.setPhone(request.getPhone());
+        user.setAddress(request.getAddress());
+        user.setAge(request.getAge());
+
+        // 🔥 upload avatar
+        if (file != null && !file.isEmpty()) {
+            String url = cloudinaryService.upload(file);
+            user.setAvatar(url);
+        }
+
+        user.setUpdatedAt(LocalDateTime.now());
+
+        userRepository.save(user);
+
+        return UserResponse.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .role(user.getRole() != null ? user.getRole().getCode() : null)
+                .status(user.getStatus())
+                .build();
+    }
+
+    // admin update user
+    @Override
+    public UserResponse updateUserByAdmin(Integer id, UpdateProfileRequest request) {
+
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User không tồn tại"));
+
+        user.setFullName(request.getFullName());
+        user.setPhone(request.getPhone());
+        user.setAddress(request.getAddress());
+        user.setAge(request.getAge());
+
+        user.setUpdatedAt(LocalDateTime.now());
+
+        userRepository.save(user);
+
+        return UserResponse.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .role(user.getRole() != null ? user.getRole().getCode() : null)
+                .status(user.getStatus())
                 .build();
     }
 }
