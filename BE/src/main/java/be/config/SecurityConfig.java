@@ -16,10 +16,14 @@ public class SecurityConfig {
 
     private final JwtAuthenticationEntryPoint entryPoint;
     private final JwtAuthenticationFilter filter;
+    private final OAuth2SuccessHandler oAuth2SuccessHandler;
 
-    public SecurityConfig(JwtAuthenticationEntryPoint entryPoint, JwtAuthenticationFilter filter) {
+    public SecurityConfig(JwtAuthenticationEntryPoint entryPoint,
+                          JwtAuthenticationFilter filter,
+                          OAuth2SuccessHandler oAuth2SuccessHandler) {
         this.entryPoint = entryPoint;
         this.filter = filter;
+        this.oAuth2SuccessHandler = oAuth2SuccessHandler;
     }
 
     @Bean
@@ -27,6 +31,7 @@ public class SecurityConfig {
 
         http
                 .csrf(csrf -> csrf.disable())
+
 
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -37,10 +42,17 @@ public class SecurityConfig {
                 )
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/staff/**").hasAnyRole("ADMIN", "STAFF")
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/auth/**", "/oauth2/**").permitAll()
+
+                        .requestMatchers("/api/admin/**").hasAnyRole("ADMIN", "STAFF")
+
+                        .requestMatchers("/api/users/**").authenticated()
+
                         .anyRequest().authenticated()
+                )
+
+                .oauth2Login(oauth -> oauth
+                        .successHandler(oAuth2SuccessHandler) 
                 )
 
                 // 🔥 add JWT filter

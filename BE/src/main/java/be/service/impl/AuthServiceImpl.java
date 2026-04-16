@@ -79,7 +79,11 @@ public class AuthServiceImpl implements AuthService {
                 .map(Permission::getCode)
                 .toList();
 
-        String token = jwtTokenProvider.generateToken(user);
+        String token = jwtTokenProvider.generateToken(
+                user.getUsername(),
+                user.getRole().getCode(),
+                permissions
+        );
 
         return LoginResponse.builder()
                 .token(token)
@@ -164,78 +168,6 @@ public class AuthServiceImpl implements AuthService {
         System.out.println("🔥 Admin created");
     }
 
-    // create Staff
-    public UserResponse createStaff(CreateStaffRequest request, String createdByUsername) {
-
-        String username = request.getUsername().trim().toLowerCase();
-
-        if (userRepository.existsByUsername(username)) {
-            throw new RuntimeException("Username đã tồn tại");
-        }
-
-        if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Email đã tồn tại");
-        }
-
-        if (!request.getRoleCode().equals("STAFF") && !request.getRoleCode().equals("ADMIN")) {
-            throw new RuntimeException("Role không hợp lệ");
-        }
-
-        Role role = roleRepository.findByCode(request.getRoleCode())
-                .orElseThrow(() -> new RuntimeException("Role không tồn tại"));
-
-        User creator = userRepository.findByUsername(createdByUsername)
-                .orElseThrow(() -> new RuntimeException("Người tạo không tồn tại"));
-
-        User user = new User();
-        user.setUsername(username);
-        user.setEmail(request.getEmail());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setPhone(request.getPhone());
-        user.setAddress(request.getAddress());
-        user.setRole(role);
-        user.setStatus(UserStatus.ACTIVE);
-        user.setCreatedBy(creator.getId());
-        user.setCreatedAt(LocalDateTime.now());
-
-        userRepository.save(user);
-
-        // 🔥 map permissions
-        List<String> permissions = role.getPermissions() == null
-                ? List.of()
-                : role.getPermissions()
-                .stream()
-                .map(Permission::getCode)
-                .toList();
-
-        return UserResponse.builder()
-                .id(user.getId())
-                .username(user.getUsername())
-                .email(user.getEmail())
-                .role(role.getCode())
-                .permissions(permissions)
-                .status(user.getStatus())
-                .build();
-    }
-
-    @Override
-    public void changePassword(String username, ChangePasswordRequest request) {
-
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User không tồn tại"));
-
-        // 🔥 check mật khẩu cũ
-        if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
-            throw new RuntimeException("Mật khẩu cũ không đúng");
-        }
-
-        // 🔥 set mật khẩu mới
-        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
-        user.setUpdatedAt(LocalDateTime.now());
-
-        userRepository.save(user);
-    }
-
     @Override
     public void forgotPassword(String email) {
 
@@ -281,117 +213,5 @@ public class AuthServiceImpl implements AuthService {
             throw new RuntimeException("Token không hợp lệ");
         }
     }
-    // searchUser
-    public Page<UserResponse> searchUsers(String keyword, int page, int size) {
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
-
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-        String username = auth.getName(); // 🔥 lấy username
-
-        boolean isAdmin = auth.getAuthorities()
-                .stream()
-                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
-
-        String roleCode = isAdmin ? null : "CUSTOMER";
-
-        Page<User> users = userRepository.searchUsers(keyword, roleCode, pageable);
-
-        return users.map(user -> UserResponse.builder()
-                .id(user.getId())
-                .username(user.getUsername())
-                .fullName(user.getFullName())
-                .email(user.getEmail())
-                .phone(user.getPhone())
-                .role(user.getRole() != null ? user.getRole().getCode() : null)
-                .status(user.getStatus())
-                .build()
-        );
-    }
-
-    // update status
-    @Override
-    public UserResponse updateStatus(Integer userId, UserStatus status) {
-
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User không tồn tại"));
-
-        user.setStatus(status);
-        userRepository.save(user);
-
-        List<String> permissions = user.getRole() == null || user.getRole().getPermissions() == null
-                ? List.of()
-                : user.getRole().getPermissions()
-                .stream()
-                .map(Permission::getCode)
-                .toList();
-
-        return UserResponse.builder()
-                .id(user.getId())
-                .username(user.getUsername())
-                .email(user.getEmail())
-                .role(user.getRole() != null ? user.getRole().getCode() : null)
-                .status(user.getStatus())
-                .permissions(permissions)
-                .build();
-    }
-
-    // User update
-    @Override
-    public UserResponse updateProfile(String username,
-                                      UpdateProfileRequest request,
-                                      MultipartFile file) {
-
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User không tồn tại"));
-
-        user.setFullName(request.getFullName());
-        user.setPhone(request.getPhone());
-        user.setAddress(request.getAddress());
-        user.setAge(request.getAge());
-
-        // 🔥 upload avatar
-        if (file != null && !file.isEmpty()) {
-            String url = cloudinaryService.upload(file);
-            user.setAvatar(url);
-        }
-
-        user.setUpdatedAt(LocalDateTime.now());
-
-        userRepository.save(user);
-
-        return UserResponse.builder()
-                .id(user.getId())
-                .username(user.getUsername())
-                .email(user.getEmail())
-                .role(user.getRole() != null ? user.getRole().getCode() : null)
-                .status(user.getStatus())
-                .build();
-    }
-
-    // admin update user
-    @Override
-    public UserResponse updateUserByAdmin(Integer id, UpdateProfileRequest request) {
-
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User không tồn tại"));
-
-        user.setFullName(request.getFullName());
-        user.setPhone(request.getPhone());
-        user.setAddress(request.getAddress());
-        user.setAge(request.getAge());
-
-        user.setUpdatedAt(LocalDateTime.now());
-
-        userRepository.save(user);
-
-        return UserResponse.builder()
-                .id(user.getId())
-                .username(user.getUsername())
-                .email(user.getEmail())
-                .role(user.getRole() != null ? user.getRole().getCode() : null)
-                .status(user.getStatus())
-                .build();
-    }
 }
