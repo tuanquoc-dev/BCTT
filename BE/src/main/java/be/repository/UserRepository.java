@@ -16,27 +16,37 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     boolean existsByUsername(String username);
 
     boolean existsByEmail(String email);
+
     @Query("""
-SELECT u FROM User u
-JOIN FETCH u.role r
-LEFT JOIN FETCH r.permissions
-WHERE u.username = :username
+    SELECT DISTINCT u FROM User u
+    JOIN FETCH u.role r
+    LEFT JOIN FETCH r.permissions
+    WHERE u.username = :username
 """)
     Optional<User> findByUsernameWithRole(String username);
 
     Optional<User> findByEmail(String email);
+
     @Query("""
-    SELECT u FROM User u
-    WHERE 
-        (:roleCode IS NULL OR u.role.code = :roleCode)
-    AND
-        (:keyword IS NULL OR 
-         LOWER(u.username) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
-         LOWER(u.fullName) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
-         LOWER(u.email) LIKE LOWER(CONCAT('%', :keyword, '%')))
-""")
+                SELECT u FROM User u
+                WHERE 
+                    (:roleCode IS NULL OR u.role.code = :roleCode)
+                AND
+                    (:keyword IS NULL OR 
+                     LOWER(u.username) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
+                     LOWER(u.fullName) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
+                     LOWER(u.email) LIKE LOWER(CONCAT('%', :keyword, '%')))
+            """)
     Page<User> searchUsers(@Param("keyword") String keyword,
                            @Param("roleCode") String roleCode,
                            Pageable pageable);
+
+    @Query("""
+    SELECT DISTINCT u FROM User u
+    JOIN FETCH u.role r
+    LEFT JOIN FETCH r.permissions
+    WHERE u.email = :email
+""")
+    Optional<User> findByEmailWithRoleAndPermissions(String email);
 
 }

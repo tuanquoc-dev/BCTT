@@ -12,19 +12,8 @@ public interface AuthService {
 
     UserResponse register(RegisterRequest request);
 
-    UserResponse createStaff(CreateStaffRequest request, String username);
-
-    void changePassword(String username, ChangePasswordRequest request);
-
     void forgotPassword(String email);
 
     void resetPassword(ResetPasswordRequest request);
 
-    Page<UserResponse> searchUsers(String keyword, int page, int size);
-
-    UserResponse updateStatus(Integer userId, UserStatus status);
-
-    UserResponse updateUserByAdmin(Integer id, UpdateProfileRequest request);
-
-    UserResponse updateProfile(String username, UpdateProfileRequest request, MultipartFile file);
 }

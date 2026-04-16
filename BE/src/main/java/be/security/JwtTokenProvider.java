@@ -21,19 +21,14 @@ public class JwtTokenProvider {
         return Keys.hmacShaKeyFor(JWT_SECRET.getBytes());
     }
 
-    public String generateToken(User user) {
+    public String generateToken(String username, String role, List<String> permissions) {
 
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + JWT_EXPIRATION);
 
-        List<String> permissions = user.getRole().getPermissions()
-                .stream()
-                .map(Permission::getCode)
-                .toList();
-
         return Jwts.builder()
-                .setSubject(user.getUsername())
-                .claim("role", user.getRole().getCode())
+                .setSubject(username)
+                .claim("role", role)
                 .claim("permissions", permissions)
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
