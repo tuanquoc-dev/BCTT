@@ -4,6 +4,8 @@ import be.dto.request.ChangePasswordRequest;
 import be.dto.request.UpdateProfileRequest;
 import be.dto.response.UserResponse;
 import be.entity.User;
+import be.exception.AppException;
+import be.exception.ErrorCode;
 import be.repository.UserRepository;
 import be.service.CloudinaryService;
 import be.service.service.UserService;
@@ -32,10 +34,10 @@ public class UserServiceImpl implements UserService {
     public void changePassword(String username, ChangePasswordRequest request) {
 
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User không tồn tại"));
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
-            throw new RuntimeException("Mật khẩu cũ không đúng");
+            throw new AppException(ErrorCode.INVALID_PASSWORD);
         }
 
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
@@ -50,7 +52,7 @@ public class UserServiceImpl implements UserService {
                                       MultipartFile file) {
 
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User không tồn tại"));
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         user.setFullName(request.getFullName());
         user.setPhone(request.getPhone());

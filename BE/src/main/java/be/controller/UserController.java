@@ -6,6 +6,7 @@ import be.dto.response.ApiResponse;
 import be.dto.response.UserResponse;
 import be.service.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,7 +29,7 @@ public class UserController {
     @PutMapping("/change-password")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<String>> changePassword(
-            @RequestBody ChangePasswordRequest request) {
+            @Valid @RequestBody ChangePasswordRequest request) {
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 

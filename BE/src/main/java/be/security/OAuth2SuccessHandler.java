@@ -4,6 +4,8 @@ import be.entity.Permission;
 import be.entity.Role;
 import be.entity.User;
 import be.enums.UserStatus;
+import be.exception.AppException;
+import be.exception.ErrorCode;
 import be.repository.RoleRepository;
 import be.repository.UserRepository;
 import jakarta.servlet.http.*;
@@ -45,7 +47,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         User user = userRepository.findByEmail(email)
                 .orElseGet(() -> {
                     Role role = roleRepository.findByCode("CUSTOMER")
-                            .orElseThrow();
+                            .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
 
                     User newUser = new User();
                     newUser.setEmail(email);
@@ -60,7 +62,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         // 🔥 load lại user FULL (có permissions)
         User fullUser = userRepository.findByEmailWithRoleAndPermissions(email)
-                .orElseThrow();
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         // 🔥 map permissions
         List<String> permissions = fullUser.getRole().getPermissions()
