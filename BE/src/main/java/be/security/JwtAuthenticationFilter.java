@@ -1,8 +1,13 @@
 package be.security;
 
+import be.dto.response.ApiResponse;
+import be.exception.AppException;
+import be.exception.ErrorCode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -77,6 +82,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+
+            ApiResponse<?> apiResponse = ApiResponse.builder()
+                    .status(401)
+                    .message("Token không hợp lệ")
+                    .data(null)
+                    .build();
+
+            new ObjectMapper().writeValue(response.getOutputStream(), apiResponse);
             return;
         }
 

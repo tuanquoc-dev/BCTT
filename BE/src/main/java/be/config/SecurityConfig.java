@@ -10,20 +10,24 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.*;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
 @EnableMethodSecurity
 @Configuration
 public class SecurityConfig {
 
-    private final JwtAuthenticationEntryPoint entryPoint;
     private final JwtAuthenticationFilter filter;
     private final OAuth2SuccessHandler oAuth2SuccessHandler;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
-    public SecurityConfig(JwtAuthenticationEntryPoint entryPoint,
-                          JwtAuthenticationFilter filter,
-                          OAuth2SuccessHandler oAuth2SuccessHandler) {
-        this.entryPoint = entryPoint;
+    public SecurityConfig(
+            JwtAuthenticationFilter filter,
+            OAuth2SuccessHandler oAuth2SuccessHandler, CustomAccessDeniedHandler customAccessDeniedHandler, JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint) {
+
         this.filter = filter;
         this.oAuth2SuccessHandler = oAuth2SuccessHandler;
+        this.customAccessDeniedHandler = customAccessDeniedHandler;
+        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
     }
 
     @Bean
@@ -37,9 +41,6 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
 
-                .exceptionHandling(ex -> ex
-                        .authenticationEntryPoint(entryPoint)
-                )
 
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**", "/oauth2/**").permitAll()
@@ -51,8 +52,14 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
 
+
                 .oauth2Login(oauth -> oauth
-                        .successHandler(oAuth2SuccessHandler) 
+                        .successHandler(oAuth2SuccessHandler)
+                )
+
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                        .accessDeniedHandler(customAccessDeniedHandler)
                 )
 
                 // 🔥 add JWT filter

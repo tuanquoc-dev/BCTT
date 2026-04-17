@@ -6,6 +6,8 @@ import be.entity.Permission;
 import be.entity.Role;
 import be.entity.User;
 import be.enums.UserStatus;
+import be.exception.AppException;
+import be.exception.ErrorCode;
 import be.repository.RoleRepository;
 import be.repository.UserRepository;
 import be.security.CustomUserDetails;
@@ -22,6 +24,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -40,57 +43,78 @@ public class AuthServiceImpl implements AuthService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
-    private final CloudinaryService cloudinaryService;
 
     public AuthServiceImpl(AuthenticationManager authenticationManager,
                            JwtTokenProvider jwtTokenProvider,
                            UserRepository userRepository,
                            RoleRepository roleRepository,
-                           PasswordEncoder passwordEncoder, EmailService emailService, CloudinaryService cloudinaryService) {
+                           PasswordEncoder passwordEncoder, EmailService emailService) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.emailService = emailService;
-        this.cloudinaryService = cloudinaryService;
     }
 
     @Override
     public LoginResponse login(LoginRequest request) {
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getUsername(),
-                        request.getPassword()
-                )
-        );
+//        try {
+//            Authentication authentication = authenticationManager.authenticate(
+//                    new UsernamePasswordAuthenticationToken(
+//                            request.getUsername(),
+//                            request.getPassword()
+//                    )
+//            );
+//
+//            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+//
+//            String username = userDetails.getUsername();
+//
+//            User user = userRepository.findByUsernameWithRole(username)
+//                    .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+//
+//            if (user.getStatus() == UserStatus.BLOCKED) {
+//                throw new AppException(ErrorCode.USER_BLOCKED);
+//            }
+        // 1. Check user tồn tại
+        User user = userRepository.findByUsernameWithRole(request.getUsername())
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        // 2. Check bị block
+        if (user.getStatus() == UserStatus.BLOCKED) {
+            throw new AppException(ErrorCode.USER_BLOCKED);
+        }
 
-        String username = userDetails.getUsername();
-
-        User user = userRepository.findByUsernameWithRole(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
+        // 3. Check password
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new AppException(ErrorCode.INVALID_PASSWORD);
+        }
 
         List<String> permissions = user.getRole().getPermissions()
-                .stream()
-                .map(Permission::getCode)
-                .toList();
+                    .stream()
+                    .map(Permission::getCode)
+                    .toList();
 
-        String token = jwtTokenProvider.generateToken(
-                user.getUsername(),
-                user.getRole().getCode(),
-                permissions
-        );
+            String token = jwtTokenProvider.generateToken(
+                    user.getUsername(),
+                    user.getRole().getCode(),
+                    permissions
+            );
 
-        return LoginResponse.builder()
-                .token(token)
-                .username(user.getUsername())
-                .role(user.getRole().getCode())
-                .permissions(permissions)
-                .build();
+            return LoginResponse.builder()
+                    .token(token)
+                    .username(user.getUsername())
+                    .role(user.getRole().getCode())
+                    .permissions(permissions)
+                    .build();
+//        } catch (DisabledException e) {
+//            throw new AppException(ErrorCode.USER_BLOCKED);
+//        } catch (AuthenticationException e) {
+//            // 🔥 tất cả lỗi login sai đều vào đây
+//            throw new AppException(ErrorCode.INVALID_PASSWORD);
+//        }
     }
 
     // 📝 REGISTER
@@ -98,21 +122,21 @@ public class AuthServiceImpl implements AuthService {
     public UserResponse register(RegisterRequest request) {
 
         if (!request.getPassword().equals(request.getConfirmPassword())) {
-            throw new RuntimeException("Password không khớp");
+            throw new AppException(ErrorCode.PASSWORD_NOT_MATCH);
         }
 
         String username = request.getUsername().trim();
 
         if (userRepository.existsByUsername(username)) {
-            throw new RuntimeException("Username đã tồn tại");
+            throw new AppException(ErrorCode.USERNAME_EXISTS);
         }
 
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Email đã tồn tại");
+            throw new AppException(ErrorCode.EMAIL_EXISTS);
         }
 
         Role role = roleRepository.findByCode("CUSTOMER")
-                .orElseThrow(() -> new RuntimeException("Role CUSTOMER không tồn tại"));
+                .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
 
         User user = new User();
         user.setUsername(username);
@@ -153,7 +177,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         Role adminRole = roleRepository.findByCode("ADMIN")
-                .orElseThrow(() -> new RuntimeException("Role ADMIN không tồn tại"));
+                .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
 
         User admin = new User();
         admin.setUsername("admin");
@@ -171,13 +195,14 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void forgotPassword(String email) {
 
-        Optional<User> optionalUser = userRepository.findByEmail(email);
+//        Optional<User> optionalUser = userRepository.findByEmail(email);
+//
+//        if (optionalUser.isEmpty()) {
+//            return; // 🔥 không leak info
+//        }
 
-        if (optionalUser.isEmpty()) {
-            return; // 🔥 không leak info
-        }
-
-        User user = optionalUser.get();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOT_FOUND));
 
         String token = jwtTokenProvider.generateResetToken(user.getEmail());
 
@@ -200,7 +225,7 @@ public class AuthServiceImpl implements AuthService {
             String email = jwtTokenProvider.getEmailFromToken(request.getToken());
 
             User user = userRepository.findByEmail(email)
-                    .orElseThrow(() -> new RuntimeException("User không tồn tại"));
+                    .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
             user.setPassword(passwordEncoder.encode(request.getNewPassword()));
             user.setUpdatedAt(LocalDateTime.now());
@@ -208,9 +233,11 @@ public class AuthServiceImpl implements AuthService {
             userRepository.save(user);
 
         } catch (ExpiredJwtException e) {
-            throw new RuntimeException("Token đã hết hạn");
+            throw new AppException(ErrorCode.EXPIRED_TOKEN);
         } catch (JwtException e) {
-            throw new RuntimeException("Token không hợp lệ");
+            throw new AppException(ErrorCode.INVALID_TOKEN);
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);
         }
     }
 

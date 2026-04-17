@@ -6,6 +6,8 @@ import be.dto.response.UserResponse;
 import be.entity.Role;
 import be.entity.User;
 import be.enums.UserStatus;
+import be.exception.AppException;
+import be.exception.ErrorCode;
 import be.repository.RoleRepository;
 import be.repository.UserRepository;
 import be.service.service.AdminService;
@@ -39,14 +41,14 @@ public class AdminServiceImpl implements AdminService {
     public UserResponse createStaff(CreateStaffRequest request, String createdByUsername) {
 
         if (userRepository.existsByUsername(request.getUsername())) {
-            throw new RuntimeException("Username đã tồn tại");
+            throw new AppException(ErrorCode.USERNAME_EXISTS);
         }
 
         Role role = roleRepository.findByCode(request.getRoleCode())
-                .orElseThrow(() -> new RuntimeException("Role không tồn tại"));
+                .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
 
         User creator = userRepository.findByUsername(createdByUsername)
-                .orElseThrow(() -> new RuntimeException("Người tạo không tồn tại"));
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         User user = User.builder()
                 .username(request.getUsername())
@@ -101,7 +103,7 @@ public class AdminServiceImpl implements AdminService {
     public UserResponse updateStatus(Integer userId, UserStatus status) {
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User không tồn tại"));
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
@@ -112,7 +114,7 @@ public class AdminServiceImpl implements AdminService {
         // 🔥 STAFF chỉ được update CUSTOMER
         if (!isAdmin) {
             if (user.getRole() == null || !"CUSTOMER".equals(user.getRole().getCode())) {
-                throw new RuntimeException("Bạn không có quyền cập nhật user này");
+                throw new AppException(ErrorCode.PERMISSION_DENIED);
             }
         }
 
@@ -130,7 +132,7 @@ public class AdminServiceImpl implements AdminService {
     public UserResponse updateUser(Integer id, UpdateProfileRequest request) {
 
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User không tồn tại"));
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
@@ -141,7 +143,7 @@ public class AdminServiceImpl implements AdminService {
         // 🔥 STAFF chỉ được update CUSTOMER
         if (!isAdmin) {
             if (user.getRole() == null || !"CUSTOMER".equals(user.getRole().getCode())) {
-                throw new RuntimeException("Bạn không có quyền cập nhật user này");
+                throw new AppException(ErrorCode.PERMISSION_DENIED);
             }
         }
 
