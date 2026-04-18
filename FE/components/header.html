@@ -1,0 +1,257 @@
+<header class="bg-white shadow-sm py-2 position-relative">
+  <div class="container d-flex justify-content-between align-items-center">
+
+    <!-- Logo -->
+    <h4 class="m-0 text-success fw-bold d-flex align-items-center">
+      <i class="fa-solid fa-mobile-screen-button me-2"></i>
+      MobileHub
+    </h4>
+
+    <!-- Search -->
+    <div class="w-50 mx-3">
+      <div class="input-group">
+        <input class="form-control" placeholder="Tìm kiếm sản phẩm...">
+        <button class="btn btn-success">
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="d-flex gap-4 align-items-center">
+
+      <!-- CART -->
+      <a href="#" class="text-decoration-none position-relative">
+        <i class="fa-solid fa-cart-shopping"></i> Giỏ hàng
+        <span class="badge bg-danger position-absolute top-0 start-100 translate-middle rounded-pill">
+      2
+    </span>
+      </a>
+
+      <!-- ORDER -->
+      <a href="#" class="text-decoration-none">
+        <i class="fa-solid fa-receipt"></i> Tra cứu
+      </a>
+
+      <!-- PROMO -->
+      <a href="#" class="text-decoration-none text-danger">
+        <i class="fa-solid fa-tags"></i> Khuyến mãi
+      </a>
+
+      <!-- ACCOUNT -->
+      <div class="dropdown" id="accountSection">
+        <!-- chưa login -->
+        <a href="./pages/auth/login.html" id="loginLink" class="text-decoration-none">
+          <i class="fa-solid fa-user"></i> Login
+        </a>
+
+        <!-- đã login -->
+        <div id="userDropdown" class="d-none">
+          <a class="text-decoration-none dropdown-toggle" href="#" data-bs-toggle="dropdown">
+            <i class="fa-solid fa-user-circle"></i> Tài khoản
+          </a>
+
+          <ul class="dropdown-menu dropdown-menu-end shadow">
+            <li>
+              <a class="dropdown-item" href="./pages/user/profile.html">
+                <i class="fa-solid fa-id-card"></i> Hồ sơ
+              </a>
+            </li>
+
+            <li>
+              <a class="dropdown-item" href="./pages/user/change-password.html">
+                <i class="fa-solid fa-key"></i> Đổi mật khẩu
+              </a>
+            </li>
+
+            <li>
+              <a class="dropdown-item" href="#">
+                <i class="fa-solid fa-box"></i> Đơn hàng của tôi
+              </a>
+            </li>
+
+            <li><hr class="dropdown-divider"></li>
+
+            <li>
+              <button class="dropdown-item text-danger" id="logoutBtn">
+                <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="bg-light mt-2 py-2 position-relative">
+    <div class="container d-flex gap-4">
+
+      <!-- ĐIỆN THOẠI -->
+      <div class="category-item">
+        <span>Điện thoại <i class="fa-solid fa-angle-down"></i></span>
+        <div class="mega-menu shadow p-4">
+          <div class="row">
+            <div class="col-md-3">
+              <strong>Apple</strong>
+              <ul>
+                <li>iPhone 15</li>
+                <li>iPhone 14</li>
+                <li>iPhone 13</li>
+              </ul>
+            </div>
+            <div class="col-md-3">
+              <strong>Samsung</strong>
+              <ul>
+                <li>Galaxy S</li>
+                <li>Galaxy A</li>
+                <li>Galaxy Z</li>
+              </ul>
+            </div>
+            <div class="col-md-3">
+              <strong>Xiaomi</strong>
+              <ul>
+                <li>Redmi</li>
+                <li>Poco</li>
+              </ul>
+            </div>
+            <div class="col-md-3">
+              <strong>OPPO</strong>
+              <ul>
+                <li>Find X</li>
+                <li>Reno</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LAPTOP -->
+      <div class="category-item">
+        <span>Laptop <i class="fa-solid fa-angle-down"></i></span>
+        <div class="mega-menu shadow p-4">
+          <div class="row">
+            <div class="col-md-3">
+              <strong>Macbook</strong>
+              <ul>
+                <li>Macbook Air</li>
+                <li>Macbook Pro</li>
+              </ul>
+            </div>
+            <div class="col-md-3">
+              <strong>Dell</strong>
+              <ul>
+                <li>XPS</li>
+                <li>Inspiron</li>
+              </ul>
+            </div>
+            <div class="col-md-3">
+              <strong>Asus</strong>
+              <ul>
+                <li>ROG</li>
+                <li>VivoBook</li>
+              </ul>
+            </div>
+            <div class="col-md-3">
+              <strong>HP</strong>
+              <ul>
+                <li>Pavilion</li>
+                <li>Envy</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TABLET -->
+      <div class="category-item">
+        <span>Tablet <i class="fa-solid fa-angle-down"></i></span>
+        <div class="mega-menu shadow p-4">
+          <div class="row">
+            <div class="col-md-3">
+              <strong>Apple</strong>
+              <ul>
+                <li>iPad Pro</li>
+                <li>iPad Air</li>
+              </ul>
+            </div>
+            <div class="col-md-3">
+              <strong>Samsung</strong>
+              <ul>
+                <li>Galaxy Tab S</li>
+                <li>Galaxy Tab A</li>
+              </ul>
+            </div>
+            <div class="col-md-3">
+              <strong>Xiaomi</strong>
+              <ul>
+                <li>Pad 5</li>
+                <li>Pad 6</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PHỤ KIỆN -->
+      <div class="category-item">
+        <span>Phụ kiện <i class="fa-solid fa-angle-down"></i></span>
+        <div class="mega-menu shadow p-4">
+          <div class="row">
+            <div class="col-md-3">
+              <strong>Tai nghe</strong>
+              <ul>
+                <li>AirPods</li>
+                <li>Bluetooth</li>
+              </ul>
+            </div>
+            <div class="col-md-3">
+              <strong>Sạc</strong>
+              <ul>
+                <li>Cáp sạc</li>
+                <li>Sạc nhanh</li>
+              </ul>
+            </div>
+            <div class="col-md-3">
+              <strong>Ốp lưng</strong>
+              <ul>
+                <li>Silicon</li>
+                <li>Chống sốc</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ĐỒNG HỒ -->
+      <div class="category-item">
+        <span>Đồng hồ <i class="fa-solid fa-angle-down"></i></span>
+        <div class="mega-menu shadow p-4">
+          <div class="row">
+            <div class="col-md-3">
+              <strong>Apple Watch</strong>
+              <ul>
+                <li>Series 9</li>
+                <li>Ultra</li>
+              </ul>
+            </div>
+            <div class="col-md-3">
+              <strong>Samsung</strong>
+              <ul>
+                <li>Galaxy Watch</li>
+              </ul>
+            </div>
+            <div class="col-md-3">
+              <strong>Xiaomi</strong>
+              <ul>
+                <li>Mi Band</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</header>

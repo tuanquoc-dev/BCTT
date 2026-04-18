@@ -1,13 +1,8 @@
-function saveAuth(data) {
-    localStorage.setItem("token", data.token);
-    localStorage.setItem("role", data.role);
-}
-
-function logout() {
-    localStorage.clear();
-    window.location.href = "/pages/auth/login.html";
-}
-
-function isAdmin() {
-    return localStorage.getItem("role") === "ADMIN";
-}
+const Auth = {
+  setToken: (token) => sessionStorage.setItem("token", token),
+  getToken: () => sessionStorage.getItem("token"),
+  logout: () => {
+    sessionStorage.removeItem("token");
+    window.location.href = "./pages/auth/login.html";
+  }
+};
