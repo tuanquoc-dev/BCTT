@@ -1,18 +1,25 @@
-async function apiRequest(url, method = "GET", data = null, isAuth = false) {
-    const headers = {
-        "Content-Type": "application/json"
-    };
+const api = axios.create({
+  baseURL: BASE_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 
-    if (isAuth) {
-        const token = localStorage.getItem("token");
-        headers["Authorization"] = "Bearer " + token;
-    }
+// request interceptor (gắn token)
+api.interceptors.request.use((config) => {
+  const token = sessionStorage.getItem("token");
+  if (token) {
+    config.headers.Authorization = "Bearer " + token;
+  }
+  return config;
+});
 
-    const response = await fetch(BASE_URL + url, {
-        method,
-        headers,
-        body: data ? JSON.stringify(data) : null
-    });
-
-    return response.json();
-}
+// response interceptor
+api.interceptors.response.use(
+  (res) => res,
+  (err) => {
+    hideLoading();
+    showToast(err.response?.data?.message || "Lỗi hệ thống", "danger");
+    return Promise.reject(err);
+  },
+);
