@@ -10,46 +10,32 @@ import be.exception.AppException;
 import be.exception.ErrorCode;
 import be.repository.RoleRepository;
 import be.repository.UserRepository;
-import be.security.CustomUserDetails;
 import be.security.JwtTokenProvider;
-import be.service.CloudinaryService;
 import be.service.EmailService;
 import be.service.service.AuthService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import jakarta.annotation.PostConstruct;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.security.authentication.*;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AuthServiceImpl implements AuthService {
 
-    private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
 
-    public AuthServiceImpl(AuthenticationManager authenticationManager,
-                           JwtTokenProvider jwtTokenProvider,
-                           UserRepository userRepository,
-                           RoleRepository roleRepository,
-                           PasswordEncoder passwordEncoder, EmailService emailService) {
-        this.authenticationManager = authenticationManager;
+    public AuthServiceImpl(
+            JwtTokenProvider jwtTokenProvider,
+            UserRepository userRepository,
+            RoleRepository roleRepository,
+            PasswordEncoder passwordEncoder, EmailService emailService) {
         this.jwtTokenProvider = jwtTokenProvider;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
@@ -59,25 +45,6 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public LoginResponse login(LoginRequest request) {
-
-//        try {
-//            Authentication authentication = authenticationManager.authenticate(
-//                    new UsernamePasswordAuthenticationToken(
-//                            request.getUsername(),
-//                            request.getPassword()
-//                    )
-//            );
-//
-//            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-//
-//            String username = userDetails.getUsername();
-//
-//            User user = userRepository.findByUsernameWithRole(username)
-//                    .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-//
-//            if (user.getStatus() == UserStatus.BLOCKED) {
-//                throw new AppException(ErrorCode.USER_BLOCKED);
-//            }
         // 1. Check user tồn tại
         User user = userRepository.findByUsernameWithRole(request.getUsername())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
@@ -93,28 +60,22 @@ public class AuthServiceImpl implements AuthService {
         }
 
         List<String> permissions = user.getRole().getPermissions()
-                    .stream()
-                    .map(Permission::getCode)
-                    .toList();
+                .stream()
+                .map(Permission::getCode)
+                .toList();
 
-            String token = jwtTokenProvider.generateToken(
-                    user.getUsername(),
-                    user.getRole().getCode(),
-                    permissions
-            );
+        String token = jwtTokenProvider.generateToken(
+                user.getUsername(),
+                user.getRole().getCode(),
+                permissions
+        );
 
-            return LoginResponse.builder()
-                    .token(token)
-                    .username(user.getUsername())
-                    .role(user.getRole().getCode())
-                    .permissions(permissions)
-                    .build();
-//        } catch (DisabledException e) {
-//            throw new AppException(ErrorCode.USER_BLOCKED);
-//        } catch (AuthenticationException e) {
-//            // 🔥 tất cả lỗi login sai đều vào đây
-//            throw new AppException(ErrorCode.INVALID_PASSWORD);
-//        }
+        return LoginResponse.builder()
+                .token(token)
+                .username(user.getUsername())
+                .role(user.getRole().getCode())
+                .permissions(permissions)
+                .build();
     }
 
     // 📝 REGISTER
@@ -195,18 +156,12 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void forgotPassword(String email) {
 
-//        Optional<User> optionalUser = userRepository.findByEmail(email);
-//
-//        if (optionalUser.isEmpty()) {
-//            return; // 🔥 không leak info
-//        }
-
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOT_FOUND));
 
         String token = jwtTokenProvider.generateResetToken(user.getEmail());
 
-        String link = "http://localhost:3000/reset-password?token=" + token;
+        String link = "http://localhost:63342/MobileHub/FE/pages/auth/reset-password.html?token=" + token;
 
         emailService.send(
                 user.getEmail(),
@@ -217,6 +172,10 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void resetPassword(ResetPasswordRequest request) {
+
+        if (!request.getNewPassword().equals(request.getConfirmPassword())) {
+            throw new AppException(ErrorCode.PASSWORD_NOT_MATCH);
+        }
 
         try {
             // 🔥 validate token
