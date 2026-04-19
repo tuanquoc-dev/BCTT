@@ -12,17 +12,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/api/**")
-//                .allowedOrigins("" +
-//                        "http://127.0.0.1:5500")
-                .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
-                .allowedOriginPatterns(
-                        "http://localhost:*",
-                        "http://127.0.0.1:*"
-                )
+        registry.addMapping("/**")
+                .allowedOriginPatterns("http://localhost:*") // ✅ đúng
+                .allowedMethods("*")
                 .allowedHeaders("*")
-                .allowCredentials(true)
-                .maxAge(3600);
+                .allowCredentials(true);
     }
 
     @Override

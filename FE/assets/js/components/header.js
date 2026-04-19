@@ -1,13 +1,20 @@
 const Header = (() => {
 
     const load = async () => {
-        const res = await fetch("./components/header.html");
+        const res = await fetch("/MobileHub/FE/components/header.html");
         const html = await res.text();
 
-        document.getElementById("header").innerHTML = html;
+        const container = document.getElementById("header");
 
-        bindEvents();
-        renderAuth();
+        if (!container) return;
+
+        container.innerHTML = html;
+
+        // delay 1 tick để DOM update
+        setTimeout(() => {
+            bindEvents();
+            renderAuth();
+        }, 0);
     };
 
     // 🔥 bind event

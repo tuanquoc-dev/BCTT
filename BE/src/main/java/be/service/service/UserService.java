@@ -8,4 +8,5 @@ import org.springframework.web.multipart.MultipartFile;
 public interface UserService {
     void changePassword(String username, ChangePasswordRequest request);
     UserResponse updateProfile(String username, UpdateProfileRequest request, MultipartFile file);
+    UserResponse getCurrentUser(String username);
 }

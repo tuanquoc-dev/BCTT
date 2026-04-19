@@ -64,4 +64,20 @@ public class UserController {
                         .build()
         );
     }
+
+    // GET CURRENT USER
+    @GetMapping("/me")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<ApiResponse<UserResponse>> getCurrentUser() {
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        return ResponseEntity.ok(
+                ApiResponse.<UserResponse>builder()
+                        .status(200)
+                        .message("Lấy thông tin thành công")
+                        .data(userService.getCurrentUser(username))
+                        .build()
+        );
+    }
 }
