@@ -13,9 +13,14 @@
         body { background: #f5f7fa; }
 
         .sidebar, .content-box {
+            height: 100%;
             background: white;
             border-radius: 12px;
             padding: 20px;
+        }
+
+        .row.g-4 {
+            align-items: stretch;
         }
 
         .avatar-box {
@@ -42,14 +47,18 @@
             border-radius: 8px;
         }
 
-        .menu-item.active, .menu-item:hover {
+        .menu-item:not(.active):hover {
+            background: #e7f1ff;
+        }
+
+        /* active riêng */
+        .menu-item.active {
             background: #0d6efd;
-            color: white;
         }
     </style>
 </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100">
 
 <div id="loadingSpinner"
      class="position-fixed top-0 start-0 w-100 h-100 d-none d-flex align-items-center justify-content-center bg-dark bg-opacity-25"
@@ -62,7 +71,7 @@
 <!-- HEADER -->
 <div id="header"></div>
 
-<div class="container my-4">
+<div class="container my-4 flex-grow-1">
     <div class="row g-4">
 
         <!-- LEFT -->
@@ -93,6 +102,10 @@
 
                 <form id="profileForm">
 
+                    <input id="fullName" class="form-control mb-3" placeholder="Họ tên">
+
+                    <input id="age" type="date" class="form-control mb-3">
+
                     <input id="email" class="form-control mb-3" placeholder="Email">
 
                     <input id="phone" class="form-control mb-3" placeholder="SĐT">
@@ -115,9 +128,9 @@
 
                     <input id="oldPassword" type="password" class="form-control mb-3" placeholder="Mật khẩu cũ">
                     <input id="newPassword" type="password" class="form-control mb-3" placeholder="Mật khẩu mới">
-                    <input id="confirmPassword" type="password" class="form-control mb-3" placeholder="Nhập lại">
+                    <input id="confirmPassword" type="password" class="form-control mb-3" placeholder="Xác nhận mật khẩu">
 
-                    <button type="submit" class="btn btn-warning w-100">
+                    <button type="submit" class="btn btn-primary w-100">
                         🔐 Đổi mật khẩu
                     </button>
 
@@ -137,22 +150,21 @@
 
 <!-- CORE -->
 <script src="../../config.js"></script>
-<script src="../../assets/js/common/api.js"></script>
-<script src="../../assets/js/common/auth.js"></script>
-<script src="../../assets/js/common/utils.js"></script>
+<script src="../../assets/js/core/api.js"></script>
+<script src="../../assets/js/core/auth.js"></script>
+<script src="../../assets/js/core/utils.js"></script>
 
 <!-- COMPONENT -->
 <script src="../../assets/js/components/header.js"></script>
+<script src="../../assets/js/components/footer.js"></script>
 
-<!-- PAGE -->
-<script src="../../assets/js/user/profile.js"></script>
+<script src="../../assets/js/models/user.model.js"></script>
+<script src="../../assets/js/views/user/profile.view.js"></script>
+<script src="../../assets/js/controllers/user/profile.controller.js"></script>
 
 <script>
     Header.load();
-
-    fetch("../../components/footer.html")
-        .then(res => res.text())
-        .then(html => document.getElementById("footer").innerHTML = html);
+    Footer.load();
 </script>
 
 </body>

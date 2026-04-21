@@ -90,6 +90,7 @@ public class UserServiceImpl implements UserService {
                 .fullName(user.getFullName())
                 .email(user.getEmail())
                 .phone(user.getPhone())
+                .age(user.getAge())
                 .address(user.getAddress())
                 .avatar(user.getAvatar())
                 .role(user.getRole().getCode())

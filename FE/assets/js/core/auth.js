@@ -3,6 +3,6 @@ const Auth = {
   getToken: () => sessionStorage.getItem("token"),
   logout: () => {
     sessionStorage.removeItem("token");
-    window.location.href = "./pages/auth/login.html";
+    window.location.href = "/MobileHub/FE/pages/auth/login.html";
   }
 };
