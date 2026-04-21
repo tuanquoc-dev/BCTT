@@ -77,4 +77,24 @@ public class UserServiceImpl implements UserService {
                 .status(user.getStatus())
                 .build();
     }
+
+    @Override
+    public UserResponse getCurrentUser(String username) {
+
+        User user = userRepository.findByUsernameWithRole(username)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        return UserResponse.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .fullName(user.getFullName())
+                .email(user.getEmail())
+                .phone(user.getPhone())
+                .age(user.getAge())
+                .address(user.getAddress())
+                .avatar(user.getAvatar())
+                .role(user.getRole().getCode())
+                .status(user.getStatus())
+                .build();
+    }
 }

@@ -47,12 +47,9 @@ public class UserController {
     @PutMapping(value = "/profile", consumes = "multipart/form-data")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<UserResponse>> updateProfile(
-            @RequestParam("data") String data,
-            @RequestParam(value = "file", required = false) MultipartFile file
-    ) throws Exception {
-
-        UpdateProfileRequest request =
-                objectMapper.readValue(data, UpdateProfileRequest.class);
+            @Valid @RequestPart("data") UpdateProfileRequest request,
+            @RequestPart(value = "file", required = false) MultipartFile file
+    ) {
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
@@ -61,6 +58,22 @@ public class UserController {
                         .status(200)
                         .message("Cập nhật thành công")
                         .data(userService.updateProfile(username, request, file))
+                        .build()
+        );
+    }
+
+    // GET CURRENT USER
+    @GetMapping("/me")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<ApiResponse<UserResponse>> getCurrentUser() {
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        return ResponseEntity.ok(
+                ApiResponse.<UserResponse>builder()
+                        .status(200)
+                        .message("Lấy thông tin thành công")
+                        .data(userService.getCurrentUser(username))
                         .build()
         );
     }

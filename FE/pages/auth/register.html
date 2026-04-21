@@ -20,84 +20,120 @@
 
 <body class="register-bg">
 
-    <!-- loading + toast -->
-    <div id="loadingSpinner"
-        class="position-fixed top-0 start-0 w-100 h-100 d-none d-flex align-items-center justify-content-center bg-dark bg-opacity-25"
-        style="z-index:9999;">
-        <div class="spinner-border text-light"></div>
+<!-- loading + toast -->
+<div id="loadingSpinner"
+     class="position-fixed top-0 start-0 w-100 h-100 d-none d-flex align-items-center justify-content-center bg-dark bg-opacity-25"
+     style="z-index:9999;">
+    <div class="spinner-border text-light"></div>
+</div>
+
+<div class="toast-container position-fixed top-0 end-0 p-3" id="toastContainer"></div>
+
+<div class="card p-4 shadow" style="width: 416px;">
+
+    <!-- Header -->
+    <div class="text-center mb-4">
+        <h3 class="fw-bold mb-2">MobileHub</h3>
+        <p class="text-muted mb-0">Đăng kí tài khoản</p>
     </div>
 
-    <div class="toast-container position-fixed top-0 end-0 p-3" id="toastContainer"></div>
+    <!-- Form -->
+    <form id="registerForm">
 
-    <div class="card p-4 shadow" style="width: 416px;">
-
-        <!-- Header -->
-        <div class="text-center mb-4">
-            <h3 class="fw-bold mb-2">MobileHub</h3>
-            <p class="text-muted mb-0">Register to your account</p>
-        </div>
-
-        <!-- Form -->
-        <form id="registerForm">
-
-            <!-- Username -->
-            <div class="mb-3">
-                <div class="input-group login-input-group">
+        <!-- Username -->
+        <div class="mb-3">
+            <div class="input-group login-input-group">
                     <span class="input-group-text bg-light border-end-0">
                         <i class="fas fa-user text-muted"></i>
                     </span>
-                    <input id="regUsername" class="form-control border-start-0 ps-0 form-control-lg"
-                        placeholder="Username" required>
-                </div>
+                <input id="regUsername" class="form-control border-start-0 ps-0 form-control-lg"
+                       placeholder="Tên tài khoản" required>
             </div>
+        </div>
 
-            <!-- Email -->
-            <div class="mb-3">
-                <div class="input-group login-input-group">
+        <!-- Email -->
+        <div class="mb-3">
+            <div class="input-group login-input-group">
                     <span class="input-group-text bg-light border-end-0">
                         <i class="fas fa-envelope text-muted"></i>
                     </span>
-                    <input id="regEmail" type="email" class="form-control border-start-0 ps-0 form-control-lg"
-                        placeholder="Email" required>
-                </div>
+                <input id="regEmail" type="email" class="form-control border-start-0 ps-0 form-control-lg"
+                       placeholder="Email" required>
             </div>
+        </div>
 
-            <!-- Password -->
-            <div class="mb-4">
-                <div class="input-group login-input-group">
+        <!-- PHONE -->
+        <div class="mb-3">
+            <div class="input-group login-input-group">
+    <span class="input-group-text bg-light border-end-0">
+      <i class="fas fa-phone text-muted"></i>
+    </span>
+                <input id="regPhone" class="form-control border-start-0 ps-0 form-control-lg"
+                       placeholder="Số điện thoại" required>
+            </div>
+        </div>
+
+        <!-- ADDRESS -->
+        <div class="mb-3">
+            <div class="input-group login-input-group">
+    <span class="input-group-text bg-light border-end-0">
+      <i class="fas fa-location-dot text-muted"></i>
+    </span>
+                <input id="regAddress" class="form-control border-start-0 ps-0 form-control-lg"
+                       placeholder="Địa chỉ">
+            </div>
+        </div>
+
+        <!-- Password -->
+        <div class="mb-4">
+            <div class="input-group login-input-group">
                     <span class="input-group-text bg-light border-end-0">
                         <i class="fas fa-lock text-muted"></i>
                     </span>
-                    <input id="regPassword" type="password" class="form-control border-start-0 ps-0 form-control-lg"
-                        placeholder="Password" required>
-                </div>
+                <input id="regPassword" type="password" class="form-control border-start-0 ps-0 form-control-lg"
+                       placeholder="Mật khẩu" required>
             </div>
-
-            <!-- Button -->
-            <div class="d-grid">
-                <button class="btn btn-success btn-lg">
-                    <i class="fas fa-user-plus me-2"></i>
-                    Register
-                </button>
-            </div>
-
-        </form>
-
-        <!-- Footer -->
-        <div class="text-center mt-4">
-            <span class="text-muted">Already have an account?</span>
-            <a href="login.html" class="ms-1">Login</a>
         </div>
 
+        <!-- CONFIRM PASSWORD -->
+        <div class="mb-4">
+            <div class="input-group login-input-group">
+    <span class="input-group-text bg-light border-end-0">
+      <i class="fas fa-lock text-muted"></i>
+    </span>
+                <input id="regConfirmPassword" type="password"
+                       class="form-control border-start-0 ps-0 form-control-lg"
+                       placeholder="Xác nhận mật khẩu" required>
+            </div>
+        </div>
+
+        <!-- Button -->
+        <div class="d-grid">
+            <button class="btn btn-success btn-lg">
+                <i class="fas fa-user-plus me-2"></i>
+                Register
+            </button>
+        </div>
+
+    </form>
+
+    <!-- Footer -->
+    <div class="text-center mt-4">
+        <span class="text-muted">Bạn đã có tài khoản</span>
+        <a href="login.html" class="ms-1">Đăng nhập</a>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</div>
 
-    <script src="../../config.js"></script>
-    <script src="../../assets/js/common/api.js"></script>
-    <script src="../../assets/js/common/utils.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
-    <script src="../../assets/js/auth/register.js"></script>
+<script src="../../config.js"></script>
+<script src="../../assets/js/core/api.js"></script>
+<script src="../../assets/js/core/utils.js"></script>
+
+<script src="../../assets/js/models/auth.model.js"></script>
+<script src="../../assets/js/views/auth/register.view.js"></script>
+<script src="../../assets/js/controllers/auth/register.controller.js"></script>
 
 </body>
 
