@@ -3,8 +3,67 @@
     border: none;
 }
 
+.header-gradient {
+    background: #2A3F54; /* giống sidebar */
+    color: #E7E7E7
+}
+
 .header-gradient input:focus {
     box-shadow: 0 0 0 2px rgba(255,255,255,0.3);
+}
+
+.header-gradient .d-flex a,
+.header-gradient .d-flex i{
+    color: #E7E7E7
+}
+
+.header-gradient .d-flex a:hover,
+.header-gradient .d-flex i:hover{
+    color: #E7E7E7
+}
+
+.dropdown-menu a,
+.dropdown-menu i {
+    color: #333 !important;
+}
+
+.header-bottom {
+    padding: 10px 0;
+    /* border phân cách */
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+/* text menu */
+.header-bottom .category-item span {
+    color: #E7E7E7;
+    font-weight: 500;
+}
+
+/* hover */
+.header-bottom .category-item:hover span {
+    color: #E7E7E7
+}
+
+/* icon */
+.header-bottom i {
+    color: #E7E7E7;
+}
+
+.footer-custom {
+    background: #2A3F54; /* giống sidebar */
+    color: #E7E7E7;
+
+    /* border cho rõ layout */
+    border-top: 1px solid rgba(255,255,255,0.1);
+
+    /* nhìn có chiều sâu hơn */
+    box-shadow: 0 -2px 6px rgba(0,0,0,0.1);
+}
+
+/* text nhỏ */
+.footer-custom p {
+    margin: 0;
+    color: #bbb;
 }
 
 .category-item {
@@ -14,6 +73,7 @@
 }
 
 .category-item span {
+    color: #E7E7E7;
     font-weight: 500;
 }
 
@@ -72,4 +132,356 @@ footer {
     color: white;
     padding: 20px 0;
     margin-top: auto;
+}
+/* ===== RESET ===== */
+body {
+    margin: 0;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    background: #f7f7f7;
+}
+
+.container.body {
+    display: flex;
+}
+
+.main_container {
+    display: flex;
+    width: 100%;
+}
+
+/* ===== SIDEBAR ===== */
+.left_col {
+    background: #2A3F54;
+    width: 250px;
+    min-height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    color: #E7E7E7;
+    padding: 0;
+    overflow: hidden;
+}
+
+/* ===== LOGO ===== */
+.site_title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 10px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #ECF0F1;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    text-decoration: none;
+}
+
+/* ===== PROFILE ===== */
+.profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 10px;
+}
+
+.profile_img {
+    width: 50px;
+    border-radius: 50%;
+}
+
+.profile_info span {
+    font-size: 12px;
+    color: #aaa;
+}
+
+.profile_info h2 {
+    font-size: 16px;
+    margin: 0;
+    color: #fff;
+}
+
+/* ===== MENU ===== */
+.menu_section {
+    margin-top: 10px;
+}
+
+.menu_section h3 {
+    font-size: 11px;
+    color: #8895a7;
+    text-transform: uppercase;
+    padding: 10px;
+    margin: 0;
+}
+
+.side-menu {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+.side-menu li {
+    list-style: none;
+}
+
+.side-menu .menu-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 15px;
+    color: #E7E7E7;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.side-menu .menu-link:hover {
+    background: #1ABB9C;
+    color: #fff;
+}
+
+.menu-item.active .menu-link {
+    background: #1ABB9C;
+}
+
+/* CHILD MENU */
+.child_menu {
+    display: none;
+    padding-left: 15px;
+}
+
+.side-menu li.active .child_menu {
+    display: block;
+}
+
+.child_menu li a {
+    padding: 8px 10px;
+    font-size: 14px;
+}
+
+/* ===== RIGHT ===== */
+.right_col {
+    margin-left: 250px;
+    margin-top: 60px;
+    width: calc(100% - 250px);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ===== NAVBAR ===== */
+.top_nav {
+    position: fixed;
+    top: 0;
+    left: 250px;
+    width: calc(100% - 250px);
+    height: 60px;
+    background: #ffffff; /* đổi từ xám -> trắng */
+    border-bottom: 1px solid #e0e0e0;
+    z-index: 1000;
+    border-bottom: 1px solid #dee2e6 !important; /* rõ hơn */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* NAV CONTENT */
+.nav_menu {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+}
+
+/* LEFT TOGGLE */
+.nav.toggle i {
+    font-size: 20px;
+    cursor: pointer;
+}
+
+#menu_toggle {
+    cursor: pointer;
+    z-index: 2000;
+    position: relative;
+}
+
+.nav-left {
+    display: flex;
+    align-items: center;
+}
+
+/* RIGHT NAV */
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* MAIL ICON */
+.navbar-right .fa-envelope {
+    font-size: 18px;
+    position: relative;
+}
+
+/* BADGE */
+.navbar-right .badge {
+    position: absolute;
+    top: -5px;
+    right: -10px;
+    background: #26B99A;
+    color: #fff;
+    font-size: 10px;
+    padding: 3px 6px;
+    border-radius: 50%;
+}
+
+/* ICON NAVBAR */
+.navbar-right i {
+    font-size: 20px;
+}
+
+.navbar-right .nav-link {
+    position: relative;
+    padding: 5px;
+}
+
+/* USER NAME */
+#navUsername {
+    font-weight: 500;
+    font-size: 15px;
+}
+
+/* AVATAR */
+#navAvatar {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* DROPDOWN FIX */
+.dropdown-menu {
+    min-width: 160px;
+}
+
+/* USER */
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.user-profile img {
+    width: 30px;
+    border-radius: 50%;
+}
+
+/* ===== CONTENT ===== */
+.content {
+    padding: 20px;
+    min-height: 100vh;
+    background: #f7f7f7;
+    border-top: 1px solid #e0e0e0;
+}
+@media (max-width: 768px) {
+
+    .left_col {
+        left: -250px;
+        transition: 0.3s;
+    }
+
+    .left_col.show {
+        left: 0;
+    }
+
+    .right_col {
+        margin-left: 0;
+    }
+
+    .top_nav {
+        left: 0;
+        width: 100%;
+    }
+}
+
+/* ===== COLLAPSE SIDEBAR ===== */
+body.nav-sm .left_col {
+    width: 70px !important;
+}
+
+body.nav-sm .right_col {
+    margin-left: 70px !important;
+    width: calc(100% - 70px);
+}
+
+body.nav-sm .top_nav {
+    left: 70px !important;
+    width: calc(100% - 70px);
+}
+
+/* Ẩn text menu */
+body.nav-sm .menu-link span {
+    white-space: nowrap;
+    display: none;
+}
+
+/* Center icon */
+body.nav-sm .menu-link {
+    justify-content: center;
+    padding: 12px 0;
+}
+
+/* Ẩn logo text */
+body.nav-sm .site_title span {
+    display: none;
+}
+
+body.nav-sm .site_title {
+    justify-content: center;
+}
+
+body.nav-sm .site_title i {
+    font-size: 24px;
+}
+
+/* Ẩn profile text */
+body.nav-sm .profile_info {
+    display: none;
+}
+
+body.nav-sm .profile {
+    justify-content: center;
+}
+
+/* Resize avatar */
+body.nav-sm .profile_img {
+    width: 35px;
+}
+
+/* Content co lại */
+body.nav-sm .right_col {
+    margin-left: 70px;
+}
+
+/* Navbar co lại */
+body.nav-sm .top_nav {
+    left: 70px;
+    width: calc(100% - 70px);
+}
+
+/* Animation mượt */
+.left_col,
+.right_col,
+.top_nav {
+    transition: all 0.3s ease;
+}
+
+.left_col.scroll-view {
+    overflow: hidden;
+}
+
+.main_container {
+    display: flex;
 }

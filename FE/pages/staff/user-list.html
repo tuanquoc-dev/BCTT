@@ -19,7 +19,7 @@
     <div id="sidebar" class="sidebar"></div>
 
     <div class="right_col">
-        <div id="navbar" class="top_nav"></div>
+        <div id="navbar"></div>
 
         <div class="content p-4">
 
@@ -29,11 +29,6 @@
             <div class="d-flex gap-2 mb-3">
                 <input id="searchInput" class="form-control" placeholder="Tìm username...">
                 <button id="searchBtn" class="btn btn-primary">Search</button>
-
-                <!-- NEW -->
-                <button id="createStaffBtn" class="btn btn-success">
-                    + Create Staff
-                </button>
             </div>
 
             <!-- TABLE -->
@@ -117,47 +112,6 @@
                     <div class="modal-footer">
                         <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                         <button id="saveUserBtn" class="btn btn-primary">Save</button>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-        <!-- CREATE STAFF MODAL -->
-        <div class="modal fade" id="createStaffModal" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-
-                    <div class="modal-header">
-                        <h5 class="modal-title">Create Staff</h5>
-                        <button class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-
-                    <div class="modal-body">
-
-                        <div class="mb-2">
-                            <label>Username</label>
-                            <input id="createUsername" class="form-control">
-                        </div>
-
-                        <div class="mb-2">
-                            <label>Email</label>
-                            <input id="createEmail" class="form-control">
-                        </div>
-
-                        <div class="mb-2">
-                            <label>Password</label>
-                            <input id="createPassword" type="password" class="form-control">
-                        </div>
-
-                        <!-- KHÔNG cần chọn role -->
-                        <input type="hidden" id="createRole" value="STAFF">
-
-                    </div>
-
-                    <div class="modal-footer">
-                        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button id="saveStaffBtn" class="btn btn-success">Create</button>
                     </div>
 
                 </div>

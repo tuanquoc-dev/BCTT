@@ -1,14 +1,23 @@
 const LoginView = {
+
     getFormData: () => ({
-        username: document.getElementById("username").value,
-        password: document.getElementById("password").value
+        username: document.getElementById("username").value.trim(),
+        password: document.getElementById("password").value.trim()
     }),
 
     showSuccess: () => showToast("Đăng nhập thành công"),
 
-    redirect: () => {
+    redirect: (role) => {
         setTimeout(() => {
-            window.location.href = "../../index.html";
-        }, 1000);
+
+            const routes = {
+                ADMIN: "../admin/dashboard.html",
+                STAFF: "../staff/dashboard.html",
+                CUSTOMER: "../../index.html"
+            };
+
+            window.location.href = routes[role] || "../../index.html";
+
+        }, 800); // nhanh hơn, mượt hơn
     }
 };
