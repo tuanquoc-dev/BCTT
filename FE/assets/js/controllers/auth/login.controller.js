@@ -6,17 +6,28 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
     try {
         const data = LoginView.getFormData();
 
+        // ===== CALL API =====
         const res = await AuthModel.login(data);
+        const loginData = res.data.data;
 
-        Auth.setToken(res.data.data.token);
+        // ===== LƯU TOKEN =====
+        Auth.setToken(loginData.token);
 
-        if (window.handleAuthUI) handleAuthUI();
+        // ===== LƯU USER =====
+        Auth.setUser({
+            username: loginData.username,
+            role: loginData.role,
+            permissions: loginData.permissions
+        });
 
+        // ===== UI =====
         LoginView.showSuccess();
-        LoginView.redirect();
+
+        // ===== REDIRECT =====
+        LoginView.redirect(loginData.role);
 
     } catch (err) {
-        // interceptor xử lý rồi
+        // interceptor đã xử lý toast
     } finally {
         hideLoading();
     }

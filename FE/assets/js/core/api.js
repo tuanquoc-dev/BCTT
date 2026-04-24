@@ -18,7 +18,6 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (res) => res,
   (err) => {
-    hideLoading();
     showToast(err.response?.data?.message || "Lỗi hệ thống", "danger");
     return Promise.reject(err);
   },

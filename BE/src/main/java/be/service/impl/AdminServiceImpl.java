@@ -92,6 +92,8 @@ public class AdminServiceImpl implements AdminService {
                 .username(user.getUsername())
                 .fullName(user.getFullName())
                 .email(user.getEmail())
+                .age(user.getAge())
+                .address(user.getAddress())
                 .phone(user.getPhone())
                 .role(user.getRole() != null ? user.getRole().getCode() : null)
                 .status(user.getStatus())
@@ -161,6 +163,8 @@ public class AdminServiceImpl implements AdminService {
                 .fullName(user.getFullName())
                 .email(user.getEmail())
                 .phone(user.getPhone())
+                .age(user.getAge())
+                .address(user.getAddress())
                 .role(user.getRole().getCode())
                 .status(user.getStatus())
                 .build();

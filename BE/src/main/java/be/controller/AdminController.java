@@ -80,7 +80,7 @@ public class AdminController {
     @PreAuthorize("hasAuthority('USER_UPDATE')")
     public ResponseEntity<ApiResponse<UserResponse>> updateUser(
             @PathVariable Integer id,
-            @RequestBody UpdateProfileRequest request
+            @Valid @RequestBody UpdateProfileRequest request
     ) {
 
         return ResponseEntity.ok(
