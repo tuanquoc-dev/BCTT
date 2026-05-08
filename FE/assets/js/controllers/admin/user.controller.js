@@ -5,22 +5,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     loadUsers();
 
-    document.getElementById("searchBtn")?.addEventListener("click", () => {
-        currentPage = 0;
-        loadUsers();
-    });
+    document.getElementById("searchInput")
+        ?.addEventListener("keyup", () => {
 
-    document.getElementById("searchInput")?.addEventListener("keypress", (e) => {
-        if (e.key === "Enter") {
             currentPage = 0;
             loadUsers();
-        }
-    });
+        });
 
     document.getElementById("saveUserBtn")?.addEventListener("click", handleSaveUser);
 
     document.getElementById("createStaffBtn")?.addEventListener("click", () => {
-        UserListView.showCreateModal();
+        UserView.showCreateModal();
     });
 
     document.getElementById("saveStaffBtn")?.addEventListener("click", handleCreateStaff);
@@ -33,15 +28,15 @@ async function loadUsers() {
 
     try {
         const res = await AdminModel.getUsers({
-            keyword: UserListView.getKeyword(),
+            keyword: UserView.getKeyword(),
             page: currentPage,
             size: pageSize
         });
 
         const data = res.data.data;
 
-        UserListView.renderTable(data.content);
-        UserListView.renderPagination(data.totalPages, currentPage);
+        UserView.renderTable(data.content);
+        UserView.renderPagination(data.totalPages, currentPage);
 
         bindEvents();
 
@@ -77,8 +72,8 @@ function bindEvents() {
         btn.onclick = () => {
             const user = JSON.parse(btn.dataset.user);
 
-            UserListView.fillEditForm(user);
-            UserListView.showModal();
+            UserView.fillEditForm(user);
+            UserView.showModal();
         };
     });
 }
@@ -87,7 +82,7 @@ function bindEvents() {
 // ================= SAVE =================
 async function handleSaveUser() {
 
-    const {id, data, status} = UserListView.getEditData();
+    const {id, data, status} = UserView.getEditData();
 
     showLoading();
 
@@ -97,7 +92,7 @@ async function handleSaveUser() {
 
         showToast("Cập nhật thành công");
 
-        UserListView.hideModal();
+        UserView.hideModal();
         loadUsers();
 
     } catch (err) {
@@ -110,7 +105,7 @@ async function handleSaveUser() {
 
 async function handleCreateStaff() {
 
-    const data = UserListView.getCreateData();
+    const data = UserView.getCreateData();
 
     showLoading();
 
@@ -119,7 +114,7 @@ async function handleCreateStaff() {
 
         showToast("Tạo nhân viên thành công");
 
-        UserListView.hideCreateModal();
+        UserView.hideCreateModal();
 
         loadUsers();
 

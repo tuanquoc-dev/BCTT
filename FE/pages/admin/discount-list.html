@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Discount CRUD</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body>
+<!-- LOADING -->
+<div id="loadingSpinner"
+     class="position-fixed top-0 start-0 w-100 h-100 d-none d-flex align-items-center justify-content-center bg-dark bg-opacity-25"
+     style="z-index:9999;">
+    <div class="spinner-border text-light"></div>
+</div>
+
+<!-- TOAST -->
+<div class="toast-container position-fixed top-0 end-0 p-3" id="toastContainer"></div>
+
+<div class="wrapper">
+
+    <div id="sidebar" class="sidebar"></div>
+
+    <div class="right_col">
+        <div id="navbar" class="top_nav"></div>
+
+        <div class="content">
+
+            <!-- HEADER -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+
+                <div>
+                    <h3>
+                        Quản lý Mã giảm giá
+                    </h3>
+                </div>
+
+                <button
+                        class="btn btn-primary px-4"
+                        onclick="DiscountController.openCreate()">
+
+                    <i class="fa fa-plus"></i>
+                    Add Discount
+                </button>
+
+            </div>
+
+            <!-- FILTER -->
+            <div class="card border-0 shadow-sm mb-4 rounded-4">
+
+                <div class="card-body p-4">
+
+                    <div class="row g-3 align-items-center">
+
+                        <!-- SEARCH -->
+                        <div class="col-lg-6 col-md-12">
+
+                            <div class="input-group">
+
+                    <span class="input-group-text bg-white border-end-0">
+                        <i class="fa fa-search text-muted"></i>
+                    </span>
+
+                                <input
+                                        id="searchInput"
+                                        class="form-control border-start-0"
+                                        placeholder="Search discount code...">
+
+                            </div>
+
+                        </div>
+
+                        <!-- STATUS -->
+                        <div class="col-lg-3 col-md-6">
+
+                            <div class="input-group">
+
+                    <span class="input-group-text bg-white">
+                        <i class="fa fa-toggle-on"></i>
+                    </span>
+
+                                <select
+                                        id="statusFilter"
+                                        class="form-select">
+
+                                    <option value="">
+                                        All Status
+                                    </option>
+
+                                    <option value="ACTIVE">
+                                        ACTIVE
+                                    </option>
+
+                                    <option value="INACTIVE">
+                                        INACTIVE
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                        <!-- RESET -->
+                        <div class="col-lg-3 col-md-6">
+
+                            <button
+                                    class="btn btn-outline-secondary w-100"
+                                    onclick="DiscountView.resetFilter()">
+
+                                <i class="fa fa-rotate-right me-1"></i>
+                                Reset
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- TABLE -->
+            <div class="card">
+
+                <div class="card-body table-responsive">
+
+                    <table class="table table-hover align-middle text-center">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Code</th>
+                            <th>Type</th>
+                            <th>Value</th>
+                            <th>Limit</th>
+                            <th>Used</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody id="discountTable"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="pagination" class="mt-3"></div>
+        </div>
+
+        <!-- MODAL -->
+        <div class="modal fade" id="discountModal" tabindex="-1">
+
+            <div class="modal-dialog modal-xl modal-dialog-scrollable">
+
+                <div class="modal-content border-0 shadow">
+
+                    <!-- HEADER -->
+                    <div class="modal-header text-white">
+
+                        <h5 class="modal-title" id="discountModalTitle">
+                            Discount
+                        </h5>
+
+                        <button type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal">
+                        </button>
+
+                    </div>
+
+                    <!-- BODY -->
+                    <div class="modal-body">
+
+                        <div class="card border-0 shadow-sm">
+
+                            <div class="card-header fw-bold">
+                                Discount Information
+                            </div>
+
+                            <div class="card-body">
+
+                                <div class="row g-3">
+
+                                    <!-- CODE -->
+                                    <div class="col-md-6">
+                                        <label class="form-label">
+                                            Discount Code
+                                        </label>
+
+                                        <input id="code"
+                                               type="text"
+                                               class="form-control"
+                                               placeholder="Enter code">
+                                    </div>
+
+                                    <!-- TYPE -->
+                                    <div class="col-md-6">
+                                        <label class="form-label">
+                                            Discount Type
+                                        </label>
+
+                                        <select id="discountType"
+                                                class="form-select">
+
+                                            <option value="PERCENT">
+                                                PERCENT
+                                            </option>
+
+                                            <option value="AMOUNT">
+                                                AMOUNT
+                                            </option>
+
+                                        </select>
+                                    </div>
+
+                                    <!-- VALUE -->
+                                    <div class="col-md-4">
+                                        <label class="form-label">
+                                            Discount Value
+                                        </label>
+
+                                        <input id="discountValue"
+                                               type="number"
+                                               class="form-control"
+                                               placeholder="0">
+                                    </div>
+
+                                    <!-- LIMIT -->
+                                    <div class="col-md-4">
+                                        <label class="form-label">
+                                            Total Limit
+                                        </label>
+
+                                        <input id="limitNumber"
+                                               type="number"
+                                               class="form-control"
+                                               placeholder="0">
+                                    </div>
+
+                                    <!-- USER LIMIT -->
+                                    <div class="col-md-4">
+                                        <label class="form-label">
+                                            Limit Per User
+                                        </label>
+
+                                        <input id="limitPerUser"
+                                               type="number"
+                                               class="form-control"
+                                               placeholder="0">
+                                    </div>
+
+                                    <!-- MIN ORDER -->
+                                    <div class="col-md-6">
+                                        <label class="form-label">
+                                            Minimum Order
+                                        </label>
+
+                                        <input id="minOrderValue"
+                                               type="number"
+                                               class="form-control"
+                                               placeholder="0">
+                                    </div>
+
+                                    <!-- MAX DISCOUNT -->
+                                    <div class="col-md-6">
+                                        <label class="form-label">
+                                            Max Discount
+                                        </label>
+
+                                        <input id="maxDiscount"
+                                               type="number"
+                                               class="form-control"
+                                               placeholder="0">
+                                    </div>
+
+                                    <!-- START -->
+                                    <div class="col-md-6">
+                                        <label class="form-label">
+                                            Start Date
+                                        </label>
+
+                                        <input id="startDate"
+                                               type="datetime-local"
+                                               class="form-control">
+                                    </div>
+
+                                    <!-- END -->
+                                    <div class="col-md-6">
+                                        <label class="form-label">
+                                            End Date
+                                        </label>
+
+                                        <input id="endDate"
+                                               type="datetime-local"
+                                               class="form-control">
+                                    </div>
+
+                                    <!-- STATUS -->
+                                    <div class="col-md-6">
+                                        <label class="form-label">
+                                            Status
+                                        </label>
+
+                                        <select id="status"
+                                                class="form-select">
+
+                                            <option value="ACTIVE">
+                                                ACTIVE
+                                            </option>
+
+                                            <option value="INACTIVE">
+                                                INACTIVE
+                                            </option>
+
+                                        </select>
+                                    </div>
+
+                                    <!-- DESCRIPTION -->
+                                    <div class="col-md-12">
+                                        <label class="form-label">
+                                            Description
+                                        </label>
+
+                                        <textarea id="description"
+                                                  rows="5"
+                                                  class="form-control"
+                                                  placeholder="Description"></textarea>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- FOOTER -->
+                    <div class="modal-footer">
+
+                        <button class="btn btn-secondary"
+                                data-bs-dismiss="modal">
+
+                            Close
+                        </button>
+
+                        <button class="btn btn-primary"
+                                onclick="DiscountController.save()">
+
+                            Save Discount
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- CORE -->
+<script src="../../config.js"></script>
+<script src="../../assets/js/core/api.js"></script>
+<script src="../../assets/js/core/auth.js"></script>
+<script src="../../assets/js/core/utils.js"></script>
+
+<!-- MODEL -->
+<script src="../../assets/js/models/admin.model.js"></script>
+<script src="../../assets/js/models/user.model.js"></script>
+
+<!-- VIEW -->
+<script src="../../assets/js/views/admin/discount-view.js"></script>
+
+<!-- CONTROLLER -->
+<script src="../../assets/js/controllers/admin/discount-controller.js"></script>
+
+<!-- COMPONENT -->
+<script src="../../assets/js/components/navbar.js"></script>
+<script src="../../assets/js/components/sidebar.js"></script>
+
+<script>
+    Navbar.load();
+    Sidebar.load();
+</script>
+
+</body>
+</html>

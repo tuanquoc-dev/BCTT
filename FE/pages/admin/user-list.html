@@ -13,7 +13,6 @@
 <body>
 
 
-
 <div class="wrapper">
 
     <div id="sidebar" class="sidebar"></div>
@@ -23,38 +22,94 @@
 
         <div class="content p-4">
 
-            <h4 class="mb-3">Quản lý User</h4>
+            <!-- HEADER -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
 
-            <!-- SEARCH -->
-            <div class="d-flex gap-2 mb-3">
-                <input id="searchInput" class="form-control" placeholder="Tìm username...">
-                <button id="searchBtn" class="btn btn-primary">Search</button>
+                <div>
+                    <h3>
+                        Quản lý Người dùng
+                    </h3>
+                </div>
 
-                <!-- NEW -->
-                <button id="createStaffBtn" class="btn btn-success">
-                    + Create Staff
+                <button
+                        id="createStaffBtn"
+                        class="btn btn-primary px-4">
+
+                    <i class="fa fa-plus"></i>
+                    Create Staff
                 </button>
+
+            </div>
+
+            <!-- FILTER -->
+            <div class="card border-0 shadow-sm mb-4 rounded-4">
+
+                <div class="card-body p-4">
+
+                    <div class="row g-3 align-items-center">
+
+                        <!-- SEARCH -->
+                        <div class="col-lg-9 col-md-12">
+
+                            <div class="input-group">
+
+                    <span class="input-group-text bg-white border-end-0">
+                        <i class="fa fa-search text-muted"></i>
+                    </span>
+
+                                <input
+                                        id="searchInput"
+                                        class="form-control border-start-0"
+                                        placeholder="Search username...">
+
+                            </div>
+
+                        </div>
+
+                        <!-- RESET -->
+                        <div class="col-lg-3 col-md-12">
+
+                            <button
+                                    class="btn btn-outline-secondary w-100"
+                                    onclick="UserView.resetFilter()">
+
+                                <i class="fa fa-rotate-right me-1"></i>
+                                Reset
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
             </div>
 
             <!-- TABLE -->
-            <table class="table table-bordered table-hover text-center align-middler">
-                <thead class="table-dark">
-                <tr>
-                    <th>ID</th>
-                    <th>Username</th>
-                    <th>Full Name</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Age</th>
-                    <th>Address</th>
-                    <th>Role</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
-                </thead>
+            <div class="card">
 
-                <tbody id="userTableBody"></tbody>
-            </table>
+                <div class="card-body table-responsive">
+
+                    <table class="table table-hover align-middle">
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Full Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Age</th>
+                            <th>Address</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+
+                        <tbody id="userTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
 
             <div id="pagination" class="d-flex gap-2"></div>
 
@@ -157,7 +212,7 @@
 
                     <div class="modal-footer">
                         <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button id="saveStaffBtn" class="btn btn-success">Create</button>
+                        <button id="saveStaffBtn" class="btn btn-primary">Create</button>
                     </div>
 
                 </div>
@@ -195,8 +250,8 @@
 <script src="../../assets/js/components/sidebar.js"></script>
 
 <!-- MVC -->
-<script src="../../assets/js/views/admin/user-list.view.js"></script>
-<script src="../../assets/js/controllers/admin/user-list.controller.js"></script>
+<script src="../../assets/js/views/admin/user.view.js"></script>
+<script src="../../assets/js/controllers/admin/user.controller.js"></script>
 
 <script>
     Navbar.load();

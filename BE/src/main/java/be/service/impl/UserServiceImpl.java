@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService {
         user.setAge(request.getAge());
 
         if (file != null && !file.isEmpty()) {
-            String url = cloudinaryService.upload(file);
+            String url = cloudinaryService.upload(file).get("url");
             user.setAvatar(url);
         }
 
