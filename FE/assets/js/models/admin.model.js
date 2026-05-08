@@ -1,3 +1,20 @@
+function buildFormData(data, file) {
+    const formData = new FormData();
+
+    formData.append(
+        "data",
+        new Blob([JSON.stringify(data)], {
+            type: "application/json"
+        })
+    );
+
+    if (file) {
+        formData.append("file", file);
+    }
+
+    return formData;
+}
+
 const AdminModel = {
 
     // =============================
@@ -25,7 +42,7 @@ const AdminModel = {
     // =============================
     updateStatus: (id, status) => {
         return api.put(`/admin/users/${id}/status`, null, {
-            params: { status }
+            params: {status}
         });
     },
 
@@ -42,5 +59,179 @@ const AdminModel = {
 
     updateProfile: (data) => {
         return api.put("/admin/me", data);
+    },
+
+    // =============================
+    // 🏷 BRAND
+    // =============================
+    getBrands: (params = {}) => {
+        return api.get("/admin/brands", {
+            params: {
+                keyword: params.keyword || "",
+                status: params.status || null,
+                page: params.page ?? 0,
+                size: params.size ?? 10
+            }
+        });
+    },
+
+    getBrandById: (id) =>
+        api.get(`/admin/brands/${id}`),
+
+    createBrand: (data, file) => {
+        return api.post(
+            "/admin/brands",
+            buildFormData(data, file)
+        );
+    },
+
+    updateBrand: (id, data, file) => {
+        return api.put(
+            `/admin/brands/${id}`,
+            buildFormData(data, file)
+        );
+    },
+
+    deleteBrand: (id) =>
+        api.delete(`/admin/brands/${id}`),
+
+    // =============================
+    // 📂 CATEGORY
+    // =============================
+    getCategories: (params = {}) => {
+        return api.get("/admin/categories", {
+            params: {
+                keyword: params.keyword || "",
+                status: params.status || null,
+                page: params.page ?? 0,
+                size: params.size ?? 10
+            }
+        });
+    },
+
+    getCategoryById: (id) =>
+        api.get(`/admin/categories/${id}`),
+
+    createCategory: (data, file) => {
+        return api.post(
+            "/admin/categories",
+            buildFormData(data, file),
+            {
+                headers: {"Content-Type": "multipart/form-data"}
+            }
+        );
+    },
+
+    updateCategory: (id, data, file) => {
+        return api.put(
+            `/admin/categories/${id}`,
+            buildFormData(data, file),
+            {
+                headers: {"Content-Type": "multipart/form-data"}
+            }
+        );
+    },
+
+    deleteCategory: (id) =>
+        api.delete(`/admin/categories/${id}`),
+
+    // =============================
+// 🛒 PRODUCT
+// =============================
+
+// 🔍 SEARCH PRODUCT
+    getProducts: (params = {}) => {
+        return api.get("/admin/products", {
+            params: {
+                keyword: params.keyword || "",
+                minPrice: params.minPrice || null,
+                maxPrice: params.maxPrice || null,
+                brandId: params.brandId || null,
+                categoryId: params.categoryId || null,
+                sort: params.sort || "newest",
+                page: params.page ?? 0,
+                size: params.size ?? 10
+            }
+        });
+    },
+
+// 🔍 GET BY ID
+    getProductById: (id) =>
+        api.get(`/admin/products/${id}`),
+
+// ➕ CREATE PRODUCT (thumbnail + images)
+    createProduct: (data, thumbnail, images = []) => {
+        const formData = new FormData();
+
+        formData.append(
+            "data",
+            new Blob([JSON.stringify(data)], {type: "application/json"})
+        );
+
+        if (thumbnail) {
+            formData.append("thumbnail", thumbnail);
+        }
+
+        images.forEach(img => {
+            formData.append("images", img);
+        });
+
+        return api.post("/admin/products", formData);
+    },
+
+// ✏️ UPDATE PRODUCT
+    updateProduct: (id, data, thumbnail, newImages = [], deleteImageIds = []) => {
+        const formData = new FormData();
+
+        formData.append(
+            "data",
+            new Blob([JSON.stringify(data)], {type: "application/json"})
+        );
+
+        if (thumbnail) {
+            formData.append("thumbnail", thumbnail);
+        }
+
+        newImages.forEach(img => {
+            formData.append("newImages", img);
+        });
+
+        deleteImageIds.forEach(id => {
+            formData.append("deleteImageIds", id);
+        });
+
+        return api.put(`/admin/products/${id}`, formData);
+    },
+
+// ❌ DELETE (soft delete -> INACTIVE)
+    deleteProduct: (id) =>
+        api.delete(`/admin/products/${id}`),
+
+// 🎟 DISCOUNT
+// =============================
+
+// 🔍 GET ALL
+    getDiscounts: (params) => {
+        return api.get("/admin/discounts", {params});
+    },
+
+// 🔍 GET BY ID
+    getDiscountById: (id) => {
+        return api.get(`/admin/discounts/${id}`);
+    },
+
+// ➕ CREATE
+    createDiscount: (data) => {
+        return api.post("/admin/discounts", data);
+    },
+
+// ✏️ UPDATE
+    updateDiscount: (id, data) => {
+        return api.put(`/admin/discounts/${id}`, data);
+    },
+
+// ❌ DELETE
+    deleteDiscount: (id) => {
+        return api.delete(`/admin/discounts/${id}`);
     }
 };

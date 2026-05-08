@@ -1,67 +1,162 @@
 const Sidebar = {
 
     load: async () => {
-        const basePath = window.location.pathname.includes("/pages/")
+
+        // =====================================================
+        // BASE PATH HTML
+        // =====================================================
+
+        const assetPath = window.location.pathname.includes("/pages/")
             ? "../../"
             : "./";
 
-        const res = await fetch(basePath + "components/sidebar.html");
-        document.getElementById("sidebar").innerHTML = await res.text();
+        // =====================================================
+        // ROLE BASE PATH
+        // =====================================================
 
-        Sidebar.renderUser();
+        const path = window.location.pathname;
+
+        let rolePath = "/MobileHub/FE/pages/user";
+
+        if (path.includes("/admin/")) {
+            rolePath = "/MobileHub/FE/pages/admin";
+        }
+
+        else if (path.includes("/staff/")) {
+            rolePath = "/MobileHub/FE/pages/staff";
+        }
+
+        // =====================================================
+        // LOAD HTML
+        // =====================================================
+
+        const res =
+            await fetch(assetPath + "components/sidebar.html");
+
+        document.getElementById("sidebar").innerHTML =
+            await res.text();
+
+        // =====================================================
+        // REPLACE LINK
+        // =====================================================
+
+        document.querySelectorAll("[data-sidebar]").forEach(link => {
+
+            const page =
+                link.getAttribute("data-sidebar");
+
+            link.href = `${rolePath}/${page}`;
+        });
+
+        // =====================================================
+        // INIT
+        // =====================================================
+
+        await Sidebar.renderUser();
+
         Sidebar.setActive();
-        Sidebar.bindMenuToggle(); // ✅ QUAN TRỌNG
+
+        Sidebar.bindMenuToggle();
     },
 
+    // =====================================================
+    // USER
+    // =====================================================
+
     renderUser: async () => {
+
         try {
+
             const res = await UserModel.getMe();
+
             const user = res.data.data;
 
-            const name = document.getElementById("sbUsername");
-            const avatar = document.getElementById("sbAvatar");
+            const name =
+                document.getElementById("sbUsername");
 
-            if (name) name.textContent = user.username;
-            if (avatar) avatar.src = user.avatar || "https://i.pravatar.cc/80";
+            const avatar =
+                document.getElementById("sbAvatar");
+
+            if (name) {
+                name.textContent = user.username;
+            }
+
+            if (avatar) {
+                avatar.src =
+                    user.avatar ||
+                    "https://i.pravatar.cc/80";
+            }
 
         } catch (e) {
-            console.error("Load sidebar user lỗi:", e);
+
+            console.error(
+                "Load sidebar user lỗi:",
+                e
+            );
         }
     },
 
-    // ✅ FIX ACTIVE MENU
+    // =====================================================
+    // ACTIVE MENU
+    // =====================================================
+
     setActive: () => {
-        const links = document.querySelectorAll(".child_menu a");
-        const path = window.location.pathname;
+
+        const links =
+            document.querySelectorAll(".menu-link");
+
+        const path =
+            window.location.pathname;
 
         links.forEach(link => {
-            const href = link.getAttribute("href");
 
-            if (href && path.includes(href)) {
-                link.closest("li").classList.add("active"); // highlight item
-                link.closest(".menu-item")?.classList.add("active"); // mở menu cha
+            const href =
+                link.getAttribute("href");
+
+            if (!href) return;
+
+            const currentPage =
+                path.split("/").pop();
+
+            const linkPage =
+                href.split("/").pop();
+
+            if (currentPage === linkPage) {
+
+                link.classList.add("active");
+
+                link.closest(".menu-item")
+                    ?.classList.add("active");
             }
         });
     },
 
-    // ✅ TOGGLE MENU
+    // =====================================================
+    // TOGGLE MENU
+    // =====================================================
+
     bindMenuToggle: () => {
-        document.querySelectorAll(".menu-link").forEach(menu => {
 
-            menu.onclick = () => {
+        document
+            .querySelectorAll(".menu-link")
+            .forEach(menu => {
 
-                const parent = menu.parentElement;
+                menu.onclick = () => {
 
-                // 👉 chỉ mở 1 menu
-                document.querySelectorAll(".menu-item").forEach(item => {
-                    if (item !== parent) {
-                        item.classList.remove("active");
-                    }
-                });
+                    const parent =
+                        menu.parentElement;
 
-                parent.classList.toggle("active");
-            };
-        });
+                    document
+                        .querySelectorAll(".menu-item")
+                        .forEach(item => {
+
+                            if (item !== parent) {
+                                item.classList.remove("active");
+                            }
+                        });
+
+                    parent.classList.toggle("active");
+                };
+            });
     }
-
 };

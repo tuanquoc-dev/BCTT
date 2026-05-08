@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Quản lý danh mục</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body>
+
+<!-- LOADING -->
+<div id="loadingSpinner"
+     class="position-fixed top-0 start-0 w-100 h-100 d-none d-flex align-items-center justify-content-center bg-dark bg-opacity-25"
+     style="z-index:9999;">
+    <div class="spinner-border text-light"></div>
+</div>
+
+<!-- TOAST -->
+<div class="toast-container position-fixed top-0 end-0 p-3" id="toastContainer"></div>
+
+<div class="wrapper">
+
+    <div id="sidebar" class="sidebar"></div>
+
+    <div class="right_col">
+        <div id="navbar" class="top_nav"></div>
+
+        <div class="content">
+
+            <!-- HEADER -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+
+                <div>
+                    <h3>
+                        Quản lý Danh mục
+                    </h3>
+                </div>
+
+                <button
+                        class="btn btn-primary px-4"
+                        onclick="CategoryController.openCreate()">
+
+                    <i class="fa fa-plus"></i>
+                    Add Category
+                </button>
+
+            </div>
+
+            <!-- FILTER -->
+            <div class="card border-0 shadow-sm mb-4 rounded-4">
+
+                <div class="card-body p-4">
+
+                    <div class="row g-3 align-items-center">
+
+                        <!-- SEARCH -->
+                        <div class="col-lg-6 col-md-12">
+
+                            <div class="input-group">
+
+                    <span class="input-group-text bg-white border-end-0">
+                        <i class="fa fa-search text-muted"></i>
+                    </span>
+
+                                <input
+                                        id="searchInput"
+                                        class="form-control border-start-0"
+                                        placeholder="Search category name...">
+
+                            </div>
+
+                        </div>
+
+                        <!-- STATUS -->
+                        <div class="col-lg-3 col-md-6">
+
+                            <div class="input-group">
+
+                    <span class="input-group-text bg-white">
+                        <i class="fa fa-toggle-on"></i>
+                    </span>
+
+                                <select
+                                        id="statusFilter"
+                                        class="form-select">
+
+                                    <option value="">
+                                        All Status
+                                    </option>
+
+                                    <option value="ACTIVE">
+                                        ACTIVE
+                                    </option>
+
+                                    <option value="INACTIVE">
+                                        INACTIVE
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                        <!-- RESET -->
+                        <div class="col-lg-3 col-md-6">
+
+                            <button
+                                    class="btn btn-outline-secondary w-100"
+                                    onclick="CategoryView.resetFilter()">
+
+                                <i class="fa fa-rotate-right me-1"></i>
+                                Reset
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="card">
+
+                <div class="card-body table-responsive">
+
+                    <table class="table table-hover align-middle text-center">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Image</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody id="categoryTable"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="pagination" class="mt-3"></div>
+
+            <!-- MODAL -->
+            <div class="modal fade" id="categoryModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <h5 id="modalTitle">Category</h5>
+                            <button class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <div class="modal-body">
+
+                            <input id="categoryName" class="form-control mb-2" placeholder="Tên category">
+
+                            <input id="categoryDescription" class="form-control mb-2" placeholder="Mô tả">
+
+                            <select id="categoryStatus" class="form-select mb-2">
+                                <option value="ACTIVE">ACTIVE</option>
+                                <option value="INACTIVE">INACTIVE</option>
+                            </select>
+
+                            <div class="mb-2">
+                                <img id="categoryPreview" width="80" class="d-none"/>
+
+                                <button id="categoryRemoveBtn"
+                                        class="btn btn-sm btn-danger d-none"
+                                        onclick="CategoryView.removeCurrentImage()">
+                                    ❌
+                                </button>
+                            </div>
+
+                            <input type="file" id="categoryFile" class="form-control">
+
+                        </div>
+
+                        <div class="modal-footer">
+                            <button class="btn btn-primary" onclick="CategoryController.save()">Save</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- CORE -->
+<script src="../../config.js"></script>
+<script src="../../assets/js/core/api.js"></script>
+<script src="../../assets/js/core/auth.js"></script>
+<script src="../../assets/js/core/utils.js"></script>
+
+
+<script src="../../assets/js/models/admin.model.js"></script>
+<script src="../../assets/js/models/user.model.js"></script>
+<script src="../../assets/js/views/admin/category.view.js"></script>
+<script src="../../assets/js/controllers/admin/category.controller.js"></script>
+
+
+<script src="../../assets/js/components/navbar.js"></script>
+<script src="../../assets/js/components/sidebar.js"></script>
+
+<script>
+    Navbar.load();
+    Sidebar.load();
+</script>
+</body>
+</html>

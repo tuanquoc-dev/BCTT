@@ -4,6 +4,8 @@ import be.dto.response.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import org.springframework.web.multipart.MultipartException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -67,5 +69,39 @@ public class GlobalExceptionHandler {
                         .message(ErrorCode.PERMISSION_DENIED.getMessage())
                         .data(null)
                         .build());
+    }
+
+    // ================= FILE TOO LARGE =================
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<ApiResponse<?>> handleMaxSize(
+            MaxUploadSizeExceededException e
+    ) {
+
+        return ResponseEntity
+                .status(ErrorCode.FILE_SIZE_EXCEEDED.getStatus())
+                .body(
+                        ApiResponse.builder()
+                                .status(ErrorCode.FILE_SIZE_EXCEEDED.getStatus().value())
+                                .message(ErrorCode.FILE_SIZE_EXCEEDED.getMessage())
+                                .build()
+                );
+    }
+
+    // ================= MULTIPART =================
+
+    @ExceptionHandler(MultipartException.class)
+    public ResponseEntity<ApiResponse<?>> handleMultipart(
+            MultipartException e
+    ) {
+
+        return ResponseEntity
+                .status(ErrorCode.FILE_SIZE_EXCEEDED.getStatus())
+                .body(
+                        ApiResponse.builder()
+                                .status(ErrorCode.FILE_SIZE_EXCEEDED.getStatus().value())
+                                .message(ErrorCode.FILE_SIZE_EXCEEDED.getMessage())
+                                .build()
+                );
     }
 }

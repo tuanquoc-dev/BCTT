@@ -17,15 +17,28 @@ public class CloudinaryService {
         this.cloudinary = cloudinary;
     }
 
-    public String upload(MultipartFile file) {
+    public Map<String, String> upload(MultipartFile file) {
         try {
             Map uploadResult = cloudinary.uploader().upload(
                     file.getBytes(),
                     ObjectUtils.emptyMap()
             );
-            return uploadResult.get("secure_url").toString(); // dùng secure_url
+
+            return Map.of(
+                    "url", uploadResult.get("secure_url").toString(),
+                    "publicId", uploadResult.get("public_id").toString()
+            );
+
         } catch (IOException e) {
             throw new RuntimeException("Upload ảnh thất bại");
+        }
+    }
+
+    public void delete(String publicId) {
+        try {
+            cloudinary.uploader().destroy(publicId, Map.of());
+        } catch (IOException e) {
+            throw new RuntimeException("Xóa ảnh thất bại");
         }
     }
 }

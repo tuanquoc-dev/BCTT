@@ -1,4 +1,4 @@
-const UserListView = {
+const UserView = {
 
     renderTable: (users) => {
         const tbody = document.getElementById("userTableBody");
@@ -24,7 +24,7 @@ const UserListView = {
                 </span>
             </td>
             <td>
-                <button class="btn btn-sm btn-primary editBtn"
+                <button class="btn btn-sm editBtn"
                         data-user='${JSON.stringify(u)}'>
                     <i class="fa fa-edit"></i> Edit
                 </button>
@@ -92,6 +92,14 @@ const UserListView = {
         document.getElementById("editAge").value = user.age || "";
         document.getElementById("editAddress").value = user.address || "";
         document.getElementById("editStatus").value = user.status;
+    },
+
+    resetFilter: () => {
+
+        document.getElementById("searchInput").value = "";
+
+        currentPage = 0;
+        loadUsers();
     },
 
     getEditData: () => ({

@@ -233,7 +233,7 @@ body {
     transition: all 0.2s ease;
 }
 
-.side-menu .menu-link:hover {
+.side-menu .menu-link.active:hover i{
     background: #1ABB9C;
     color: #fff;
 }
@@ -484,4 +484,65 @@ body.nav-sm .top_nav {
 
 .main_container {
     display: flex;
+}
+/* =====================================================
+   PROFILE PAGE
+===================================================== */
+
+.profile-page {
+    background: #f5f7fa;
+}
+
+/* CARD */
+.profile-page .profile-sidebar,
+.profile-page .profile-content-box {
+    height: 100%;
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.profile-page .profile-content-box {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    border: 1px solid #eee;
+}
+
+.profile-page .profile-sidebar {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.profile-page .row.g-4 {
+    align-items: stretch;
+}
+
+/* AVATAR */
+.profile-page .profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+    border: 3px solid #ddd;
+    transition: 0.3s;
+}
+
+.profile-page .profile-avatar:hover {
+    opacity: 0.8;
+}
+
+/* MENU */
+.profile-page .profile-menu-item {
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: 0.2s;
+}
+
+.profile-page .profile-menu-item:not(.active):hover {
+    background: #e7f1ff;
+}
+
+.profile-page .profile-menu-item.active {
+    background: #0d6efd;
+    color: #fff;
 }
