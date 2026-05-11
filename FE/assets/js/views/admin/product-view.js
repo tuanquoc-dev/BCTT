@@ -55,10 +55,38 @@ const ProductView = {
                     </td>
 
                     <td>
-                        <div class="fw-semibold">
-                            ${p.name || ""}
-                        </div>
-                    </td>
+
+    <div class="fw-semibold">
+        ${p.name || ""}
+    </div>
+
+    <div class="small text-muted mt-1">
+
+        ${p.color ? `
+            <span class="badge rounded-pill bg-secondary-subtle text-dark border">
+                ${p.color}
+            </span>
+        ` : ""}
+
+        ${p.ram ? `
+            <span class="badge rounded-pill bg-secondary-subtle text-dark border">
+                ${p.ram}
+            </span>
+        ` : ""}
+
+    </div>
+
+    ${
+                p.parentSlug
+                    ? `
+                <div class="small text-primary mt-1">
+                    Group: ${p.parentSlug}
+                </div>
+            `
+                    : ""
+            }
+
+</td>
 
                     <td>${p.brandName || ""}</td>
 
@@ -294,6 +322,7 @@ const ProductView = {
         document.getElementById("stock").value = "";
         document.getElementById("sku").value = "";
         document.getElementById("color").value = "";
+        document.getElementById("ram").value = "";
         document.getElementById("description").value = "";
         document.getElementById("status").value = "ACTIVE";
 
@@ -351,6 +380,9 @@ const ProductView = {
 
         document.getElementById("color").value =
             p.color || "";
+
+        document.getElementById("ram").value =
+            p.ram || "";
 
         document.getElementById("description").value =
             p.description || "";
@@ -640,6 +672,8 @@ ProductView.showDetail = (p) => {
     document.getElementById("detailColor")
         .innerText = p.color || "";
 
+    document.getElementById("detailRam")
+        .innerText = p.ram || "";
     // ===============================
     // PRICE
     // ===============================

@@ -4,6 +4,7 @@ import be.dto.request.CreateProductRequest;
 import be.dto.request.UpdateProductRequest;
 import be.dto.response.ImageResponse;
 import be.dto.response.ProductResponse;
+import be.dto.response.ProductVariantResponse;
 import be.entity.*;
 import be.enums.CommonStatus;
 import be.enums.DiscountType;
@@ -56,12 +57,18 @@ public class ProductServiceImpl implements ProductService {
 
         Product product = Product.builder()
                 .name(request.getName())
-                .slug(generateSlug(request.getName()))
+                .slug(generateVariantSlug(request))
+                .parentSlug(
+                        request.getParentSlug() != null
+                                ? request.getParentSlug()
+                                : generateParentSlug(request.getName())
+                )
                 .description(request.getDescription())
                 .price(request.getPrice())
                 .stock(request.getStock() != null ? request.getStock() : 0)
                 .sku(request.getSku())
                 .color(request.getColor())
+                .ram(request.getRam())
                 .brand(brand)
                 .category(category)
                 .status(
@@ -170,7 +177,32 @@ public class ProductServiceImpl implements ProductService {
                 !request.getName().isBlank()) {
 
             product.setName(request.getName());
-            product.setSlug(generateSlug(request.getName()));
+            String finalName =
+                    request.getName() != null
+                            ? request.getName()
+                            : product.getName();
+
+            String finalColor =
+                    request.getColor() != null
+                            ? request.getColor()
+                            : product.getColor();
+
+            String finalRam =
+                    request.getRam() != null
+                            ? request.getRam()
+                            : product.getRam();
+
+            String rawSlug = finalName;
+
+            if (finalColor != null && !finalColor.isBlank()) {
+                rawSlug += "-" + finalColor;
+            }
+
+            if (finalRam != null && !finalRam.isBlank()) {
+                rawSlug += "-" + finalRam;
+            }
+
+            product.setSlug(generateSlug(rawSlug));
         }
 
         if (request.getDescription() != null) {
@@ -191,6 +223,24 @@ public class ProductServiceImpl implements ProductService {
 
         if (request.getColor() != null) {
             product.setColor(request.getColor());
+        }
+
+        if (request.getRam() != null) {
+            product.setRam(request.getRam());
+        }
+
+        if (request.getName() != null &&
+                !request.getName().isBlank()) {
+
+            product.setName(request.getName());
+
+            if (request.getParentSlug() == null ||
+                    request.getParentSlug().isBlank()) {
+
+                product.setParentSlug(
+                        generateParentSlug(request.getName())
+                );
+            }
         }
 
         if (request.getStatus() != null) {
@@ -371,6 +421,47 @@ public class ProductServiceImpl implements ProductService {
         ).map(this::mapProduct);
     }
 
+    // customer search
+    @Override
+    public Page<ProductResponse> search(String keyword,
+                                        Integer brandId,
+                                        Integer categoryId,
+                                        Double minPrice,
+                                        Double maxPrice,
+                                        Float minRating,
+                                        String sort,
+                                        int page,
+                                        int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        return productRepository.search(
+                keyword,
+                brandId,
+                categoryId,
+                minPrice,
+                maxPrice,
+                minRating,
+                sort,
+                pageable
+        ).map(this::mapProduct);
+    }
+
+    @Override
+    public ProductResponse getBySlug(String slug) {
+
+        Product product = productRepository.findBySlug(slug)
+                .orElseThrow(() ->
+                        new AppException(ErrorCode.PRODUCT_NOT_FOUND));
+
+        // tăng view
+        product.setViewCount(product.getViewCount() + 1);
+
+        productRepository.save(product);
+
+        return mapProduct(product);
+    }
+
     // =====================================================
     // MAP PRODUCT
     // =====================================================
@@ -393,6 +484,27 @@ public class ProductServiceImpl implements ProductService {
                         product.getDiscount()
                 );
 
+        List<ProductVariantResponse> variants =
+                productRepository
+                        .findByParentSlug(product.getParentSlug())
+                        .stream()
+                        .map(p -> ProductVariantResponse.builder()
+                                .id(p.getId())
+                                .color(p.getColor())
+                                .ram(p.getRam())
+                                .slug(p.getSlug())
+                                .price(p.getPrice())
+                                .finalPrice(
+                                        calculateFinalPrice(
+                                                p.getPrice(),
+                                                p.getDiscount()
+                                        )
+                                )
+                                .stock(p.getStock())
+                                .thumbnail(p.getThumbnail())
+                                .build())
+                        .toList();
+
         return ProductResponse.builder()
                 .id(product.getId())
                 .name(product.getName())
@@ -407,6 +519,9 @@ public class ProductServiceImpl implements ProductService {
                 .stock(product.getStock())
                 .sku(product.getSku())
                 .color(product.getColor())
+                .ram(product.getRam())
+                .parentSlug(product.getParentSlug())
+                .variants(variants)
 
                 .discountId(
                         product.getDiscount() != null
@@ -530,6 +645,29 @@ public class ProductServiceImpl implements ProductService {
         }
 
         return slug;
+    }
+
+    private String generateParentSlug(String name) {
+
+        return name.toLowerCase()
+                .trim()
+                .replaceAll("\\s+", "-")
+                .replaceAll("[^a-z0-9-]", "");
+    }
+
+    private String generateVariantSlug(CreateProductRequest request) {
+
+        String raw = request.getName();
+
+        if (request.getColor() != null) {
+            raw += "-" + request.getColor();
+        }
+
+        if (request.getRam() != null) {
+            raw += "-" + request.getRam();
+        }
+
+        return generateSlug(raw);
     }
 
     private void validateImage(MultipartFile file) {

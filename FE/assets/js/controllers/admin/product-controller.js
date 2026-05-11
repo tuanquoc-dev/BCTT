@@ -212,6 +212,9 @@ const ProductController = {
                 color:
                 document.getElementById("color").value,
 
+                ram:
+                document.getElementById("ram").value,
+
                 description:
                 document.getElementById("description").value,
 

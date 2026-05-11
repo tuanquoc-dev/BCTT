@@ -1,253 +1,232 @@
-<header class="header-gradient py-3 position-relative">
-  <div class="container d-flex justify-content-between align-items-center">
+<header>
 
-    <!-- Logo -->
-    <h4 class="m-0 text-white fw-bold d-flex align-items-center">
-      <a href="/MobileHub/FE/index.html" class="text-decoration-none text-white">
-      <i class="fa-solid fa-mobile-screen-button me-2"></i>
-      MobileHub
-      </a>
-    </h4>
+  <!-- ===================================== -->
+  <!-- TOP BAR -->
+  <!-- ===================================== -->
 
-    <!-- Search -->
-    <div class="w-50 mx-3">
-      <div class="input-group">
-        <input class="form-control" placeholder="Tìm kiếm sản phẩm...">
-        <button class="btn btn-white">
-          <i class="fas fa-search"></i>
-        </button>
-      </div>
-    </div>
+  <div class="top-header py-2">
 
-    <!-- Actions -->
-    <div class="d-flex gap-4 align-items-center">
+    <div class="container">
 
-      <!-- CART -->
-      <a href="#" class="text-decoration-none position-relative">
-        <i class="fa-solid fa-cart-shopping"></i> Giỏ hàng
-        <span class="badge bg-danger position-absolute top-0 start-100 translate-middle rounded-pill">
-      2
-    </span>
-      </a>
+      <div class="d-flex justify-content-between align-items-center">
 
-      <!-- ORDER -->
-      <a href="#" class="text-decoration-none">
-        <i class="fa-solid fa-receipt"></i> Tra cứu
-      </a>
+        <!-- LEFT -->
+        <div class="small text-white">
 
-      <!-- PROMO -->
-      <a href="#" class="text-decoration-none">
-        <i class="fa-solid fa-tags"></i> Khuyến mãi
-      </a>
+          <i class="fa-solid fa-bolt"></i>
 
-      <!-- ACCOUNT -->
-      <div class="dropdown" id="accountSection">
-        <!-- chưa login -->
-        <a href="/MobileHub/FE/pages/auth/login.html" id="loginLink" class="text-decoration-none">
-          <i class="fa-solid fa-user"></i> Login
-        </a>
+          Flash Sale đến 50% • Miễn phí vận chuyển toàn quốc
 
-        <!-- đã login -->
-        <div id="userDropdown" class="d-none">
-          <a class="text-decoration-none dropdown-toggle" href="#" data-bs-toggle="dropdown">
-            <i class="fa-solid fa-user-circle"></i> Tài khoản
+        </div>
+
+        <!-- RIGHT -->
+        <div class="d-flex gap-4 small">
+
+          <!-- HOTLINE -->
+          <a href="tel:0123456789"
+             class="text-white text-decoration-none">
+
+            <i class="fa-solid fa-phone"></i>
+
+            0123 456 789
+
           </a>
 
-          <ul class="dropdown-menu dropdown-menu-end shadow">
-            <li>
-              <a class="dropdown-item" href="./pages/user/profile.html">
-                <i class="fa-solid fa-id-card"></i> Hồ sơ
-              </a>
-            </li>
+          <!-- ORDER -->
+          <a href="#"
+             class="text-white text-decoration-none">
 
-            <li>
-              <a class="dropdown-item" href="#">
-                <i class="fa-solid fa-box"></i> Đơn hàng của tôi
-              </a>
-            </li>
+            <i class="fa-solid fa-receipt"></i>
 
-            <li><hr class="dropdown-divider"></li>
+            Tra cứu đơn hàng
 
-            <li>
-              <button class="dropdown-item text-danger" id="logoutBtn">
-                <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
-              </button>
-            </li>
-          </ul>
+          </a>
+
         </div>
+
       </div>
 
     </div>
 
   </div>
 
-  <div class="header-bottom position-relative">
-    <div class="container d-flex gap-4">
 
-      <!-- ĐIỆN THOẠI -->
-      <div class="category-item">
-        <span>Điện thoại <i class="fa-solid fa-angle-down"></i></span>
-        <div class="mega-menu shadow p-4">
-          <div class="row">
-            <div class="col-md-3">
-              <strong>Apple</strong>
-              <ul>
-                <li>iPhone 15</li>
-                <li>iPhone 14</li>
-                <li>iPhone 13</li>
-              </ul>
-            </div>
-            <div class="col-md-3">
-              <strong>Samsung</strong>
-              <ul>
-                <li>Galaxy S</li>
-                <li>Galaxy A</li>
-                <li>Galaxy Z</li>
-              </ul>
-            </div>
-            <div class="col-md-3">
-              <strong>Xiaomi</strong>
-              <ul>
-                <li>Redmi</li>
-                <li>Poco</li>
-              </ul>
-            </div>
-            <div class="col-md-3">
-              <strong>OPPO</strong>
-              <ul>
-                <li>Find X</li>
-                <li>Reno</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
 
-      <!-- LAPTOP -->
-      <div class="category-item">
-        <span>Laptop <i class="fa-solid fa-angle-down"></i></span>
-        <div class="mega-menu shadow p-4">
-          <div class="row">
-            <div class="col-md-3">
-              <strong>Macbook</strong>
-              <ul>
-                <li>Macbook Air</li>
-                <li>Macbook Pro</li>
-              </ul>
-            </div>
-            <div class="col-md-3">
-              <strong>Dell</strong>
-              <ul>
-                <li>XPS</li>
-                <li>Inspiron</li>
-              </ul>
-            </div>
-            <div class="col-md-3">
-              <strong>Asus</strong>
-              <ul>
-                <li>ROG</li>
-                <li>VivoBook</li>
-              </ul>
-            </div>
-            <div class="col-md-3">
-              <strong>HP</strong>
-              <ul>
-                <li>Pavilion</li>
-                <li>Envy</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
+  <!-- ===================================== -->
+  <!-- MAIN HEADER -->
+  <!-- ===================================== -->
 
-      <!-- TABLET -->
-      <div class="category-item">
-        <span>Tablet <i class="fa-solid fa-angle-down"></i></span>
-        <div class="mega-menu shadow p-4">
-          <div class="row">
-            <div class="col-md-3">
-              <strong>Apple</strong>
-              <ul>
-                <li>iPad Pro</li>
-                <li>iPad Air</li>
-              </ul>
-            </div>
-            <div class="col-md-3">
-              <strong>Samsung</strong>
-              <ul>
-                <li>Galaxy Tab S</li>
-                <li>Galaxy Tab A</li>
-              </ul>
-            </div>
-            <div class="col-md-3">
-              <strong>Xiaomi</strong>
-              <ul>
-                <li>Pad 5</li>
-                <li>Pad 6</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
+  <div class="main-header py-3 shadow-sm">
 
-      <!-- PHỤ KIỆN -->
-      <div class="category-item">
-        <span>Phụ kiện <i class="fa-solid fa-angle-down"></i></span>
-        <div class="mega-menu shadow p-4">
-          <div class="row">
-            <div class="col-md-3">
-              <strong>Tai nghe</strong>
-              <ul>
-                <li>AirPods</li>
-                <li>Bluetooth</li>
-              </ul>
-            </div>
-            <div class="col-md-3">
-              <strong>Sạc</strong>
-              <ul>
-                <li>Cáp sạc</li>
-                <li>Sạc nhanh</li>
-              </ul>
-            </div>
-            <div class="col-md-3">
-              <strong>Ốp lưng</strong>
-              <ul>
-                <li>Silicon</li>
-                <li>Chống sốc</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div class="container">
 
-      <!-- ĐỒNG HỒ -->
-      <div class="category-item">
-        <span>Đồng hồ <i class="fa-solid fa-angle-down"></i></span>
-        <div class="mega-menu shadow p-4">
-          <div class="row">
-            <div class="col-md-3">
-              <strong>Apple Watch</strong>
-              <ul>
-                <li>Series 9</li>
-                <li>Ultra</li>
-              </ul>
-            </div>
-            <div class="col-md-3">
-              <strong>Samsung</strong>
-              <ul>
-                <li>Galaxy Watch</li>
-              </ul>
-            </div>
-            <div class="col-md-3">
-              <strong>Xiaomi</strong>
-              <ul>
-                <li>Mi Band</li>
-              </ul>
-            </div>
+      <div class="d-flex align-items-center gap-3">
+
+        <!-- LOGO -->
+        <a href="/MobileHub/FE/index.html"
+           class="logo text-decoration-none">
+
+          <h3 class="m-0 fw-bold">
+
+            <i class="fa-solid fa-mobile-screen-button"></i>
+
+            MobileHub
+
+          </h3>
+
+        </a>
+
+        <!-- CATEGORY BUTTON -->
+        <div class="category-wrapper position-relative">
+
+          <button class="btn px-3 category-btn"
+                  id="categoryBtn">
+
+            <i class="fa-solid fa-bars"></i>
+
+            Danh mục
+
+          </button>
+
+          <!-- CATEGORY DROPDOWN -->
+          <div id="categoryDropdown"
+               class="category-dropdown d-none">
+
+            <div class="category-grid"
+                 id="categoryGrid"></div>
+
           </div>
+
         </div>
+
+        <!-- SEARCH -->
+        <div class="header-search-wrapper position-relative flex-grow-1">
+
+          <div class="input-group">
+
+            <input id="searchInput"
+                   type="text"
+                   class="form-control search-input"
+                   placeholder="Bạn cần tìm gì...">
+
+            <button class="btn">
+
+              <i class="fa fa-search"></i>
+
+            </button>
+
+          </div>
+
+          <!-- SEARCH DROPDOWN -->
+          <div id="searchDropdown"
+               class="search-dropdown d-none">
+
+            <div id="searchResult"
+                 class="row g-3"></div>
+
+          </div>
+
+        </div>
+
+        <!-- CART -->
+        <a href="#"
+           class="header-action position-relative">
+
+          <i class="fa-solid fa-cart-shopping"></i>
+
+          <span>Giỏ hàng</span>
+
+          <span class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">
+
+                        2
+
+                    </span>
+
+        </a>
+
+        <!-- ACCOUNT -->
+        <div id="accountSection">
+
+          <!-- NOT LOGIN -->
+          <a href="/MobileHub/FE/pages/auth/login.html"
+             id="loginLink"
+             class="header-action">
+
+            <i class="fa-solid fa-user"></i>
+
+            <span>Đăng nhập</span>
+
+          </a>
+
+          <!-- LOGIN -->
+          <div id="userDropdown"
+               class="dropdown d-none">
+
+            <a class="header-action dropdown-toggle"
+               href="#"
+               data-bs-toggle="dropdown">
+
+              <i class="fa-solid fa-user-circle"></i>
+
+              <span>Tài khoản</span>
+
+            </a>
+
+            <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-4">
+
+              <li>
+
+                <a class="dropdown-item"
+                   href="./pages/user/profile.html">
+
+                  <i class="fa-solid fa-id-card"></i>
+
+                  Hồ sơ
+
+                </a>
+
+              </li>
+
+              <li>
+
+                <a class="dropdown-item"
+                   href="#">
+
+                  <i class="fa-solid fa-box"></i>
+
+                  Đơn hàng
+
+                </a>
+
+              </li>
+
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+
+              <li>
+
+                <button class="dropdown-item text-danger"
+                        id="logoutBtn">
+
+                  <i class="fa-solid fa-right-from-bracket"></i>
+
+                  Đăng xuất
+
+                </button>
+
+              </li>
+
+            </ul>
+
+          </div>
+
+        </div>
+
       </div>
 
     </div>
+
   </div>
+
 </header>

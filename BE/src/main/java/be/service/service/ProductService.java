@@ -34,4 +34,18 @@ public interface ProductService {
             int page,
             int size
     );
+
+    Page<ProductResponse> search(
+            String keyword,
+            Integer brandId,
+            Integer categoryId,
+            Double minPrice,
+            Double maxPrice,
+            Float minRating,
+            String sort,
+            int page,
+            int size
+    );
+
+    ProductResponse getBySlug(String slug);
 }

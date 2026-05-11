@@ -33,6 +33,9 @@ public class ProductResponse {
 
     private String sku;
     private String color;
+    private String ram;
+    private String parentSlug;
+    private List<ProductVariantResponse> variants;
 
     private CommonStatus status;
 

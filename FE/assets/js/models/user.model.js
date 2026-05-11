@@ -8,4 +8,32 @@ const UserModel = {
 
     changePassword: (data) =>
         api.put("/users/change-password", data),
+
+    // ======================================
+    // PRODUCTS
+    // ======================================
+
+    searchProducts: (params) =>
+        api.get("/products", { params }),
+
+    getProductDetail: (slug) =>
+        api.get(`/products/${slug}`),
+
+    // ======================================
+// BRANDS
+// ======================================
+
+    getBrands() {
+        return api.get("/public/brands");
+    },
+
+// ======================================
+// CATEGORIES
+// ======================================
+
+    getCategories() {
+
+        return api.get(
+            "/public/categories");
+    }
 };

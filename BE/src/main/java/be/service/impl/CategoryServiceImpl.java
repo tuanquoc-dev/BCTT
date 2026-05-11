@@ -15,6 +15,7 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -178,5 +179,22 @@ public class CategoryServiceImpl implements CategoryService {
                 .description(c.getDescription())
                 .status(c.getStatus())
                 .build());
+    }
+
+    @Override
+    public List<CategoryResponse> getActiveCategories() {
+
+        return categoryRepository
+                .findByStatusOrderByNameAsc(CommonStatus.ACTIVE)
+                .stream()
+                .map(c -> CategoryResponse.builder()
+                        .id(c.getId())
+                        .name(c.getName())
+                        .slug(c.getSlug())
+                        .image(c.getImage())
+                        .description(c.getDescription())
+                        .status(c.getStatus())
+                        .build())
+                .toList();
     }
 }

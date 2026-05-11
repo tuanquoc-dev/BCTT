@@ -14,6 +14,13 @@ const Header = (() => {
         setTimeout(() => {
             bindEvents();
             renderAuth();
+
+            // 🔥 INIT SEARCH
+            if (typeof initSearchEvents === "function") {
+
+                initSearchEvents();
+            }
+
         }, 0);
     };
 
