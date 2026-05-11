@@ -15,6 +15,7 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -168,5 +169,20 @@ public class BrandServiceImpl implements BrandService {
                 .logo(b.getLogo())
                 .status(b.getStatus())
                 .build());
+    }
+
+    @Override
+    public List<BrandResponse> getActiveBrands() {
+
+        return brandRepository
+                .findByStatusOrderByNameAsc(CommonStatus.ACTIVE)
+                .stream()
+                .map(b -> BrandResponse.builder()
+                        .id(b.getId())
+                        .name(b.getName())
+                        .logo(b.getLogo())
+                        .status(b.getStatus())
+                        .build())
+                .toList();
     }
 }

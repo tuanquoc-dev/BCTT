@@ -62,6 +62,10 @@ public class Product {
 
     private String color;
 
+    private String ram;
+
+    private String parentSlug;
+
     // ================= STATS =================
 
     private Integer soldQuantity = 0;

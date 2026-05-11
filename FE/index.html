@@ -24,6 +24,34 @@
 <!-- HEADER -->
 <div id="header"></div>
 
+<!-- CATEGORY OFFCANVAS -->
+<div class="offcanvas offcanvas-start"
+     tabindex="-1"
+     id="categorySidebar">
+
+    <div class="offcanvas-header">
+
+        <h5 class="offcanvas-title fw-bold">
+            Danh mục sản phẩm
+        </h5>
+
+        <button type="button"
+                class="btn-close"
+                data-bs-dismiss="offcanvas"></button>
+
+    </div>
+
+    <div class="offcanvas-body">
+
+        <div id="offcanvasCategoryList"></div>
+
+    </div>
+
+</div>
+
+<!-- SEARCH OVERLAY -->
+<div id="searchOverlay" class="search-overlay"></div>
+
 <main class="flex-grow-1">
 
     <!-- DIV 1: Layout chính -->
@@ -31,14 +59,18 @@
         <div class="row">
 
             <!-- LEFT: category -->
-            <div class="col-md-2 bg-light p-3">
-                <h6>Danh mục</h6>
-                <ul class="list-unstyled">
-                    <li>iPhone</li>
-                    <li>Samsung</li>
-                    <li>Xiaomi</li>
-                    <li>OPPO</li>
-                </ul>
+            <div class="col-lg-2">
+
+                <div class="category-sidebar">
+
+                    <h6 class="fw-bold mb-3">
+                        Danh mục
+                    </h6>
+
+                    <div id="categoryList"></div>
+
+                </div>
+
             </div>
 
             <!-- CENTER: banner lớn -->
@@ -59,8 +91,23 @@
 
     <!-- DIV 2: 20 sản phẩm -->
     <div class="container mt-4">
-        <h5>Sản phẩm nổi bật</h5>
-        <div class="row" id="productList"></div>
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+
+            <h4 class="fw-bold">
+                Sản phẩm nổi bật
+            </h4>
+
+            <a href="#"
+               class="text-success text-decoration-none">
+                Xem tất cả
+            </a>
+
+        </div>
+
+        <div class="row g-3"
+             id="productList"></div>
+
     </div>
 
     <!-- DIV 3: bán chạy + sale -->
@@ -75,14 +122,14 @@
     </div>
 
     <!-- DIV 4: categories products -->
-    <div class="container mt-4">
-        <h5>Danh mục sản phẩm</h5>
-        <div class="row">
-            <div class="col">iPhone</div>
-            <div class="col">Samsung</div>
-            <div class="col">Macbook</div>
-            <div class="col">Phụ kiện</div>
-        </div>
+    <div class="container mt-5">
+
+        <h4 class="fw-bold mb-4">
+            Danh mục sản phẩm
+        </h4>
+
+        <div id="brandSections"></div>
+
     </div>
 
     <!-- DIV 5: tin tức -->
@@ -108,27 +155,15 @@
 <script src="./assets/js/components/header.js"></script>
 <script src="./assets/js/components/footer.js"></script>
 
-<script>
+<script src="./assets/js/models/user.model.js"></script>
 
+<script src="./assets/js/views/user/home.view.js"></script>
+
+<script src="./assets/js/controllers/user/home.controller.js"></script>
+
+<script>
     Header.load();
     Footer.load();
-
-
-    // PRODUCTS
-    const productList = document.getElementById("productList");
-
-    for (let i = 1; i <= 18; i++) {
-        productList.innerHTML += `
-      <div class="col-md-2 mb-3">
-        <div class="card p-2 text-center" onclick="searchRelated(${i})">
-        </div>
-      </div>
-    `;
-    }
-
-    function searchRelated(id) {
-        alert("Tìm sản phẩm liên quan ID: " + id);
-    }
 </script>
 
 </body>

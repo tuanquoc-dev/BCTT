@@ -29,5 +29,9 @@ public class CreateProductRequest {
     private String sku;
     private String color;
 
+    private String ram;
+
+    private String parentSlug;
+
     private CommonStatus status;
 }

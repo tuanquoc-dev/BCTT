@@ -27,5 +27,9 @@ public class UpdateProductRequest {
     private String sku;
     private String color;
 
+    private String ram;
+
+    private String parentSlug;
+
     private CommonStatus status;
 }

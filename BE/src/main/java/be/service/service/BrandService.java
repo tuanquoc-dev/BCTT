@@ -20,4 +20,6 @@ public interface BrandService {
     BrandResponse getById(Integer id);
 
     Page<BrandResponse> search(String keyword, CommonStatus status, int page, int size);
+
+    List<BrandResponse> getActiveBrands();
 }

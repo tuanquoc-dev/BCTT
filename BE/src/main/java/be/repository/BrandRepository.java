@@ -25,4 +25,6 @@ public interface BrandRepository extends JpaRepository<Brand, Integer> {
             CommonStatus status,
             Pageable pageable
     );
+
+    List<Brand> findByStatusOrderByNameAsc(CommonStatus status);
 }

@@ -20,4 +20,6 @@ public interface CategoryService {
     CategoryResponse getById(Integer id);
 
     Page<CategoryResponse> search(String keyword, CommonStatus status, int page, int size);
+
+    List<CategoryResponse> getActiveCategories();
 }
