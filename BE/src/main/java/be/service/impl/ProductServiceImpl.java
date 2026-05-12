@@ -18,6 +18,7 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -64,7 +65,7 @@ public class ProductServiceImpl implements ProductService {
                                 : generateParentSlug(request.getName())
                 )
                 .description(request.getDescription())
-                .price(request.getPrice())
+                .price(BigDecimal.valueOf(request.getPrice()))
                 .stock(request.getStock() != null ? request.getStock() : 0)
                 .sku(request.getSku())
                 .color(request.getColor())
@@ -210,7 +211,7 @@ public class ProductServiceImpl implements ProductService {
         }
 
         if (request.getPrice() != null) {
-            product.setPrice(request.getPrice());
+            product.setPrice(BigDecimal.valueOf(request.getPrice()));
         }
 
         if (request.getStock() != null) {
@@ -478,7 +479,7 @@ public class ProductServiceImpl implements ProductService {
                                 .build())
                         .toList();
 
-        Double finalPrice =
+        BigDecimal finalPrice =
                 calculateFinalPrice(
                         product.getPrice(),
                         product.getDiscount()
@@ -562,11 +563,13 @@ public class ProductServiceImpl implements ProductService {
     // FINAL PRICE
     // =====================================================
 
-    private Double calculateFinalPrice(Double price,
-                                       Discount discount) {
+    private BigDecimal calculateFinalPrice(
+            BigDecimal price,
+            Discount discount
+    ) {
 
         if (price == null) {
-            return 0.0;
+            return BigDecimal.ZERO;
         }
 
         if (discount == null) {
@@ -581,44 +584,81 @@ public class ProductServiceImpl implements ProductService {
         LocalDateTime now = LocalDateTime.now();
 
         // not started
-        if (discount.getStartDate() != null &&
-                now.isBefore(discount.getStartDate())) {
-
+        if (
+                discount.getStartDate() != null
+                        &&
+                        now.isBefore(discount.getStartDate())
+        ) {
             return price;
         }
 
         // expired
-        if (discount.getEndDate() != null &&
-                now.isAfter(discount.getEndDate())) {
-
+        if (
+                discount.getEndDate() != null
+                        &&
+                        now.isAfter(discount.getEndDate())
+        ) {
             return price;
         }
 
-        // percent
+        // =====================================================
+        // PERCENT
+        // =====================================================
+
         if (discount.getDiscountType() == DiscountType.PERCENT) {
 
-            double discountAmount =
-                    price * discount.getDiscountValue() / 100;
+            BigDecimal discountValue =
+                    BigDecimal.valueOf(
+                            discount.getDiscountValue()
+                    );
 
+            BigDecimal discountAmount =
+                    price.multiply(discountValue)
+                            .divide(
+                                    BigDecimal.valueOf(100)
+                            );
+
+            // max discount
             if (discount.getMaxDiscount() != null) {
 
-                discountAmount =
-                        Math.min(
-                                discountAmount,
+                BigDecimal maxDiscount =
+                        BigDecimal.valueOf(
                                 discount.getMaxDiscount()
                         );
+
+                if (
+                        discountAmount.compareTo(maxDiscount)
+                                > 0
+                ) {
+                    discountAmount = maxDiscount;
+                }
             }
 
-            return Math.max(price - discountAmount, 0);
+            BigDecimal finalPrice =
+                    price.subtract(discountAmount);
+
+            return finalPrice.compareTo(BigDecimal.ZERO) < 0
+                    ? BigDecimal.ZERO
+                    : finalPrice;
         }
 
-        // amount
+        // =====================================================
+        // AMOUNT
+        // =====================================================
+
         if (discount.getDiscountType() == DiscountType.AMOUNT) {
 
-            return Math.max(
-                    price - discount.getDiscountValue(),
-                    0
-            );
+            BigDecimal discountAmount =
+                    BigDecimal.valueOf(
+                            discount.getDiscountValue()
+                    );
+
+            BigDecimal finalPrice =
+                    price.subtract(discountAmount);
+
+            return finalPrice.compareTo(BigDecimal.ZERO) < 0
+                    ? BigDecimal.ZERO
+                    : finalPrice;
         }
 
         return price;

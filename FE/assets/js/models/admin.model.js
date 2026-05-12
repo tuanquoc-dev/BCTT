@@ -233,5 +233,38 @@ const AdminModel = {
 // ❌ DELETE
     deleteDiscount: (id) => {
         return api.delete(`/admin/discounts/${id}`);
-    }
+    },
+
+    // ORDERS
+    getOrders: (params) => {
+
+        return api.get(
+            "/admin/orders",
+            {
+                params
+            }
+        );
+    },
+
+    getOrderDetail: (id) =>
+        api.get(`/admin/orders/${id}`),
+
+    confirmOrder: (id) =>
+        api.put(`/admin/orders/${id}/confirm`),
+
+    rejectOrder: (id) =>
+        api.put(`/admin/orders/${id}/reject`),
+
+    cancelOrder: (id) =>
+        api.put(`/admin/orders/${id}/cancel`),
+
+    shippingOrder: (id) =>
+        api.put(`/admin/orders/${id}/shipping`),
+
+    completeOrder: (id) =>
+        api.put(`/admin/orders/${id}/complete`),
+
+    // DASHBOARD
+    dashboard: () =>
+        api.get("/admin/orders/dashboard")
 };

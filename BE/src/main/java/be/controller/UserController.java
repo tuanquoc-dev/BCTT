@@ -1,11 +1,13 @@
 package be.controller;
 
 import be.dto.request.ChangePasswordRequest;
+import be.dto.request.CreateOrderRequest;
 import be.dto.request.UpdateProfileRequest;
 import be.dto.response.ApiResponse;
+import be.dto.response.OrderResponse;
 import be.dto.response.UserResponse;
+import be.service.service.OrderService;
 import be.service.service.UserService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,14 +15,18 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
 
     private final UserService userService;
+    private final OrderService orderService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, OrderService orderService) {
         this.userService = userService;
+        this.orderService = orderService;
     }
 
     // CHANGE PASSWORD
@@ -72,6 +78,61 @@ public class UserController {
                         .status(200)
                         .message("Lấy thông tin thành công")
                         .data(userService.getCurrentUser(username))
+                        .build()
+        );
+    }
+
+    // =====================================================
+    // ORDER
+    // =====================================================
+
+    @PostMapping(value = "/orders")
+    public ResponseEntity<ApiResponse<OrderResponse>> createOrder(
+            @Valid @RequestBody CreateOrderRequest request
+    ) {
+
+        return ResponseEntity.ok(
+
+                ApiResponse.<OrderResponse>builder()
+                        .status(200)
+                        .message("Đặt hàng thành công")
+                        .data(
+                                orderService.create(request)
+                        )
+                        .build()
+        );
+    }
+
+
+    @GetMapping(value = "/orders")
+    public ResponseEntity<ApiResponse<List<OrderResponse>>> myOrders() {
+
+        return ResponseEntity.ok(
+
+                ApiResponse.<List<OrderResponse>>builder()
+                        .status(200)
+                        .message("Lấy danh sách đơn hàng thành công")
+                        .data(
+                                orderService.getMyOrders()
+                        )
+                        .build()
+        );
+    }
+
+
+    @GetMapping("orders/{code}")
+    public ResponseEntity<ApiResponse<OrderResponse>> orderDetail(
+            @PathVariable String code
+    ) {
+
+        return ResponseEntity.ok(
+
+                ApiResponse.<OrderResponse>builder()
+                        .status(200)
+                        .message("Lấy chi tiết đơn hàng thành công")
+                        .data(
+                                orderService.getDetail(code)
+                        )
                         .build()
         );
     }

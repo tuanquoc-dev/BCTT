@@ -9,9 +9,15 @@ import java.math.BigDecimal;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductVariantResponse {
+public class OrderItemResponse {
 
     private Integer id;
+
+    private Integer productId;
+
+    private String productName;
+
+    private String thumbnail;
 
     private String color;
 
@@ -19,11 +25,7 @@ public class ProductVariantResponse {
 
     private BigDecimal price;
 
-    private BigDecimal finalPrice;
+    private Integer quantity;
 
-    private Integer stock;
-
-    private String slug;
-
-    private String thumbnail;
+    private BigDecimal totalPrice;
 }

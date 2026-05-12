@@ -3,6 +3,7 @@ package be.dto.response;
 import be.enums.CommonStatus;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Getter
@@ -26,8 +27,9 @@ public class ProductResponse {
     private Integer viewCount;
     private Float rating;
 
-    private Double price;
-    private Double finalPrice;
+    private BigDecimal price;
+
+    private BigDecimal finalPrice;
 
     private Integer stock;
 

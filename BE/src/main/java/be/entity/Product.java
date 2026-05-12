@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.BatchSize;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -51,7 +52,7 @@ public class Product {
 
     // ================= PRICE =================
 
-    private Double price;
+    private BigDecimal price;
 
     private Integer stock = 0;
 

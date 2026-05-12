@@ -74,7 +74,28 @@ public enum ErrorCode {
     DISCOUNT_INVALID(HttpStatus.BAD_REQUEST, "Dữ liệu discount không hợp lệ"),
     DISCOUNT_INVALID_DATE(HttpStatus.BAD_REQUEST, "Ngày bắt đầu/kết thúc không hợp lệ"),
     DISCOUNT_EXPIRED(HttpStatus.BAD_REQUEST, "Discount đã hết hạn"),
-    DISCOUNT_LIMIT_REACHED(HttpStatus.BAD_REQUEST, "Discount đã đạt giới hạn sử dụng");
+    DISCOUNT_LIMIT_REACHED(HttpStatus.BAD_REQUEST, "Discount đã đạt giới hạn sử dụng"),
+
+    // ===== ORDER =====
+    ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, "Đơn hàng không tồn tại"),
+    ORDER_ITEM_EMPTY(HttpStatus.BAD_REQUEST, "Đơn hàng không có sản phẩm"),
+    ORDER_STATUS_INVALID(HttpStatus.BAD_REQUEST, "Trạng thái đơn hàng không hợp lệ"),
+    ORDER_CANNOT_CANCEL(HttpStatus.BAD_REQUEST, "Không thể hủy đơn hàng"),
+    ORDER_ALREADY_CONFIRMED(HttpStatus.BAD_REQUEST, "Đơn hàng đã được xác nhận"),
+    ORDER_ALREADY_CANCELLED(HttpStatus.BAD_REQUEST, "Đơn hàng đã bị hủy"),
+
+    // ===== STOCK =====
+    PRODUCT_OUT_OF_STOCK(HttpStatus.BAD_REQUEST, "Sản phẩm đã hết hàng"),
+    INSUFFICIENT_STOCK(HttpStatus.BAD_REQUEST, "Số lượng tồn kho không đủ"),
+
+    // ===== SHIPPING =====
+    SHIPPING_NOT_FOUND(HttpStatus.NOT_FOUND, "Không tìm thấy phí vận chuyển"),
+    ADDRESS_INVALID(HttpStatus.BAD_REQUEST, "Địa chỉ giao hàng không hợp lệ"),
+    PROVINCE_NOT_FOUND(HttpStatus.NOT_FOUND, "Tỉnh/Thành phố không tồn tại"),
+    DISTRICT_NOT_FOUND(HttpStatus.NOT_FOUND, "Quận/Huyện không tồn tại"),
+    WARD_NOT_FOUND(HttpStatus.NOT_FOUND, "Phường/Xã không tồn tại"),
+    SHIPPING_FEE_NOT_FOUND(HttpStatus.NOT_FOUND, "Không tìm thấy phí vận chuyển");
+
 
     private final HttpStatus status;
     private final String message;
