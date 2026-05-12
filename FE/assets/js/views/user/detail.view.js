@@ -62,6 +62,8 @@ const DetailView = {
         DetailView.renderImages(product);
 
         DetailView.renderVariants(product);
+
+        DetailView.bindAddToCart(product);
     },
 
     // =========================================
@@ -169,6 +171,26 @@ const DetailView = {
     `).join("");
 
         document.getElementById("variantColors").innerHTML = html;
+    },
+
+    bindAddToCart(product) {
+
+        const btn =
+            document.getElementById("addToCartBtn");
+
+        if (!btn) return;
+
+        btn.onclick = () => {
+
+            CartStorage.addItem(product);
+
+            setTimeout(() => {
+
+                window.location.href =
+                    "/MobileHub/FE/pages/user/cart.html";
+
+            }, 500);
+        };
     },
 
     // =========================================

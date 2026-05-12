@@ -35,5 +35,31 @@ const UserModel = {
 
         return api.get(
             "/public/categories");
-    }
+    },
+
+    // ======================================
+    // ORDERS
+    // ======================================
+
+    createOrder(data) {
+
+        return api.post(
+            "/users/orders",
+            data
+        );
+    },
+
+    getMyOrders() {
+
+        return api.get(
+            "/users/orders"
+        );
+    },
+
+    getOrderDetail(code) {
+
+        return api.get(
+            `/users/orders/${code}`
+        );
+    },
 };

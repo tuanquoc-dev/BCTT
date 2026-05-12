@@ -12,18 +12,22 @@ const ProductView = {
 
     formatPrice: (value) => {
 
-        if (value == null || value === "") {
+        if (
+            value === null ||
+            value === undefined ||
+            value === ""
+        ) {
             return "0 ₫";
         }
 
-        return Number(value).toLocaleString(
+        return new Intl.NumberFormat(
             "vi-VN",
             {
                 style: "currency",
                 currency: "VND",
                 maximumFractionDigits: 0
             }
-        );
+        ).format(Number(value || 0));
     },
 
     // =====================================================
@@ -368,8 +372,9 @@ const ProductView = {
             p.discountId || "";
 
         document.getElementById("price").value =
-            p.price
-                ? Number(p.price).toLocaleString("vi-VN")
+            p.price !== null && p.price !== undefined
+                ? new Intl.NumberFormat("vi-VN")
+                    .format(p.price)
                 : "";
 
         document.getElementById("stock").value =

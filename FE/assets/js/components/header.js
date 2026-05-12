@@ -22,6 +22,8 @@ const Header = (() => {
             }
 
         }, 0);
+
+        updateCartCount();
     };
 
     // 🔥 bind event
@@ -53,9 +55,21 @@ const Header = (() => {
         }
     };
 
+    const updateCartCount = () => {
+
+        const cartCount =
+            document.getElementById("cartCount");
+
+        if (!cartCount) return;
+
+        cartCount.innerText =
+            CartStorage.getCount();
+    };
+
     return {
         load,
-        renderAuth
+        renderAuth,
+        updateCartCount
     };
 
 })();
