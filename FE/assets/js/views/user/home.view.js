@@ -340,6 +340,96 @@ const HomeView = {
         document.getElementById("categoryList").innerHTML = html;
 
         document.getElementById("categoryGrid").innerHTML = html;
+    },
+
+    // ================= MAIN BANNER =================
+    renderMainBanners: (banners) => {
+
+        const inner =
+            document.getElementById("mainBannerInner");
+
+        const indicators =
+            document.getElementById("mainBannerIndicators");
+
+        if (!banners.length) {
+
+            inner.innerHTML = `
+                <div class="bg-light d-flex align-items-center justify-content-center"
+                     style="height:360px;">
+
+                    No Banner
+
+                </div>
+            `;
+
+            return;
+        }
+
+        indicators.innerHTML = banners.map((_, index) => `
+
+            <button
+                type="button"
+                data-bs-target="#mainBannerCarousel"
+                data-bs-slide-to="${index}"
+                class="${index === 0 ? "active" : ""}">
+            </button>
+
+        `).join("");
+
+        inner.innerHTML = banners.map((banner, index) => `
+
+            <div class="carousel-item ${index === 0 ? "active" : ""}">
+
+                <a href="${banner.link || '#'}"
+                   class="banner-link">
+
+                    <img
+                        src="${banner.thumbnail}"
+                        class="main-banner-img"
+                        alt="${banner.name}"
+                    >
+
+                </a>
+
+            </div>
+
+        `).join("");
+
+    },
+
+    // ================= SIDE BANNER =================
+    renderSideBanners: (banners) => {
+
+        const container =
+            document.getElementById("sideBannerList");
+
+        if (!banners.length) {
+
+            container.innerHTML = `
+                <div class="bg-light p-5 rounded-4 text-center">
+                    No Banner
+                </div>
+            `;
+
+            return;
+        }
+
+        container.innerHTML = banners.map(banner => `
+
+            <a href="${banner.link || '#'}"
+               class="banner-link shadow-sm">
+
+                <img
+                    src="${banner.thumbnail}"
+                    class="side-banner-img"
+                    alt="${banner.name}"
+                >
+
+            </a>
+
+        `).join("");
+
     }
+
 
 };

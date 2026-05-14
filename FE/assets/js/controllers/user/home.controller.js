@@ -8,6 +8,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     initCategoryDropdown();
 
+    await loadBanners();
+
 });
 
 
@@ -263,4 +265,50 @@ function initCategoryDropdown() {
 
         overlay.classList.remove("show");
     });
+}
+
+// ================= BANNER =================
+
+async function loadBanners() {
+
+    try {
+
+        // MAIN
+        const mainRes =
+            await PublicBannerModel.getBanners({
+
+                position: "HOME_MAIN",
+
+                status: 1,
+
+                size: 5
+
+            });
+
+        // SIDE
+        const sideRes =
+            await PublicBannerModel.getBanners({
+
+                position: "HOME_SIDE",
+
+                status: 1,
+
+                size: 2
+
+            });
+
+        HomeView.renderMainBanners(
+            mainRes.data.data.content
+        );
+
+        HomeView.renderSideBanners(
+            sideRes.data.data.content
+        );
+
+    } catch (err) {
+
+        console.error(err);
+
+    }
+
 }

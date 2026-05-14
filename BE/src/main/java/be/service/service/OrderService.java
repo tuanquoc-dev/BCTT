@@ -1,5 +1,6 @@
 package be.service.service;
 
+import be.dto.request.CancelOrderRequest;
 import be.dto.request.CreateOrderRequest;
 import be.dto.response.OrderDashboardResponse;
 import be.dto.response.OrderResponse;
@@ -38,4 +39,9 @@ public interface OrderService {
     OrderResponse complete(Integer id);
 
     OrderDashboardResponse dashboard();
+
+    OrderResponse customerCancel(
+            String code,
+            CancelOrderRequest request
+    );
 }

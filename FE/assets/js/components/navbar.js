@@ -50,6 +50,13 @@ const Navbar = {
 
             Navbar.renderUser();
 
+            if (
+                window.location.pathname.includes("/admin/")
+            ) {
+
+                NotifyController.init();
+            }
+
         }, 0);
     },
 

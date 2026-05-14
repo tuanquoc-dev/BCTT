@@ -1,5 +1,6 @@
 package be.entity;
 
+import be.enums.CancelledBy;
 import be.enums.OrderStatus;
 import be.enums.PaymentMethod;
 import be.enums.PaymentStatus;
@@ -90,6 +91,14 @@ public class Order {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
+    @Column(columnDefinition = "TEXT")
+    private String cancelReason;
+
+    @Enumerated(EnumType.STRING)
+    private CancelledBy cancelledBy;
+
+    private LocalDateTime cancelledAt;
 
     // ================= ITEMS =================
 

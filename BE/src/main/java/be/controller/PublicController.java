@@ -1,11 +1,15 @@
 package be.controller;
 
 import be.dto.response.ApiResponse;
+import be.dto.response.BannerResponse;
 import be.dto.response.BrandResponse;
 import be.dto.response.CategoryResponse;
+import be.service.service.BannerService;
 import be.service.service.BrandService;
 import be.service.service.CategoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +21,7 @@ public class PublicController {
 
     private final BrandService brandService;
     private final CategoryService categoryService;
+    private final BannerService bannerService;
 
     // =====================================
     // BRANDS
@@ -73,5 +78,33 @@ public class PublicController {
                         categoryService.getById(id)
                 )
                 .build();
+    }
+
+    // =====================================
+    // BANNER
+    // =====================================
+
+    @GetMapping("/banners")
+    public ResponseEntity<ApiResponse<Page<BannerResponse>>> getBanners(
+            @RequestParam(required = false) String position,
+            @RequestParam(required = false) String type,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+
+        return ResponseEntity.ok(
+                ApiResponse.<Page<BannerResponse>>builder()
+                        .status(200)
+                        .message("Lấy banner thành công")
+                        .data(
+                                bannerService.publicBanners(
+                                        position,
+                                        type,
+                                        page,
+                                        size
+                                )
+                        )
+                        .build()
+        );
     }
 }

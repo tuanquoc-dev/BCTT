@@ -7,3 +7,13 @@ const AuthModel = {
 
     reset: (data) => api.post("/auth/reset-password", data),
 };
+
+const NotificationModel = {
+
+    getMine: () =>
+        api.get("public/notifications/my"),
+
+    read: (id) =>
+        api.put(`public/notifications/${id}/read`),
+
+};

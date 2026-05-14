@@ -94,7 +94,18 @@ public enum ErrorCode {
     PROVINCE_NOT_FOUND(HttpStatus.NOT_FOUND, "Tỉnh/Thành phố không tồn tại"),
     DISTRICT_NOT_FOUND(HttpStatus.NOT_FOUND, "Quận/Huyện không tồn tại"),
     WARD_NOT_FOUND(HttpStatus.NOT_FOUND, "Phường/Xã không tồn tại"),
-    SHIPPING_FEE_NOT_FOUND(HttpStatus.NOT_FOUND, "Không tìm thấy phí vận chuyển");
+    SHIPPING_FEE_NOT_FOUND(HttpStatus.NOT_FOUND, "Không tìm thấy phí vận chuyển"),
+
+    // ===== BANNER =====
+    BANNER_NOT_FOUND(HttpStatus.NOT_FOUND, "Banner không tồn tại"),
+    BANNER_NAME_INVALID(HttpStatus.BAD_REQUEST, "Tên banner không hợp lệ"),
+    BANNER_INVALID(HttpStatus.BAD_REQUEST, "Dữ liệu banner không hợp lệ"),
+    BANNER_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "Banner đã tồn tại"),
+    INVALID_SORT_ORDER(HttpStatus.BAD_REQUEST, "Sort không được nhỏ hơn 1"),
+
+
+    // ===== Notification ====
+    NOTIFICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "Không có thông báo");
 
 
     private final HttpStatus status;

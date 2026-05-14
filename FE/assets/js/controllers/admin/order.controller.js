@@ -41,6 +41,18 @@ const OrderController = {
                 pageData.content || []
             );
 
+            const params =
+                new URLSearchParams(window.location.search);
+
+            const id = params.get("id");
+
+            if (id && !window.orderModalOpened) {
+
+                window.orderModalOpened = true;
+
+                await OrderController.openDetail(id);
+            }
+
             OrderView.renderPagination(
                 pageData.totalPages,
                 pageData.number

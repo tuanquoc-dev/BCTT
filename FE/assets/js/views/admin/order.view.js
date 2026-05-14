@@ -65,7 +65,7 @@ const OrderView = {
                     <div class="d-flex gap-2 justify-content-center flex-wrap">
 
                         <button
-                            class="btn btn-dark btn-sm"
+                            class="btn btn-sm"
                             onclick="OrderController.openDetail(${order.id})"
                         >
                             <i class="fa fa-eye"></i>
@@ -88,14 +88,14 @@ const OrderView = {
 
             return `
                 <button
-                    class="btn btn-success btn-sm"
+                    class="btn btn-sm"
                     onclick="OrderController.confirm(${order.id})"
                 >
                     <i class="fa fa-check"></i>
                 </button>
 
                 <button
-                    class="btn btn-danger btn-sm"
+                    class="btn btn-sm"
                     onclick="OrderController.reject(${order.id})"
                 >
                     <i class="fa fa-xmark"></i>
@@ -107,7 +107,7 @@ const OrderView = {
 
             return `
                 <button
-                    class="btn btn-primary btn-sm"
+                    class="btn btn-sm"
                     onclick="OrderController.shipping(${order.id})"
                 >
                     <i class="fa fa-truck"></i>
@@ -119,7 +119,7 @@ const OrderView = {
 
             return `
                 <button
-                    class="btn btn-success btn-sm"
+                    class="btn btn-sm"
                     onclick="OrderController.complete(${order.id})"
                 >
                     <i class="fa fa-box"></i>
@@ -168,39 +168,34 @@ const OrderView = {
         `;
     },
 
-    renderPagination(totalPages, currentPage) {
-
-        const container =
-            document.getElementById("pagination");
-
+    // ================= PAGINATION =================
+    renderPagination: (totalPages, currentPage) => {
+        const container = document.getElementById("pagination");
         if (!container) return;
 
-        let html = `
-            <nav>
-                <ul class="pagination justify-content-center">
+        let html = `<nav><ul class="pagination">`;
+
+        html += `
+            <li class="page-item ${currentPage === 0 ? "disabled" : ""}">
+                <a class="page-link" href="#" data-page="${currentPage - 1}">Previous</a>
+            </li>
         `;
 
         for (let i = 0; i < totalPages; i++) {
-
             html += `
-                <li class="page-item
-                    ${i === currentPage ? "active" : ""}
-                ">
-                    <a
-                        href="#"
-                        class="page-link"
-                        data-page="${i}"
-                    >
-                        ${i + 1}
-                    </a>
+                <li class="page-item ${i === currentPage ? "active" : ""}">
+                    <a class="page-link" href="#" data-page="${i}">${i + 1}</a>
                 </li>
             `;
         }
 
         html += `
-                </ul>
-            </nav>
+            <li class="page-item ${currentPage === totalPages - 1 ? "disabled" : ""}">
+                <a class="page-link" href="#" data-page="${currentPage + 1}">Next</a>
+            </li>
         `;
+
+        html += `</ul></nav>`;
 
         container.innerHTML = html;
     },

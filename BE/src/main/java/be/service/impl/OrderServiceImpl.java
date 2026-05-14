@@ -1,19 +1,18 @@
 package be.service.impl;
 
+import be.dto.request.CancelOrderRequest;
 import be.dto.request.CreateOrderItemRequest;
 import be.dto.request.CreateOrderRequest;
 import be.dto.response.OrderDashboardResponse;
 import be.dto.response.OrderItemResponse;
 import be.dto.response.OrderResponse;
 import be.entity.*;
-import be.enums.CommonStatus;
-import be.enums.DiscountType;
-import be.enums.OrderStatus;
-import be.enums.PaymentStatus;
+import be.enums.*;
 import be.exception.AppException;
 import be.exception.ErrorCode;
 import be.repository.*;
 import be.security.SecurityUtils;
+import be.service.NotificationService;
 import be.service.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -44,6 +43,8 @@ public class OrderServiceImpl implements OrderService {
     private final DistrictRepository districtRepository;
 
     private final WardRepository wardRepository;
+
+    private final NotificationService notificationService;
 
     private final ShippingFeeRepository shippingFeeRepository;
 
@@ -229,6 +230,14 @@ public class OrderServiceImpl implements OrderService {
                 .build();
 
         orderRepository.save(order);
+
+        notificationService.createAndSendToAdmins(
+                "Đơn hàng mới",
+                "Có đơn hàng mới: " + order.getCode(),
+                NotificationType.ORDER_CREATED,
+                order.getId(),
+                "/admin/order-list.html?id=" + order.getId()
+        );
 
         // ================= CREATE ITEMS =================
 
@@ -492,6 +501,15 @@ public class OrderServiceImpl implements OrderService {
 
         orderRepository.save(order);
 
+        notificationService.createAndSendToUser(
+                order.getUser().getId(),
+                "Đơn hàng đã xác nhận",
+                "Đơn hàng " + order.getCode() + " đã được xác nhận",
+                NotificationType.ORDER_CONFIRMED,
+                order.getId(),
+                "/user/my-orders.html?code=" + order.getCode()
+        );
+
         return mapOrder(order);
     }
 
@@ -518,6 +536,15 @@ public class OrderServiceImpl implements OrderService {
         order.setUpdatedAt(LocalDateTime.now());
 
         orderRepository.save(order);
+
+        notificationService.createAndSendToUser(
+                order.getUser().getId(),
+                "Đơn hàng bị từ chối",
+                "Đơn hàng " + order.getCode() + " đã bị từ chối",
+                NotificationType.ORDER_REJECTED,
+                order.getId(),
+                "/user/my-orders.html?code=" + order.getCode()
+        );
 
         return mapOrder(order);
     }
@@ -550,6 +577,16 @@ public class OrderServiceImpl implements OrderService {
 
         orderRepository.save(order);
 
+        // ================= NOTIFY USER =================
+        notificationService.createAndSendToUser(
+                order.getUser().getId(),
+                "Đơn hàng đã bị hủy",
+                "Đơn hàng " + order.getCode() + " đã được hủy thành công",
+                NotificationType.ORDER_CANCELLED,
+                order.getId(),
+                "/user/my-orders.html?code=" + order.getCode()
+        );
+
         return mapOrder(order);
     }
 
@@ -574,6 +611,15 @@ public class OrderServiceImpl implements OrderService {
         order.setUpdatedAt(LocalDateTime.now());
 
         orderRepository.save(order);
+
+        notificationService.createAndSendToUser(
+                order.getUser().getId(),
+                "Đơn hàng đang vận chuyển",
+                "Đơn hàng " + order.getCode() + " đang được giao",
+                NotificationType.ORDER_SHIPPING,
+                order.getId(),
+                "/user/my-orders.html?code=" + order.getCode()
+        );
 
         return mapOrder(order);
     }
@@ -603,9 +649,111 @@ public class OrderServiceImpl implements OrderService {
 
         orderRepository.save(order);
 
+        notificationService.createAndSendToUser(
+                order.getUser().getId(),
+                "Đơn hàng hoàn tất",
+                "Đơn hàng " + order.getCode() + " đã giao thành công",
+                NotificationType.ORDER_COMPLETED,
+                order.getId(),
+                "/user/my-orders.html?code=" + order.getCode()
+        );
+
         return mapOrder(order);
     }
 
+    @Override
+    @Transactional
+    public OrderResponse customerCancel(
+            String code,
+            CancelOrderRequest request
+    ) {
+
+        String username =
+                SecurityUtils.getCurrentUsername();
+
+        User user = userRepository
+                .findByUsername(username)
+                .orElseThrow(() ->
+                        new AppException(ErrorCode.USER_NOT_FOUND));
+
+        Order order = orderRepository
+                .findByCode(code)
+                .orElseThrow(() ->
+                        new AppException(ErrorCode.ORDER_NOT_FOUND));
+
+        // chỉ được hủy đơn của mình
+        if (!order.getUser().getId().equals(user.getId())) {
+
+            throw new AppException(ErrorCode.FORBIDDEN);
+        }
+
+        // =====================================================
+        // KHÔNG CHO HỦY
+        // =====================================================
+
+        if (
+                order.getStatus() == OrderStatus.SHIPPING
+                        || order.getStatus() == OrderStatus.COMPLETED
+                        || order.getStatus() == OrderStatus.CANCELLED
+                        || order.getStatus() == OrderStatus.REJECTED
+        ) {
+
+            throw new AppException(
+                    ErrorCode.ORDER_STATUS_INVALID
+            );
+        }
+
+        // =====================================================
+        // PENDING
+        // =====================================================
+
+        if (order.getStatus() == OrderStatus.PENDING) {
+
+            order.setStatus(OrderStatus.CANCELLED);
+
+            order.setCancelReason(request.getReason());
+
+            order.setUpdatedAt(LocalDateTime.now());
+
+            orderRepository.save(order);
+
+            return mapOrder(order);
+        }
+
+        // =====================================================
+        // CONFIRMED
+        // =====================================================
+
+        if (order.getStatus() == OrderStatus.CONFIRMED) {
+
+            restoreStock(order);
+
+            order.setStatus(OrderStatus.CANCELLED);
+
+            order.setCancelReason(request.getReason());
+
+            order.setUpdatedAt(LocalDateTime.now());
+
+            orderRepository.save(order);
+
+            // notify admin
+            notificationService.createAndSendToAdmins(
+                    "Khách hàng hủy đơn",
+                    "Đơn " + order.getCode()
+                            + " đã bị khách hủy",
+                    NotificationType.ORDER_CANCELLED,
+                    order.getId(),
+                    "/admin/order-list.html?id="
+                            + order.getId()
+            );
+
+            return mapOrder(order);
+        }
+
+        throw new AppException(
+                ErrorCode.ORDER_STATUS_INVALID
+        );
+    }
     // =====================================================
     // DASHBOARD
     // =====================================================
