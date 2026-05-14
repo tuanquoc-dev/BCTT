@@ -80,16 +80,6 @@ const ProductView = {
 
     </div>
 
-    ${
-                p.parentSlug
-                    ? `
-                <div class="small text-primary mt-1">
-                    Group: ${p.parentSlug}
-                </div>
-            `
-                    : ""
-            }
-
 </td>
 
                     <td>${p.brandName || ""}</td>

@@ -1,5 +1,6 @@
 package be.entity;
 
+import be.enums.NotificationType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,9 +26,17 @@ public class Notification {
 
     private Boolean isRead = false;
 
-    private String type;
+    private NotificationType type;
 
     private Integer referenceId;
+
+    private String redirectUrl;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    private Boolean isAdminNotification = false;
 
     private LocalDateTime createdAt;
 }

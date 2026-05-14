@@ -22,6 +22,17 @@ const MyOrderController = {
 
             MyOrderView.render(orders);
 
+            const params =
+                new URLSearchParams(window.location.search);
+
+            const code =
+                params.get("code");
+
+            if (code) {
+
+                MyOrderController.showDetail(code);
+            }
+
         } catch (e) {
 
             console.log(e);
@@ -222,6 +233,71 @@ const MyOrderController = {
             );
         }
     },
+
+    openCancelModal(code) {
+
+        const modal =
+            new bootstrap.Modal(
+                document.getElementById(
+                    "cancelOrderModal"
+                )
+            );
+
+        modal.show();
+
+        document
+            .getElementById("confirmCancelBtn")
+            .onclick = async () => {
+
+            const reason =
+                document.getElementById(
+                    "cancelReason"
+                ).value;
+
+            if (!reason.trim()) {
+
+                showToast(
+                    "Vui lòng nhập lý do hủy",
+                    "danger"
+                );
+
+                return;
+            }
+
+            try {
+
+                showLoading();
+
+                await UserModel.cancelMyOrder(
+                    code,
+                    {
+                        reason: reason
+                    }
+                );
+
+                modal.hide();
+
+                showToast(
+                    "Đã hủy đơn hàng"
+                );
+
+                await MyOrderController.load();
+
+            } catch (e) {
+
+                console.log(e);
+
+                showToast(
+                    "Không thể hủy đơn",
+                    "danger"
+                );
+
+            } finally {
+
+                hideLoading();
+            }
+        };
+    }
 };
 
 // =====================================

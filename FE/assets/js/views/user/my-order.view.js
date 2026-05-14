@@ -65,6 +65,18 @@ const MyOrderView = {
 
 </button>
 
+<button
+    class="btn btn-danger rounded-3 fw-semibold"
+
+    onclick="
+        MyOrderController.openCancelModal(
+            '${order.code}'
+        )
+    "
+>
+    Hủy đơn
+</button>
+
                     </div>
 
                 </div>

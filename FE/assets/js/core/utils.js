@@ -57,3 +57,18 @@ function formatPrice(price) {
         }
     ).format(price || 0);
 }
+
+function parseJwt(token) {
+
+    if (!token) return null;
+
+    return JSON.parse(
+        atob(token.split('.')[1])
+    );
+}
+
+function formatTime(date) {
+
+    return new Date(date)
+        .toLocaleString("vi-VN");
+}

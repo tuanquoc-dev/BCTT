@@ -11,8 +11,11 @@ const CartView = {
         const cartCountText =
             document.getElementById("cartCountText");
 
-        cartCountText.textContent =
-            `${cart.length} sản phẩm`;
+        if (cartCountText) {
+
+            cartCountText.textContent =
+                `${cart.length} sản phẩm`;
+        }
 
         // EMPTY
         if (!cart.length) {

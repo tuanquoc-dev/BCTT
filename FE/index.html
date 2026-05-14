@@ -73,17 +73,54 @@
 
             </div>
 
-            <!-- CENTER: banner lớn -->
-            <div class="col-md-7">
-                <div class="bg-secondary text-white text-center p-5">
-                    Banner quảng cáo lớn
+            <!-- CENTER: MAIN BANNER -->
+            <div class="col-lg-7">
+
+                <div id="mainBannerCarousel"
+                     class="carousel slide rounded-4 overflow-hidden shadow-sm"
+                     data-bs-ride="carousel">
+
+                    <!-- indicators -->
+                    <div class="carousel-indicators"
+                         id="mainBannerIndicators">
+                    </div>
+
+                    <!-- items -->
+                    <div class="carousel-inner"
+                         id="mainBannerInner">
+                    </div>
+
+                    <!-- prev -->
+                    <button class="carousel-control-prev"
+                            type="button"
+                            data-bs-target="#mainBannerCarousel"
+                            data-bs-slide="prev">
+
+                        <span class="carousel-control-prev-icon"></span>
+
+                    </button>
+
+                    <!-- next -->
+                    <button class="carousel-control-next"
+                            type="button"
+                            data-bs-target="#mainBannerCarousel"
+                            data-bs-slide="next">
+
+                        <span class="carousel-control-next-icon"></span>
+
+                    </button>
+
                 </div>
+
             </div>
 
-            <!-- RIGHT: banner nhỏ -->
-            <div class="col-md-3 d-flex flex-column gap-3">
-                <div class="bg-warning p-3 text-center">Banner 1</div>
-                <div class="bg-info p-3 text-center">Banner 2</div>
+            <!-- RIGHT: SIDE BANNER -->
+            <div class="col-lg-3">
+
+                <div id="sideBannerList"
+                     class="d-flex flex-column gap-3">
+                </div>
+
             </div>
 
         </div>
@@ -147,6 +184,11 @@
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- SOCKJS -->
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+
+<!-- STOMP -->
+<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
 
 <script src="./config.js"></script>
 <script src="assets/js/core/api.js"></script>
@@ -154,6 +196,11 @@
 <script src="assets/js/core/utils.js"></script>
 <script src="./assets/js/components/header.js"></script>
 <script src="./assets/js/components/footer.js"></script>
+
+
+<script src="./assets/js/models/auth.model.js"></script>
+<script src="./assets/js/views/auth/notification.view.js"></script>
+<script src="./assets/js/controllers/auth/notification.controller.js"></script>
 
 <script src="./assets/js/utils/cart.storage.js"></script>
 

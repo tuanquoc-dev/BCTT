@@ -268,3 +268,46 @@ const AdminModel = {
     dashboard: () =>
         api.get("/admin/orders/dashboard")
 };
+
+// ================= BANNER =================
+
+const BannerModel = {
+
+    getAll: (params) =>
+        api.get("/admin/banners", { params }),
+
+    getById: (id) =>
+        api.get(`/admin/banners/${id}`),
+
+    create: (data, file) => {
+
+        return api.post(
+            "/admin/banners",
+            buildFormData(data, file)
+        );
+
+    },
+
+
+    update: (id, data, file) => {
+
+        return api.put(
+            `/admin/banners/${id}`,
+            buildFormData(data, file)
+        );
+
+    },
+
+    delete: (id) =>
+        api.delete(`/admin/banners/${id}`),
+
+};
+
+const NotificationAdminModel = {
+
+    read: (id) =>
+        api.put(`admin/${id}/read`),
+
+    getAdminNotifications: () =>
+        api.get("admin/notifications")
+};

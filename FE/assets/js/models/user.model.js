@@ -62,4 +62,21 @@ const UserModel = {
             `/users/orders/${code}`
         );
     },
+
+    cancelMyOrder(code, data) {
+
+        return api.put(
+            `/users/my-orders/${code}/cancel`,
+            data
+        );
+    }
+};
+
+// ================= BANNER =================
+
+const PublicBannerModel = {
+
+    getBanners: (params) =>
+        api.get("/public/banners", { params })
+
 };

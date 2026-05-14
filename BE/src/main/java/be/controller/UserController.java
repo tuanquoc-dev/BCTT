@@ -1,5 +1,6 @@
 package be.controller;
 
+import be.dto.request.CancelOrderRequest;
 import be.dto.request.ChangePasswordRequest;
 import be.dto.request.CreateOrderRequest;
 import be.dto.request.UpdateProfileRequest;
@@ -135,5 +136,25 @@ public class UserController {
                         )
                         .build()
         );
+    }
+
+    @PutMapping("/my-orders/{code}/cancel")
+    public ApiResponse<OrderResponse> cancel(
+            @PathVariable String code,
+
+            @RequestBody
+            CancelOrderRequest request
+    ) {
+
+        return ApiResponse.<OrderResponse>builder()
+
+                .data(
+                        orderService.customerCancel(
+                                code,
+                                request
+                        )
+                )
+
+                .build();
     }
 }
