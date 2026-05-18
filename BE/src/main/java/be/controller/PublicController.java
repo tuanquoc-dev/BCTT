@@ -5,6 +5,7 @@ import be.service.service.BannerService;
 import be.service.service.BrandService;
 import be.service.service.CategoryService;
 import be.service.service.ReviewService;
+import be.service.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ public class PublicController {
     private final CategoryService categoryService;
     private final BannerService bannerService;
     private final ReviewService reviewService;
+    private final CommentService commentService;
 
     // =====================================
     // BRANDS
@@ -175,5 +177,21 @@ public class PublicController {
                         )
                         .build()
         );
+    // =====================================================
+    // GET COMMENT BY PRODUCT
+    // =====================================================
+
+    @GetMapping("comments/product/{productId}")
+    public ApiResponse<List<CommentResponse>> getByProduct(
+            @PathVariable Integer productId
+    ) {
+
+        return ApiResponse.<List<CommentResponse>>builder()
+                .status(200)
+                .message("Lấy comment sản phẩm thành công")
+                .data(
+                        commentService.getByProduct(productId)
+                )
+                .build();
     }
 }

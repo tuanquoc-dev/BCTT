@@ -44,7 +44,7 @@
                         onclick="ProductController.openCreate()">
 
                     <i class="fa fa-plus"></i>
-                    Add Product
+                    Thêm sản phẩm
                 </button>
 
             </div>
@@ -71,7 +71,7 @@
                                 <input
                                         id="searchInput"
                                         class="form-control border-start-0"
-                                        placeholder="Search product..."
+                                        placeholder="Tìm kiếm sản phẩm..."
                                         onkeyup="ProductController.load()">
 
                             </div>
@@ -93,7 +93,7 @@
                                         onchange="ProductController.load()">
 
                                     <option value="">
-                                        All Brand
+                                        Tất cả thương hiệu
                                     </option>
 
                                 </select>
@@ -117,7 +117,7 @@
                                         onchange="ProductController.load()">
 
                                     <option value="">
-                                        All Category
+                                        Tất cả danh mục
                                     </option>
 
                                 </select>
@@ -141,15 +141,15 @@
                                         onchange="ProductController.load()">
 
                                     <option value="newest">
-                                        Newest
+                                        Mới nhất
                                     </option>
 
                                     <option value="price_asc">
-                                        Price Low → High
+                                        Giá thấp → cao
                                     </option>
 
                                     <option value="price_desc">
-                                        Price High → Low
+                                        Giá cao → thấp
                                     </option>
 
                                 </select>
@@ -166,7 +166,7 @@
                                     onclick="ProductView.resetFilter()">
 
                                 <i class="fa fa-rotate-right me-1"></i>
-                                Reset
+                                Đặt lại
 
                             </button>
 
@@ -194,24 +194,24 @@
 
                             <th>ID</th>
 
-                            <th>Thumbnail</th>
+                            <th>Ảnh</th>
 
-                            <th>Name</th>
+                            <th>Tên</th>
 
-                            <th>Brand</th>
+                            <th>Thương hiệu</th>
 
-                            <th>Category</th>
+                            <th>Danh mục</th>
 
-                            <th>Price</th>
+                            <th>Giá</th>
 
-                            <th>Stock</th>
+                            <th>Tồn kho</th>
 
                             <th>SKU</th>
 
-                            <th>Status</th>
+                            <th>Trạng thái</th>
 
                             <th class="text-center">
-                                Action
+                                Hành động
                             </th>
 
                         </tr>
@@ -248,7 +248,7 @@
                     <!-- HEADER -->
                     <div class="modal-header text-white">
                         <h5 class="modal-title" id="modalTitle">
-                            Product
+                            Sản phẩm
                         </h5>
 
                         <button type="button"
@@ -267,7 +267,7 @@
                                 <!-- BASIC -->
                                 <div class="card border-0 shadow-sm mb-4">
                                     <div class="card-header fw-bold">
-                                        Basic Information
+                                        Thông tin sản phẩm
                                     </div>
 
                                     <div class="card-body">
@@ -277,7 +277,7 @@
                                             <!-- NAME -->
                                             <div class="col-md-12">
                                                 <label class="form-label">
-                                                    Product Name
+                                                    Tên sản phẩm
                                                 </label>
 
                                                 <input type="text"
@@ -288,7 +288,7 @@
                                             <!-- BRAND -->
                                             <div class="col-md-6">
                                                 <label class="form-label">
-                                                    Brand
+                                                    Thương hiệu
                                                 </label>
 
                                                 <select class="form-select"
@@ -299,7 +299,7 @@
                                             <!-- CATEGORY -->
                                             <div class="col-md-6">
                                                 <label class="form-label">
-                                                    Category
+                                                    Danh mục
                                                 </label>
 
                                                 <select class="form-select"
@@ -310,7 +310,7 @@
                                             <!-- PRICE -->
                                             <div class="col-md-4">
                                                 <label class="form-label">
-                                                    Price
+                                                    Giá
                                                 </label>
 
                                                 <input type="text"
@@ -321,7 +321,7 @@
                                             <!-- STOCK -->
                                             <div class="col-md-4">
                                                 <label class="form-label">
-                                                    Stock
+                                                    Tồn kho
                                                 </label>
 
                                                 <input type="number"
@@ -342,7 +342,7 @@
                                             <!-- COLOR -->
                                             <div class="col-md-4">
                                                 <label class="form-label">
-                                                    COLOR
+                                                    Màu
                                                 </label>
 
                                                 <input type="text"
@@ -363,7 +363,7 @@
                                             <!-- DISCOUNT -->
                                             <div class="col-md-6">
                                                 <label class="form-label">
-                                                    Discount
+                                                    Mã giảm giá
                                                 </label>
 
                                                 <select class="form-select"
@@ -374,18 +374,18 @@
                                             <!-- STATUS -->
                                             <div class="col-md-6">
                                                 <label class="form-label">
-                                                    Status
+                                                    Trạng thái
                                                 </label>
 
                                                 <select class="form-select"
                                                         id="status">
 
                                                     <option value="ACTIVE">
-                                                        ACTIVE
+                                                        Hoat động
                                                     </option>
 
                                                     <option value="INACTIVE">
-                                                        INACTIVE
+                                                        Ngừng hoạt động
                                                     </option>
                                                 </select>
                                             </div>
@@ -393,7 +393,7 @@
                                             <!-- DESCRIPTION -->
                                             <div class="col-md-12">
                                                 <label class="form-label">
-                                                    Description
+                                                    Mô tả
                                                 </label>
 
                                                 <textarea class="form-control"
@@ -415,7 +415,7 @@
                                 <div class="card border-0 shadow-sm mb-4">
 
                                     <div class="card-header fw-bold">
-                                        Thumbnail
+                                        Ảnh đại diện
                                     </div>
 
                                     <div class="card-body">
@@ -437,10 +437,10 @@
 
                                     <div class="card-header fw-bold d-flex justify-content-between align-items-center">
 
-                                        <span>Gallery Images</span>
+                                        <span>Thư viện ảnh</span>
 
                                         <label class="btn btn-sm btn-primary mb-0">
-                                            + Add Images
+                                            Thêm ảnh
 
                                             <input type="file"
                                                    hidden
@@ -471,13 +471,13 @@
                         <button class="btn btn-secondary"
                                 data-bs-dismiss="modal">
 
-                            Close
+                            Đóng
                         </button>
 
                         <button class="btn btn-primary"
                                 id="saveBtn">
 
-                            Save Product
+                            Lưu
                         </button>
 
                     </div>
@@ -661,7 +661,7 @@ PRODUCT DETAIL MODAL
                                         <div class="border rounded p-3">
 
                                             <div class="text-muted small">
-                                                Rating
+                                                Đánh giá
                                             </div>
 
                                             <div class="fw-semibold"

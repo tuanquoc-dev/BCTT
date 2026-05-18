@@ -3,7 +3,7 @@ const HomeView = {
     renderCard: (product) => {
 
         return `
-        <div class="col-lg-2 col-md-3 col-6">
+ <div class="product-col">
 
             <div class="card h-100 border-0 shadow-sm product-card">
 
@@ -84,7 +84,7 @@ const HomeView = {
                 </div>
 
                 <a href="#"
-                   class="text-success text-decoration-none fw-semibold">
+                   class="text-dark text-decoration-none fw-semibold hover-dark">
 
                     Xem tất cả
 
@@ -136,7 +136,7 @@ const HomeView = {
             html += `
                 <div class="carousel-item ${i === 0 ? "active" : ""}">
 
-                    <div class="row g-3">
+                    <div class="d-flex flex-wrap">
 
                         ${chunk.map(HomeView.renderCard).join("")}
 

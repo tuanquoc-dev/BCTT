@@ -19,14 +19,24 @@ const UserView = {
             <td>${u.address || ""}</td>
             <td>${u.role || "N/A"}</td>
             <td>
-                <span class="badge rounded-pill ${u.status === "ACTIVE" ? "bg-success" : "bg-danger"}">
-                    ${u.status}
-                </span>
+                                        <span class="badge ${
+            u.status === "ACTIVE"
+                ? "bg-success"
+                : "bg-secondary"
+        }">
+
+                            ${
+            u.status === "ACTIVE"
+                ? "Hoạt động"
+                : "Ngừng hoạt động"
+        }
+
+                        </span>
             </td>
             <td>
                 <button class="btn btn-sm editBtn"
                         data-user='${JSON.stringify(u)}'>
-                    <i class="fa fa-edit"></i> Edit
+                    <i class="fa fa-edit text-dark"></i>
                 </button>
             </td>
         </tr>
@@ -45,7 +55,7 @@ const UserView = {
         html += `
         <li class="page-item ${currentPage === 0 ? "disabled" : ""}">
             <a class="page-link" href="#" data-page="${currentPage - 1}">
-                Previous
+                Trước
             </a>
         </li>
     `;
@@ -65,7 +75,7 @@ const UserView = {
         html += `
         <li class="page-item ${currentPage === totalPages - 1 ? "disabled" : ""}">
             <a class="page-link" href="#" data-page="${currentPage + 1}">
-                Next
+                Sau
             </a>
         </li>
     `;

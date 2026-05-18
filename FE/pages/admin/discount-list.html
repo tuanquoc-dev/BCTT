@@ -33,7 +33,7 @@
 
                 <div>
                     <h3>
-                        Quản lý Mã giảm giá
+                        Quản lý mã giảm giá
                     </h3>
                 </div>
 
@@ -41,8 +41,8 @@
                         class="btn btn-primary px-4"
                         onclick="DiscountController.openCreate()">
 
-                    <i class="fa fa-plus"></i>
-                    Add Discount
+                    <i class="fa fa-plus me-2"></i>
+                    Thêm mã giảm giá
                 </button>
 
             </div>
@@ -66,7 +66,7 @@
                                 <input
                                         id="searchInput"
                                         class="form-control border-start-0"
-                                        placeholder="Search discount code...">
+                                        placeholder="Tìm kiếm mã giảm giá...">
 
                             </div>
 
@@ -78,7 +78,7 @@
                             <div class="input-group">
 
                     <span class="input-group-text bg-white">
-                        <i class="fa fa-toggle-on"></i>
+                        <i class="fa fa-filter"></i>
                     </span>
 
                                 <select
@@ -86,15 +86,15 @@
                                         class="form-select">
 
                                     <option value="">
-                                        All Status
+                                        Tất cả trạng thái
                                     </option>
 
                                     <option value="ACTIVE">
-                                        ACTIVE
+                                        Hoạt động
                                     </option>
 
                                     <option value="INACTIVE">
-                                        INACTIVE
+                                        Ngừng hoạt động
                                     </option>
 
                                 </select>
@@ -111,7 +111,7 @@
                                     onclick="DiscountView.resetFilter()">
 
                                 <i class="fa fa-rotate-right me-1"></i>
-                                Reset
+                                Đặt lại
 
                             </button>
 
@@ -129,21 +129,30 @@
                 <div class="card-body table-responsive">
 
                     <table class="table table-hover align-middle text-center">
+
                         <thead>
+
                         <tr>
+
                             <th>ID</th>
-                            <th>Code</th>
-                            <th>Type</th>
-                            <th>Value</th>
-                            <th>Limit</th>
-                            <th>Used</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                            <th>Mã</th>
+                            <th>Loại</th>
+                            <th>Giá trị</th>
+                            <th>Giới hạn</th>
+                            <th>Đã dùng</th>
+                            <th>Trạng thái</th>
+                            <th>Thao tác</th>
+
                         </tr>
+
                         </thead>
+
                         <tbody id="discountTable"></tbody>
+
                     </table>
+
                 </div>
+
             </div>
 
             <div id="pagination" class="mt-3"></div>
@@ -160,7 +169,7 @@
                     <div class="modal-header text-white">
 
                         <h5 class="modal-title" id="discountModalTitle">
-                            Discount
+                            Mã giảm giá
                         </h5>
 
                         <button type="button"
@@ -176,7 +185,7 @@
                         <div class="card border-0 shadow-sm">
 
                             <div class="card-header fw-bold">
-                                Discount Information
+                                Thông tin mã giảm giá
                             </div>
 
                             <div class="card-body">
@@ -185,148 +194,170 @@
 
                                     <!-- CODE -->
                                     <div class="col-md-6">
+
                                         <label class="form-label">
-                                            Discount Code
+                                            Mã giảm giá
                                         </label>
 
                                         <input id="code"
                                                type="text"
                                                class="form-control"
-                                               placeholder="Enter code">
+                                               placeholder="Nhập mã giảm giá">
+
                                     </div>
 
                                     <!-- TYPE -->
                                     <div class="col-md-6">
+
                                         <label class="form-label">
-                                            Discount Type
+                                            Loại giảm giá
                                         </label>
 
                                         <select id="discountType"
                                                 class="form-select">
 
                                             <option value="PERCENT">
-                                                PERCENT
+                                                Phần trăm
                                             </option>
 
                                             <option value="AMOUNT">
-                                                AMOUNT
+                                                Số tiền
                                             </option>
 
                                         </select>
+
                                     </div>
 
                                     <!-- VALUE -->
                                     <div class="col-md-4">
+
                                         <label class="form-label">
-                                            Discount Value
+                                            Giá trị giảm
                                         </label>
 
                                         <input id="discountValue"
                                                type="number"
                                                class="form-control"
                                                placeholder="0">
+
                                     </div>
 
                                     <!-- LIMIT -->
                                     <div class="col-md-4">
+
                                         <label class="form-label">
-                                            Total Limit
+                                            Giới hạn sử dụng
                                         </label>
 
                                         <input id="limitNumber"
                                                type="number"
                                                class="form-control"
                                                placeholder="0">
+
                                     </div>
 
                                     <!-- USER LIMIT -->
                                     <div class="col-md-4">
+
                                         <label class="form-label">
-                                            Limit Per User
+                                            Giới hạn mỗi người
                                         </label>
 
                                         <input id="limitPerUser"
                                                type="number"
                                                class="form-control"
                                                placeholder="0">
+
                                     </div>
 
                                     <!-- MIN ORDER -->
                                     <div class="col-md-6">
+
                                         <label class="form-label">
-                                            Minimum Order
+                                            Đơn hàng tối thiểu
                                         </label>
 
                                         <input id="minOrderValue"
                                                type="number"
                                                class="form-control"
                                                placeholder="0">
+
                                     </div>
 
                                     <!-- MAX DISCOUNT -->
                                     <div class="col-md-6">
+
                                         <label class="form-label">
-                                            Max Discount
+                                            Giảm tối đa
                                         </label>
 
                                         <input id="maxDiscount"
                                                type="number"
                                                class="form-control"
                                                placeholder="0">
+
                                     </div>
 
                                     <!-- START -->
                                     <div class="col-md-6">
+
                                         <label class="form-label">
-                                            Start Date
+                                            Ngày bắt đầu
                                         </label>
 
                                         <input id="startDate"
                                                type="datetime-local"
                                                class="form-control">
+
                                     </div>
 
                                     <!-- END -->
                                     <div class="col-md-6">
+
                                         <label class="form-label">
-                                            End Date
+                                            Ngày kết thúc
                                         </label>
 
                                         <input id="endDate"
                                                type="datetime-local"
                                                class="form-control">
+
                                     </div>
 
                                     <!-- STATUS -->
                                     <div class="col-md-6">
+
                                         <label class="form-label">
-                                            Status
+                                            Trạng thái
                                         </label>
 
                                         <select id="status"
                                                 class="form-select">
 
                                             <option value="ACTIVE">
-                                                ACTIVE
+                                                Hoạt động
                                             </option>
 
                                             <option value="INACTIVE">
-                                                INACTIVE
+                                                Ngừng hoạt động
                                             </option>
 
                                         </select>
+
                                     </div>
 
                                     <!-- DESCRIPTION -->
                                     <div class="col-md-12">
+
                                         <label class="form-label">
-                                            Description
+                                            Mô tả
                                         </label>
 
                                         <textarea id="description"
                                                   rows="5"
                                                   class="form-control"
-                                                  placeholder="Description"></textarea>
+                                                  placeholder="Nhập mô tả"></textarea>
+
                                     </div>
 
                                 </div>
@@ -343,13 +374,13 @@
                         <button class="btn btn-secondary"
                                 data-bs-dismiss="modal">
 
-                            Close
+                            Đóng
                         </button>
 
                         <button class="btn btn-primary"
                                 onclick="DiscountController.save()">
 
-                            Save Discount
+                            Lưu mã giảm giá
                         </button>
 
                     </div>

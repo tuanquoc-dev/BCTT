@@ -8,6 +8,13 @@ const NotificationController = (() => {
 
     const init = async () => {
 
+        // 👇 CHECK LOGIN
+        const token = Auth.getToken();
+
+        if (!token) {
+            return;
+        }
+
         await loadNotifications();
 
         connectSocket();
@@ -40,6 +47,13 @@ const NotificationController = (() => {
 
     const connectSocket = () => {
 
+        const token = Auth.getToken();
+
+        // 👇 CHECK TOKEN
+        if (!token) {
+            return;
+        }
+
         const socket =
             new SockJS(SOCKET_URL + "/ws");
 
@@ -57,6 +71,11 @@ const NotificationController = (() => {
 
                 const payload =
                     parseJwt(Auth.getToken());
+
+                // 👇 SAFE CHECK
+                if (!payload) {
+                    return;
+                }
 
                 const username =
                     payload.sub;

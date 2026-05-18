@@ -116,6 +116,11 @@ public enum ErrorCode {
     REVIEW_INVALID_STAR(HttpStatus.BAD_REQUEST, "Số sao không hợp lệ"),
     REVIEW_NOT_PURCHASED(HttpStatus.BAD_REQUEST, "Bạn chưa mua sản phẩm này"),
     REVIEW_FORBIDDEN(HttpStatus.FORBIDDEN, "Không có quyền sửa đánh giá");
+    // ===== Comment ===
+    COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "Comment không tồn tại"),
+
+    // ===== Post ===
+    POST_NOT_FOUND(HttpStatus.NOT_FOUND, "Bài viết không tồn tại");
 
 
     private final HttpStatus status;
