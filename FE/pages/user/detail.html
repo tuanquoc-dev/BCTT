@@ -240,6 +240,7 @@
 
         </div>
 
+        <!-- REVIEW -->
         <!-- COMMENTS -->
         <div class="mt-5">
 
@@ -247,6 +248,74 @@
 
                 <div class="d-flex justify-content-between align-items-center mb-4">
 
+                    <div>
+
+                        <h4 class="fw-bold mb-1">
+                            Đánh giá sản phẩm
+                        </h4>
+
+                        <div>
+
+                    <span class="text-warning fs-5">
+                        <i class="fa-solid fa-star"></i>
+                    </span>
+
+                            <span id="avgStar"
+                                  class="fw-bold fs-5">
+                        0
+                    </span>
+
+                            <span class="text-muted ms-2">
+                        (
+                        <span id="totalReview">
+                            0
+                        </span>
+                        đánh giá )
+                    </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- FILTER -->
+                <div class="d-flex gap-2 flex-wrap mb-4">
+
+                    <button class="btn btn-outline-danger review-filter active"
+                            data-star="">
+                        Tất cả
+                    </button>
+
+                    <button class="btn btn-outline-danger review-filter"
+                            data-star="5">
+                        5 Sao
+                    </button>
+
+                    <button class="btn btn-outline-danger review-filter"
+                            data-star="4">
+                        4 Sao
+                    </button>
+
+                    <button class="btn btn-outline-danger review-filter"
+                            data-star="3">
+                        3 Sao
+                    </button>
+
+                    <button class="btn btn-outline-danger review-filter"
+                            data-star="2">
+                        2 Sao
+                    </button>
+
+                    <button class="btn btn-outline-danger review-filter"
+                            data-star="1">
+                        1 Sao
+                    </button>
+
+                </div>
+
+                <!-- LIST -->
+                <div id="reviewContainer"></div>
                     <h4 class="fw-bold mb-0">
                         Bình luận sản phẩm
                     </h4>
@@ -315,6 +384,9 @@
 
 <script src="../../assets/js/models/user.model.js"></script>
 
+<script src="../../assets/js/views/user/review.view.js"></script>
+
+<script src="../../assets/js/controllers/user/review.controller.js"></script>
 <script src="../../assets/js/views/user/detail-comment.view.js"></script>
 
 <script src="../../assets/js/views/user/detail.view.js"></script>

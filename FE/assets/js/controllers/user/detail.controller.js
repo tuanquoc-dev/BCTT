@@ -27,6 +27,11 @@ async function loadDetail(slug) {
         const res =
             await UserModel.getProductDetail(slug);
 
+        const product = res.data.data;
+
+        DetailView.render(
+            res.data.data
+        );
         const product =
             res.data.data;
 
@@ -35,6 +40,7 @@ async function loadDetail(slug) {
         // RETURN PRODUCT
         return product;
 
+        await ReviewController.init(product.id);
     } catch (err) {
 
 

@@ -1,13 +1,12 @@
 package be.controller;
 
-import be.dto.request.CancelOrderRequest;
-import be.dto.request.ChangePasswordRequest;
-import be.dto.request.CreateOrderRequest;
-import be.dto.request.UpdateProfileRequest;
+import be.dto.request.*;
 import be.dto.response.ApiResponse;
 import be.dto.response.OrderResponse;
+import be.dto.response.ReviewResponse;
 import be.dto.response.UserResponse;
 import be.service.service.OrderService;
+import be.service.service.ReviewService;
 import be.service.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -24,10 +23,12 @@ public class UserController {
 
     private final UserService userService;
     private final OrderService orderService;
+    private final ReviewService reviewService;
 
-    public UserController(UserService userService, OrderService orderService) {
+    public UserController(UserService userService, OrderService orderService, ReviewService reviewService) {
         this.userService = userService;
         this.orderService = orderService;
+        this.reviewService = reviewService;
     }
 
     // CHANGE PASSWORD
@@ -156,5 +157,101 @@ public class UserController {
                 )
 
                 .build();
+    }
+
+    // =====================================
+    // CREATE
+    // =====================================
+
+    @PostMapping("reviews")
+    public ResponseEntity<ApiResponse<ReviewResponse>> create(
+
+            @Valid @RequestBody
+            CreateReviewRequest request
+    ) {
+
+        String username =
+                SecurityContextHolder
+                        .getContext()
+                        .getAuthentication()
+                        .getName();
+
+        return ResponseEntity.ok(
+
+                ApiResponse.<ReviewResponse>builder()
+                        .status(200)
+                        .message("Đánh giá sản phẩm thành công")
+                        .data(
+                                reviewService.create(
+                                        username,
+                                        request
+                                )
+                        )
+                        .build()
+        );
+    }
+
+    // =====================================
+    // UPDATE
+    // =====================================
+
+    @PutMapping("reviews/{id}")
+    public ResponseEntity<ApiResponse<ReviewResponse>> update(
+
+            @PathVariable Integer id,
+
+            @Valid @RequestBody
+            CreateReviewRequest request
+    ) {
+
+        String username =
+                SecurityContextHolder
+                        .getContext()
+                        .getAuthentication()
+                        .getName();
+
+        return ResponseEntity.ok(
+
+                ApiResponse.<ReviewResponse>builder()
+                        .status(200)
+                        .message("Cập nhật đánh giá thành công")
+                        .data(
+                                reviewService.update(
+                                        id,
+                                        username,
+                                        request
+                                )
+                        )
+                        .build()
+        );
+    }
+
+    // =====================================
+    // DELETE
+    // =====================================
+
+    @DeleteMapping("reviews/{id}")
+    public ResponseEntity<ApiResponse<Void>> delete(
+            @PathVariable Integer id
+    ) {
+
+        String username =
+                SecurityContextHolder
+                        .getContext()
+                        .getAuthentication()
+                        .getName();
+
+        reviewService.delete(
+                id,
+                username
+        );
+
+        return ResponseEntity.ok(
+
+                ApiResponse.<Void>builder()
+                        .status(200)
+                        .message("Xóa đánh giá thành công")
+                        .build()
+        );
     }
 }

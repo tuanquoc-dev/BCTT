@@ -51,4 +51,18 @@ public class ProductResponse {
     private Integer discountId;
 
     private List<ImageResponse> images;
+
+    private Double averageStar;
+
+    private Long totalReview;
+
+    private Long total5Star;
+
+    private Long total4Star;
+
+    private Long total3Star;
+
+    private Long total2Star;
+
+    private Long total1Star;
 }

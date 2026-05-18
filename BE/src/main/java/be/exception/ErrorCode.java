@@ -107,6 +107,15 @@ public enum ErrorCode {
     // ===== Notification ====
     NOTIFICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "Không có thông báo"),
 
+    // ===== OrderItems =====
+    ORDER_ITEM_NOT_FOUND(HttpStatus.NOT_FOUND, "Không có order item"),
+
+    // ===== REVIEW =====
+    REVIEW_NOT_FOUND(HttpStatus.NOT_FOUND, "Đánh giá không tồn tại"),
+    REVIEW_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "Bạn đã đánh giá sản phẩm này"),
+    REVIEW_INVALID_STAR(HttpStatus.BAD_REQUEST, "Số sao không hợp lệ"),
+    REVIEW_NOT_PURCHASED(HttpStatus.BAD_REQUEST, "Bạn chưa mua sản phẩm này"),
+    REVIEW_FORBIDDEN(HttpStatus.FORBIDDEN, "Không có quyền sửa đánh giá");
     // ===== Comment ===
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "Comment không tồn tại"),
 

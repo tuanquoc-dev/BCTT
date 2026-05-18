@@ -4,6 +4,7 @@ import be.dto.response.*;
 import be.service.service.BannerService;
 import be.service.service.BrandService;
 import be.service.service.CategoryService;
+import be.service.service.ReviewService;
 import be.service.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,6 +21,7 @@ public class PublicController {
     private final BrandService brandService;
     private final CategoryService categoryService;
     private final BannerService bannerService;
+    private final ReviewService reviewService;
     private final CommentService commentService;
 
     // =====================================
@@ -107,6 +109,74 @@ public class PublicController {
         );
     }
 
+    @GetMapping("reviews/product/{productId}")
+    public ResponseEntity<ApiResponse<List<ReviewResponse>>> getByProduct(
+
+            @PathVariable Integer productId,
+
+            @RequestParam(required = false)
+            Integer star
+    ) {
+
+        return ResponseEntity.ok(
+
+                ApiResponse.<List<ReviewResponse>>builder()
+                        .status(200)
+                        .message("Lấy danh sách đánh giá thành công")
+                        .data(
+                                reviewService.getByProduct(
+                                        productId,
+                                        star
+                                )
+                        )
+                        .build()
+        );
+    }
+
+    // =====================================
+    // GET AVERAGE STAR
+    // =====================================
+
+    @GetMapping("reviews/product/{productId}/average-star")
+    public ResponseEntity<ApiResponse<Double>> getAverageStar(
+            @PathVariable Integer productId
+    ) {
+
+        return ResponseEntity.ok(
+
+                ApiResponse.<Double>builder()
+                        .status(200)
+                        .message("Lấy điểm đánh giá trung bình thành công")
+                        .data(
+                                reviewService.getAverageStar(
+                                        productId
+                                )
+                        )
+                        .build()
+        );
+    }
+
+    // =====================================
+    // GET TOTAL REVIEW
+    // =====================================
+
+    @GetMapping("reviews/product/{productId}/total")
+    public ResponseEntity<ApiResponse<Long>> getTotalReview(
+            @PathVariable Integer productId
+    ) {
+
+        return ResponseEntity.ok(
+
+                ApiResponse.<Long>builder()
+                        .status(200)
+                        .message("Lấy tổng số đánh giá thành công")
+                        .data(
+                                reviewService.getTotalReview(
+                                        productId
+                                )
+                        )
+                        .build()
+        );
     // =====================================================
     // GET COMMENT BY PRODUCT
     // =====================================================
