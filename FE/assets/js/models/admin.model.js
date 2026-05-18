@@ -311,3 +311,57 @@ const NotificationAdminModel = {
     getAdminNotifications: () =>
         api.get("admin/notifications")
 };
+
+const AdminCommentModel = {
+
+    // =============================
+    // SEARCH COMMENTS
+    // =============================
+
+    getComments(params) {
+
+        return api.get(
+            "/admin/comments",
+            { params }
+        );
+    },
+
+    // =============================
+    // UPDATE STATUS
+    // =============================
+
+    updateStatus(id, status) {
+
+        return api.put(
+            `/admin/comments/${id}/status`,
+            null,
+            {
+                params: { status }
+            }
+        );
+    },
+
+    // =============================
+    // DELETE
+    // =============================
+
+    delete(id) {
+
+        return api.delete(
+            `/admin/comments/${id}`
+        );
+    },
+    
+
+    // =============================
+    // REPLY COMMENT
+    // =============================
+
+    reply(data) {
+
+        return api.post(
+            "/admin/comments/reply",
+            data
+        );
+    }
+};

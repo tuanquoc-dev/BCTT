@@ -11,9 +11,9 @@ const AuthModel = {
 const NotificationModel = {
 
     getMine: () =>
-        api.get("public/notifications/my"),
+        api.get("users/notifications/my"),
 
     read: (id) =>
-        api.put(`public/notifications/${id}/read`),
+        api.put(`users/notifications/${id}/read`),
 
 };

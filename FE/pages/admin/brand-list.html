@@ -1,53 +1,84 @@
 <!doctype html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
+
     <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Brand list</title>
+          content="width=device-width,
+                   user-scalable=no,
+                   initial-scale=1.0,
+                   maximum-scale=1.0,
+                   minimum-scale=1.0">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../../assets/css/style.css">
+    <meta http-equiv="X-UA-Compatible"
+          content="ie=edge">
+
+    <title>Quản lý thương hiệu</title>
+
+    <!-- BOOTSTRAP -->
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+            rel="stylesheet">
+
+    <!-- FONT AWESOME -->
+    <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+            rel="stylesheet">
+
+    <!-- CUSTOM CSS -->
+    <link
+            rel="stylesheet"
+            href="../../assets/css/style.css">
 </head>
-<body>
 
+<body>
 
 <!-- LOADING -->
 <div id="loadingSpinner"
      class="position-fixed top-0 start-0 w-100 h-100 d-none d-flex align-items-center justify-content-center bg-dark bg-opacity-25"
      style="z-index:9999;">
+
     <div class="spinner-border text-light"></div>
+
 </div>
 
 <!-- TOAST -->
-<div class="toast-container position-fixed top-0 end-0 p-3" id="toastContainer"></div>
+<div class="toast-container position-fixed top-0 end-0 p-3"
+     id="toastContainer">
+</div>
 
 <div class="wrapper">
 
+    <!-- SIDEBAR -->
     <div id="sidebar" class="sidebar"></div>
 
     <div class="right_col">
+
+        <!-- NAVBAR -->
         <div id="navbar" class="top_nav"></div>
 
+        <!-- CONTENT -->
         <div class="content">
 
             <!-- HEADER -->
             <div class="d-flex justify-content-between align-items-center mb-4">
 
                 <div>
+
                     <h3>
-                        Quản lý Thương hiệu
+                        Quản lý thương hiệu
                     </h3>
+
                 </div>
 
                 <button
                         class="btn btn-primary px-4"
                         onclick="BrandController.openCreate()">
 
-                    <i class="fa fa-plus"></i>
-                    Add Brand
+                    <i class="fa fa-plus me-2"></i>
+
+                    Thêm thương hiệu
+
                 </button>
 
             </div>
@@ -64,14 +95,16 @@
 
                             <div class="input-group">
 
-                    <span class="input-group-text bg-white border-end-0">
-                        <i class="fa fa-search text-muted"></i>
-                    </span>
+                                <span class="input-group-text bg-white border-end-0">
+
+                                    <i class="fa fa-search text-muted"></i>
+
+                                </span>
 
                                 <input
                                         id="searchInput"
                                         class="form-control border-start-0"
-                                        placeholder="Search brand name...">
+                                        placeholder="Tìm kiếm tên thương hiệu...">
 
                             </div>
 
@@ -82,24 +115,26 @@
 
                             <div class="input-group">
 
-                    <span class="input-group-text bg-white">
-                        <i class="fa fa-toggle-on"></i>
-                    </span>
+                                <span class="input-group-text bg-white">
+
+                                    <i class="fa fa-toggle-on"></i>
+
+                                </span>
 
                                 <select
                                         id="statusFilter"
                                         class="form-select">
 
                                     <option value="">
-                                        All Status
+                                        Tất cả trạng thái
                                     </option>
 
                                     <option value="ACTIVE">
-                                        ACTIVE
+                                        Hoạt động
                                     </option>
 
                                     <option value="INACTIVE">
-                                        INACTIVE
+                                        Ngừng hoạt động
                                     </option>
 
                                 </select>
@@ -116,7 +151,8 @@
                                     onclick="BrandView.resetFilter()">
 
                                 <i class="fa fa-rotate-right me-1"></i>
-                                Reset
+
+                                Đặt lại
 
                             </button>
 
@@ -128,99 +164,221 @@
 
             </div>
 
-            <!-- 🔥 TABLE -->
-            <div class="card">
+            <!-- TABLE -->
+            <div class="card border-0 shadow-sm rounded-4">
 
                 <div class="card-body table-responsive">
 
-                    <table class="table table-hover align-middle text-center">
+                    <table
+                            class="table table-hover align-middle text-center">
+
                         <thead>
+
                         <tr>
+
                             <th>ID</th>
-                            <th>Name</th>
+
+                            <th>Tên thương hiệu</th>
+
                             <th>Logo</th>
-                            <th>Status</th>
-                            <th class="text-center">Action</th>
+
+                            <th>Trạng thái</th>
+
+                            <th class="text-center">
+                                Thao tác
+                            </th>
+
                         </tr>
+
                         </thead>
+
                         <tbody id="brandTable"></tbody>
+
                     </table>
+
                 </div>
+
             </div>
 
-            <div id="pagination" class="d-flex gap-2"></div>
+            <!-- PAGINATION -->
+            <div id="pagination" class="mt-3"></div>
+
         </div>
+
     </div>
+
 </div>
 
-<!-- 🔥 MODAL (để ngoài layout cho sạch) -->
-<div class="modal fade" id="brandModal">
-    <div class="modal-dialog">
-        <div class="modal-content">
+<!-- MODAL -->
+<div class="modal fade"
+     id="brandModal">
 
+    <div class="modal-dialog">
+
+        <div class="modal-content border-0 shadow">
+
+            <!-- HEADER -->
             <div class="modal-header">
-                <h5 id="modalTitle">Brand</h5>
-                <button class="btn-close" data-bs-dismiss="modal"></button>
+
+                <h5 id="modalTitle">
+                    Thương hiệu
+                </h5>
+
+                <button
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
+
             </div>
 
+            <!-- BODY -->
             <div class="modal-body">
-                <input id="name" class="form-control mb-2" placeholder="Tên brand">
 
-                <select id="status" class="form-select mb-2">
-                    <option value="ACTIVE">ACTIVE</option>
-                    <option value="INACTIVE">INACTIVE</option>
-                </select>
+                <!-- NAME -->
+                <div class="mb-3">
 
-                <div class="mb-2">
-                    <img id="previewImage" width="80" class="d-none"/>
+                    <label class="form-label">
+                        Tên thương hiệu
+                    </label>
 
-                    <button id="btnRemoveImage"
+                    <input
+                            id="name"
+                            class="form-control"
+                            placeholder="Nhập tên thương hiệu">
+
+                </div>
+
+                <!-- STATUS -->
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Trạng thái
+                    </label>
+
+                    <select
+                            id="status"
+                            class="form-select">
+
+                        <option value="ACTIVE">
+                            Hoạt động
+                        </option>
+
+                        <option value="INACTIVE">
+                            Ngừng hoạt động
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <!-- PREVIEW -->
+                <div class="mb-3">
+
+                    <img
+                            id="previewImage"
+                            width="80"
+                            class="d-none rounded border"/>
+
+                    <button
+                            id="btnRemoveImage"
                             class="btn btn-sm btn-danger d-none"
                             onclick="BrandView.removeCurrentImage()">
-                        ❌
+
+                        <i class="fa fa-trash"></i>
+
                     </button>
+
                 </div>
 
-                <input type="file" id="file" class="form-control">
+                <!-- FILE -->
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Logo thương hiệu
+                    </label>
+
+                    <input
+                            type="file"
+                            id="file"
+                            class="form-control">
+
+                </div>
 
             </div>
 
+            <!-- FOOTER -->
             <div class="modal-footer">
-                <button class="btn btn-primary"
-                        onclick="BrandController.save()">
-                    Save
+
+                <button
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+
+                    Đóng
+
                 </button>
+
+                <button
+                        class="btn btn-primary"
+                        onclick="BrandController.save()">
+
+                    <i class="fa fa-floppy-disk me-1"></i>
+
+                    Lưu
+
+                </button>
+
             </div>
 
         </div>
+
     </div>
+
 </div>
 
-
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+
 <!-- CORE -->
 <script src="../../config.js"></script>
+
 <script src="../../assets/js/core/api.js"></script>
+
 <script src="../../assets/js/core/auth.js"></script>
+
 <script src="../../assets/js/core/utils.js"></script>
 
+<!-- MODEL -->
 <script src="../../assets/js/models/admin.model.js"></script>
+
 <script src="../../assets/js/models/user.model.js"></script>
+
+<!-- VIEW -->
 <script src="../../assets/js/views/admin/notify.view.js"></script>
-<script src="../../assets/js/controllers/admin/notify.controller.js"></script>
+
 <script src="../../assets/js/views/admin/brand.view.js"></script>
+
+<!-- CONTROLLER -->
+<script src="../../assets/js/controllers/admin/notify.controller.js"></script>
+
 <script src="../../assets/js/controllers/admin/brand.controller.js"></script>
 
-
+<!-- COMPONENT -->
 <script src="../../assets/js/components/navbar.js"></script>
+
 <script src="../../assets/js/components/sidebar.js"></script>
 
 <script>
+
     Navbar.load();
+
     Sidebar.load();
+
 </script>
+
 </body>
 </html>

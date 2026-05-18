@@ -105,7 +105,13 @@ public enum ErrorCode {
 
 
     // ===== Notification ====
-    NOTIFICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "Không có thông báo");
+    NOTIFICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "Không có thông báo"),
+
+    // ===== Comment ===
+    COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "Comment không tồn tại"),
+
+    // ===== Post ===
+    POST_NOT_FOUND(HttpStatus.NOT_FOUND, "Bài viết không tồn tại");
 
 
     private final HttpStatus status;

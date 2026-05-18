@@ -1312,3 +1312,174 @@ CATEGORY DROPDOWN VERTICAL
     font-size: 11px;
     color: #999;
 }
+/* =========================================
+   HEADER ICON
+========================================= */
+
+.header-icon{
+    width: 42px;
+    height: 42px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:12px;
+
+    text-decoration:none;
+
+    /* FIX */
+    color: #fff;
+
+    transition: all .2s ease;
+
+    position: relative;
+
+    font-size: 20px;
+}
+
+.header-icon:hover{
+    background: rgba(255,255,255,0.12);
+
+    /* màu giống logo */
+    color: var(--main-hover);
+
+    transform: translateY(-1px);
+}
+
+/* icon chuông + cart */
+.header-icon i{
+    color: inherit;
+}
+
+/* badge */
+.header-icon .badge{
+    font-size: 11px;
+
+    min-width: 18px;
+    height: 18px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    padding:0 5px;
+}
+
+/* notification dropdown */
+.notification-dropdown{
+    width:350px;
+    max-height:500px;
+
+    overflow-y:auto;
+
+    border:none;
+
+    border-radius:18px;
+
+    padding:8px;
+
+    box-shadow:
+            0 10px 35px rgba(0,0,0,0.12);
+}
+
+/* item */
+.notification-dropdown .dropdown-item{
+    white-space:normal;
+
+    padding:12px 16px;
+
+    border-radius:12px;
+
+    transition: all .2s ease;
+}
+
+.notification-dropdown .dropdown-item:hover{
+    background:#f5f7fb;
+}
+
+/* =========================================
+   BRAND CAROUSEL BUTTON HOVER
+========================================= */
+
+/* mặc định ẩn */
+.brand-section .carousel-control-prev,
+.brand-section .carousel-control-next{
+
+    opacity: 0;
+
+    transition: all .25s ease;
+}
+
+/* hover section -> hiện nút */
+.brand-section:hover .carousel-control-prev,
+.brand-section:hover .carousel-control-next{
+
+    opacity: 1;
+}
+
+/* button icon */
+.brand-section .carousel-control-prev-icon,
+.brand-section .carousel-control-next-icon{
+
+    width: 44px;
+    height: 44px;
+
+    border-radius: 50%;
+
+    background-size: 18px;
+
+    background-color: rgba(255,255,255,0.95);
+
+    box-shadow:
+            0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* hover icon */
+.brand-section .carousel-control-prev-icon:hover,
+.brand-section .carousel-control-next-icon:hover{
+
+    transform: scale(1.08);
+
+    background-color: #ffffff;
+}
+
+/* smooth */
+.brand-section .carousel-control-prev-icon,
+.brand-section .carousel-control-next-icon{
+
+    transition: all .2s ease;
+}
+
+/* nút nằm sát ngoài */
+.brand-section .carousel-control-prev{
+    left: -22px;
+}
+
+.brand-section .carousel-control-next{
+    right: -22px;
+}
+/* =========================================
+   PRODUCT GRID 5 ITEMS
+========================================= */
+
+.product-col{
+    width: 20%;
+    padding: 0 8px;
+}
+
+/* tablet */
+@media(max-width: 992px){
+
+    .product-col{
+        width: 25%;
+    }
+}
+
+/* mobile */
+@media(max-width: 768px){
+
+    .product-col{
+        width: 50%;
+    }
+}

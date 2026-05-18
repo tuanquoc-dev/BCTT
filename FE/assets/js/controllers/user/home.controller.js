@@ -26,7 +26,7 @@ async function loadFeaturedProducts() {
         const res =
             await UserModel.searchProducts({
                 sort: "newest",
-                size: 12
+                size: 10
             });
 
         document.getElementById("productList")

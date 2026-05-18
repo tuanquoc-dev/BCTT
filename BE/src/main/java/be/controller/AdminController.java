@@ -1,11 +1,9 @@
 package be.controller;
 
-import be.dto.request.CreateBannerRequest;
-import be.dto.request.CreateStaffRequest;
-import be.dto.request.UpdateBannerRequest;
-import be.dto.request.UpdateProfileRequest;
+import be.dto.request.*;
 import be.dto.response.*;
 import be.entity.Notification;
+import be.enums.CommentStatus;
 import be.enums.CommonStatus;
 import be.enums.OrderStatus;
 import be.enums.UserStatus;
@@ -15,10 +13,12 @@ import be.repository.NotificationRepository;
 import be.service.NotificationService;
 import be.service.service.AdminService;
 import be.service.service.BannerService;
+import be.service.service.CommentService;
 import be.service.service.OrderService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -35,13 +35,18 @@ public class AdminController {
     private final BannerService bannerService;
     private final NotificationService notificationService;
     private final NotificationRepository notificationRepository;
+    private final CommentService commentService;
+    private final SimpMessagingTemplate messagingTemplate;
 
-    public AdminController(AdminService adminService, OrderService orderService, BannerService bannerService, NotificationService notificationService, NotificationRepository notificationRepository) {
+    public AdminController(AdminService adminService, OrderService orderService, BannerService bannerService, NotificationService notificationService, NotificationRepository notificationRepository,
+                           CommentService commentService, SimpMessagingTemplate messagingTemplate) {
         this.adminService = adminService;
         this.orderService = orderService;
         this.bannerService = bannerService;
         this.notificationService = notificationService;
         this.notificationRepository = notificationRepository;
+        this.commentService = commentService;
+        this.messagingTemplate = messagingTemplate;
     }
 
     // CREATE STAFF
@@ -417,5 +422,117 @@ public class AdminController {
                         .message("Đã đọc notification")
                         .build()
         );
+    }
+
+    // =====================================================
+    // SEARCH COMMENTS
+    // =====================================================
+
+    @GetMapping("/comments")
+    @PreAuthorize("hasAuthority('COMMENT_VIEW')")
+    public ApiResponse<Page<CommentResponse>> search(
+
+            @RequestParam(required = false)
+            String keyword,
+
+            @RequestParam(required = false)
+            CommentStatus status,
+
+            @RequestParam(defaultValue = "0")
+            int page,
+
+            @RequestParam(defaultValue = "10")
+            int size
+    ) {
+
+        return ApiResponse.<Page<CommentResponse>>builder()
+                .status(200)
+                .message("Lấy danh sách comment thành công")
+                .data(
+                        commentService.search(
+                                keyword,
+                                status,
+                                page,
+                                size
+                        )
+                )
+                .build();
+    }
+
+    // =====================================================
+    // UPDATE STATUS
+    // =====================================================
+
+    @PutMapping("comments/{id}/status")
+    @PreAuthorize("hasAuthority('COMMENT_UPDATE')")
+    public ApiResponse<CommentResponse> updateStatus(
+
+            @PathVariable
+            Integer id,
+
+            @RequestParam
+            CommentStatus status
+    ) {
+
+        CommentResponse response =
+                commentService.updateStatus(id, status);
+
+        // realtime update
+        messagingTemplate.convertAndSend(
+                "/topic/admin/comments/status",
+                response
+        );
+
+        return ApiResponse.<CommentResponse>builder()
+                .status(200)
+                .message("Cập nhật trạng thái comment thành công")
+                .data(response)
+                .build();
+    }
+
+    // =====================================================
+    // DELETE COMMENT
+    // =====================================================
+
+    @DeleteMapping("comments/{id}")
+    @PreAuthorize("hasAuthority('COMMENT_DELETE')")
+    public ApiResponse<String> delete(
+            @PathVariable Integer id
+    ) {
+
+        commentService.delete(id);
+
+        // realtime remove
+        messagingTemplate.convertAndSend(
+                "/topic/admin/comments/delete",
+                id
+        );
+
+        return ApiResponse.<String>builder()
+                .status(200)
+                .message("Xóa comment thành công")
+                .build();
+    }
+
+    @PostMapping("/comments/reply")
+    @PreAuthorize("hasAuthority('COMMENT_REPLY')")
+    public ApiResponse<CommentResponse> reply(
+            @RequestBody CreateCommentRequest request
+    ) {
+
+        String username =
+                SecurityContextHolder
+                        .getContext()
+                        .getAuthentication()
+                        .getName();
+
+        CommentResponse response =
+                commentService.create(username, request);
+
+        return ApiResponse.<CommentResponse>builder()
+                .status(200)
+                .message("Reply thành công")
+                .data(response)
+                .build();
     }
 }
