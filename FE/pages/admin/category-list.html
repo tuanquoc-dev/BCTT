@@ -46,7 +46,7 @@
                         onclick="CategoryController.openCreate()">
 
                     <i class="fa fa-plus"></i>
-                    Add Category
+                    Thêm danh mục
                 </button>
 
             </div>
@@ -70,7 +70,7 @@
                                 <input
                                         id="searchInput"
                                         class="form-control border-start-0"
-                                        placeholder="Search category name...">
+                                        placeholder="Tìm kiếm tên danh mục...">
 
                             </div>
 
@@ -90,15 +90,15 @@
                                         class="form-select">
 
                                     <option value="">
-                                        All Status
+                                        Tất cả trạng thái
                                     </option>
 
                                     <option value="ACTIVE">
-                                        ACTIVE
+                                        Hoạt Động
                                     </option>
 
                                     <option value="INACTIVE">
-                                        INACTIVE
+                                        Ngừng hoạt động
                                     </option>
 
                                 </select>
@@ -115,7 +115,7 @@
                                     onclick="CategoryView.resetFilter()">
 
                                 <i class="fa fa-rotate-right me-1"></i>
-                                Reset
+                                Đặt lại
 
                             </button>
 
@@ -135,11 +135,11 @@
                         <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Name</th>
-                            <th>Description</th>
-                            <th>Image</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                            <th>Tên danh mục</th>
+                            <th>Mô tả</th>
+                            <th>Hình ảnh</th>
+                            <th>Trạng thái</th>
+                            <th>Thao tác</th>
                         </tr>
                         </thead>
                         <tbody id="categoryTable"></tbody>
@@ -155,7 +155,7 @@
                     <div class="modal-content">
 
                         <div class="modal-header">
-                            <h5 id="modalTitle">Category</h5>
+                            <h5 id="modalTitle">Danh mục</h5>
                             <button class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
 
@@ -166,8 +166,8 @@
                             <input id="categoryDescription" class="form-control mb-2" placeholder="Mô tả">
 
                             <select id="categoryStatus" class="form-select mb-2">
-                                <option value="ACTIVE">ACTIVE</option>
-                                <option value="INACTIVE">INACTIVE</option>
+                                <option value="ACTIVE">Hoạt động</option>
+                                <option value="INACTIVE">Ngừng hoạt động</option>
                             </select>
 
                             <div class="mb-2">
@@ -176,7 +176,7 @@
                                 <button id="categoryRemoveBtn"
                                         class="btn btn-sm btn-danger d-none"
                                         onclick="CategoryView.removeCurrentImage()">
-                                    ❌
+                                    <i class="fa fa-xmark"></i>
                                 </button>
                             </div>
 
@@ -208,7 +208,7 @@
 <script src="../../assets/js/core/auth.js"></script>
 <script src="../../assets/js/core/utils.js"></script>
 
-
+l
 <script src="../../assets/js/models/admin.model.js"></script>
 <script src="../../assets/js/models/user.model.js"></script>
 <script src="../../assets/js/views/admin/category.view.js"></script>

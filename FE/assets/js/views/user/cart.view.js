@@ -11,6 +11,18 @@ const CartView = {
         const cartCountText =
             document.getElementById("cartCountText");
 
+        const cartSummary =
+            document.getElementById("cartSummary");
+
+        // 👇 CHECK
+        if (
+            !container ||
+            !emptyCart ||
+            !cartSummary
+        ) {
+            return;
+        }
+
         if (cartCountText) {
 
             cartCountText.textContent =

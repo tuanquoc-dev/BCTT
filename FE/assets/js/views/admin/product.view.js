@@ -119,33 +119,38 @@ const ProductView = {
                     </td>
 
                     <td>
-                        <span class="badge ${
-                p.status === "ACTIVE"
-                    ? "bg-success"
-                    : "bg-danger"
-            }">
-                            ${p.status}
-                        </span>
+                    <span class="badge bg-${p.status === 'ACTIVE'
+                ? 'success'
+                : 'secondary'}">
+
+                        ${p.status === 'ACTIVE'
+                ? 'Hoạt động'
+                : 'Ngừng hoạt động'}
+
+                    </span>
                     </td>
 
                     <td class="text-nowrap">
 
                         <button
-                            class="btn btn-sm"
+                            class="btn btn-sm btn-light border"
+                            title="Chi tiết"
                             onclick="ProductController.detail(${p.id})"
                         >
                             <i class="fa fa-eye"></i>
                         </button>
 
                         <button
-                            class="btn btn-sm"
+                            class="btn btn-sm btn-light border"
+                            title="Chỉnh sửa"
                             onclick="ProductController.openEdit(${p.id})"
                         >
                             <i class="fa fa-edit"></i>
                         </button>
 
                         <button
-                            class="btn btn-sm"
+                            class="btn btn-sm btn-light border"
+                            title="Xóa"
                             onclick="ProductController.delete(${p.id})"
                         >
                             <i class="fa fa-trash"></i>
@@ -171,7 +176,7 @@ const ProductView = {
         html += `
         <li class="page-item ${currentPage === 0 ? "disabled" : ""}">
             <a class="page-link" href="#" data-page="${currentPage - 1}">
-                Previous
+                Trước
             </a>
         </li>
     `;
@@ -191,7 +196,7 @@ const ProductView = {
         html += `
         <li class="page-item ${currentPage === totalPages - 1 ? "disabled" : ""}">
             <a class="page-link" href="#" data-page="${currentPage + 1}">
-                Next
+                Sau
             </a>
         </li>
     `;
@@ -220,7 +225,7 @@ const ProductView = {
             if (!sel) return;
 
             sel.innerHTML =
-                `<option value="">All Brand</option>`;
+                `<option value="">Tất cả thương hiệu</option>`;
 
             brands.forEach(b => {
 
@@ -249,7 +254,7 @@ const ProductView = {
             if (!sel) return;
 
             sel.innerHTML =
-                `<option value="">All Category</option>`;
+                `<option value="">Tất cả danh mục</option>`;
 
             categories.forEach(c => {
 

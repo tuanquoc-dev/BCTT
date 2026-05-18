@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
 
     <title>
-        Order Management
+       Quản lý đơn hàng
     </title>
 
     <!-- BOOTSTRAP -->
@@ -64,7 +64,7 @@
                 <div>
 
                     <h3>
-                        Order Management
+                        Quản lý đơn hàng
                     </h3>
 
                 </div>
@@ -92,7 +92,7 @@
                                 <input
                                         id="searchInput"
                                         class="form-control border-start-0"
-                                        placeholder="Search order code..."
+                                        placeholder="Tìm kiếm mã đơn hàng..."
                                 >
 
                             </div>
@@ -115,31 +115,31 @@
                                         class="form-select">
 
                                     <option value="">
-                                        All Status
+                                        Tất cả trạng thái
                                     </option>
 
                                     <option value="PENDING">
-                                        PENDING
+                                        Chờ xác nhận
                                     </option>
 
                                     <option value="CONFIRMED">
-                                        CONFIRMED
+                                        Đã xác nhận
                                     </option>
 
                                     <option value="SHIPPING">
-                                        SHIPPING
+                                        Đang giao
                                     </option>
 
                                     <option value="COMPLETED">
-                                        COMPLETED
+                                        Hoàn thành
                                     </option>
 
                                     <option value="REJECTED">
-                                        REJECTED
+                                        Đã từ chối
                                     </option>
 
                                     <option value="CANCELLED">
-                                        CANCELLED
+                                        Đã hủy
                                     </option>
 
                                 </select>
@@ -157,7 +157,7 @@
 
                                 <i class="fa fa-rotate-right me-1"></i>
 
-                                Reset
+                                Làm mới
 
                             </button>
 
@@ -183,17 +183,17 @@
 
                             <th>ID</th>
 
-                            <th>Code</th>
+                            <th>Mã đơn</th>
 
-                            <th>Receiver</th>
+                            <th>Người nhận</th>
 
-                            <th>Total</th>
+                            <th>Tổng tiền</th>
 
-                            <th>Status</th>
+                            <th>Trạng thái</th>
 
-                            <th>Created At</th>
+                            <th>Ngày tạo</th>
 
-                            <th>Action</th>
+                            <th>Thao tác</th>
 
                         </tr>
 
@@ -223,7 +223,7 @@
 
                                 <i class="fa fa-receipt me-2"></i>
 
-                                Order Detail
+                                Chi tiết đơn hàng
 
                             </h5>
 
@@ -247,7 +247,7 @@
                                     <div class="card border-0 shadow-sm mb-4">
 
                                         <div class="card-header fw-bold">
-                                            Order Information
+                                            Thông tin đơn hàng
                                         </div>
 
                                         <div class="card-body">
@@ -255,7 +255,7 @@
                                             <div class="mb-3">
 
                                                 <div class="text-muted small">
-                                                    Order Code
+                                                    Mã đơn hàng
                                                 </div>
 
                                                 <div
@@ -268,7 +268,7 @@
                                             <div class="mb-3">
 
                                                 <div class="text-muted small">
-                                                    Receiver
+                                                    Người nhận
                                                 </div>
 
                                                 <div
@@ -281,7 +281,7 @@
                                             <div class="mb-3">
 
                                                 <div class="text-muted small">
-                                                    Phone
+                                                    Số điện thoại
                                                 </div>
 
                                                 <div
@@ -294,7 +294,7 @@
                                             <div class="mb-3">
 
                                                 <div class="text-muted small">
-                                                    Address
+                                                    Địa chỉ
                                                 </div>
 
                                                 <div
@@ -307,7 +307,7 @@
                                             <div class="mb-3">
 
                                                 <div class="text-muted small">
-                                                    Payment Method
+                                                    Phương thức thanh toán
                                                 </div>
 
                                                 <div
@@ -320,7 +320,7 @@
                                             <div class="mb-3">
 
                                                 <div class="text-muted small">
-                                                    Payment Status
+                                                    Trạng thái thanh toán
                                                 </div>
 
                                                 <div
@@ -332,7 +332,7 @@
                                             <div class="mb-3">
 
                                                 <div class="text-muted small">
-                                                    Order Status
+                                                    Trạng thái đơn hàng
                                                 </div>
 
                                                 <div
@@ -344,7 +344,7 @@
                                             <div class="mb-3">
 
                                                 <div class="text-muted small">
-                                                    Created At
+                                                    Ngày tạo
                                                 </div>
 
                                                 <div
@@ -398,7 +398,7 @@
                                             <div class="d-flex justify-content-between mb-2">
 
                                     <span>
-                                        Subtotal
+                                        Tạm tính
                                     </span>
 
                                                 <span id="detailSubtotal"></span>
@@ -408,7 +408,7 @@
                                             <div class="d-flex justify-content-between mb-2">
 
                                     <span>
-                                        Shipping Fee
+                                        Phí vận chuyển
                                     </span>
 
                                                 <span id="detailShippingFee"></span>
@@ -418,7 +418,7 @@
                                             <div class="d-flex justify-content-between mb-2">
 
                                     <span>
-                                        Discount
+                                        Giảm giá
                                     </span>
 
                                                 <span id="detailDiscount"></span>
@@ -430,7 +430,7 @@
                                             <div class="d-flex justify-content-between">
 
                                                 <strong>
-                                                    Total
+                                                    Tổng cộng
                                                 </strong>
 
                                                 <strong

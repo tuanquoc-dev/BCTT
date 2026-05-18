@@ -25,7 +25,7 @@ const OrderView = {
             tbody.innerHTML = `
                 <tr>
                     <td colspan="7" class="text-center py-4">
-                        No orders found
+                        Không có đơn hàng
                     </td>
                 </tr>
             `;
@@ -62,20 +62,22 @@ const OrderView = {
 
                 <td>
 
-                    <div class="d-flex gap-2 justify-content-center flex-wrap">
+    <div class="d-flex gap-2 justify-content-center flex-wrap">
 
-                        <button
-                            class="btn btn-sm"
-                            onclick="OrderController.openDetail(${order.id})"
-                        >
-                            <i class="fa fa-eye"></i>
-                        </button>
+        <!-- CHI TIẾT -->
+        <button
+            class="btn btn-sm btn-light border"
+            title="Xem chi tiết"
+            onclick="OrderController.openDetail(${order.id})"
+        >
+            <i class="fa fa-eye text-dark"></i>
+        </button>
 
-                        ${this.renderTableActions(order)}
+        ${this.renderTableActions(order)}
 
-                    </div>
+    </div>
 
-                </td>
+</td>
 
             </tr>
 
@@ -87,44 +89,52 @@ const OrderView = {
         if (order.status === "PENDING") {
 
             return `
-                <button
-                    class="btn btn-sm"
-                    onclick="OrderController.confirm(${order.id})"
-                >
-                    <i class="fa fa-check"></i>
-                </button>
+            <!-- XÁC NHẬN -->
+            <button
+                class="btn btn-sm btn-light border"
+                title="Xác nhận đơn"
+                onclick="OrderController.confirm(${order.id})"
+            >
+                <i class="fa fa-check text-dark"></i>
+            </button>
 
-                <button
-                    class="btn btn-sm"
-                    onclick="OrderController.reject(${order.id})"
-                >
-                    <i class="fa fa-xmark"></i>
-                </button>
-            `;
+            <!-- TỪ CHỐI -->
+            <button
+                class="btn btn-sm btn-light border"
+                title="Từ chối đơn"
+                onclick="OrderController.reject(${order.id})"
+            >
+                <i class="fa fa-xmark text-dark"></i>
+            </button>
+        `;
         }
 
         if (order.status === "CONFIRMED") {
 
             return `
-                <button
-                    class="btn btn-sm"
-                    onclick="OrderController.shipping(${order.id})"
-                >
-                    <i class="fa fa-truck"></i>
-                </button>
-            `;
+            <!-- GIAO HÀNG -->
+            <button
+                class="btn btn-sm btn-light border"
+                title="Bắt đầu giao hàng"
+                onclick="OrderController.shipping(${order.id})"
+            >
+                <i class="fa fa-truck text-dark"></i>
+            </button>
+        `;
         }
 
         if (order.status === "SHIPPING") {
 
             return `
-                <button
-                    class="btn btn-sm"
-                    onclick="OrderController.complete(${order.id})"
-                >
-                    <i class="fa fa-box"></i>
-                </button>
-            `;
+            <!-- HOÀN THÀNH -->
+            <button
+                class="btn btn-sm btn-light border"
+                title="Hoàn thành đơn hàng"
+                onclick="OrderController.complete(${order.id})"
+            >
+                <i class="fa fa-box text-dark"></i>
+            </button>
+        `;
         }
 
         return "";
@@ -133,39 +143,46 @@ const OrderView = {
     renderStatus(status) {
 
         let color = "secondary";
+        let text = status;
 
         switch (status) {
 
             case "PENDING":
                 color = "warning";
+                text = "Chờ xác nhận";
                 break;
 
             case "CONFIRMED":
                 color = "info";
+                text = "Đã xác nhận";
                 break;
 
             case "SHIPPING":
                 color = "primary";
+                text = "Đang giao";
                 break;
 
             case "COMPLETED":
                 color = "success";
+                text = "Hoàn thành";
                 break;
 
             case "REJECTED":
                 color = "danger";
+                text = "Đã từ chối";
                 break;
 
             case "CANCELLED":
                 color = "dark";
+                text = "Đã hủy";
                 break;
         }
 
         return `
-            <span class="badge bg-${color}">
-                ${status}
-            </span>
-        `;
+        <span class="badge bg-${color}">
+            ${text}
+        </span>
+    `;
     },
 
     // ================= PAGINATION =================
@@ -177,7 +194,7 @@ const OrderView = {
 
         html += `
             <li class="page-item ${currentPage === 0 ? "disabled" : ""}">
-                <a class="page-link" href="#" data-page="${currentPage - 1}">Previous</a>
+                <a class="page-link" href="#" data-page="${currentPage - 1}">Trước</a>
             </li>
         `;
 
@@ -191,7 +208,7 @@ const OrderView = {
 
         html += `
             <li class="page-item ${currentPage === totalPages - 1 ? "disabled" : ""}">
-                <a class="page-link" href="#" data-page="${currentPage + 1}">Next</a>
+                <a class="page-link" href="#" data-page="${currentPage + 1}">Sau</a>
             </li>
         `;
 
@@ -268,11 +285,11 @@ const OrderView = {
                         </div>
 
                         <div class="small text-muted">
-                            Color: ${item.color || "-"}
+                            Màu: ${item.color || "-"}
                         </div>
 
                         <div class="small">
-                            Qty: ${item.quantity}
+                            Số lượng: ${item.quantity}
                         </div>
 
                     </div>
@@ -305,14 +322,14 @@ const OrderView = {
                     class="btn btn-success"
                     onclick="OrderController.confirm(${order.id})"
                 >
-                    Confirm Order
+                 Xác nhận đơn
                 </button>
 
                 <button
                     class="btn btn-danger"
                     onclick="OrderController.reject(${order.id})"
                 >
-                    Reject Order
+                   Từ chối đơn
                 </button>
             `;
         }
@@ -324,7 +341,7 @@ const OrderView = {
                     class="btn btn-primary"
                     onclick="OrderController.shipping(${order.id})"
                 >
-                    Shipping
+                    Bắt đầu giao hàng
                 </button>
             `;
         }
@@ -336,7 +353,7 @@ const OrderView = {
                     class="btn btn-success"
                     onclick="OrderController.complete(${order.id})"
                 >
-                    Complete
+                    Hoàn thành đơn
                 </button>
             `;
         }
@@ -354,7 +371,7 @@ const OrderView = {
                     class="btn btn-dark"
                     onclick="OrderController.cancel(${order.id})"
                 >
-                    Cancel
+                   Hủy đơn
                 </button>
             `;
         }

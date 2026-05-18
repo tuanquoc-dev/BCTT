@@ -4,7 +4,7 @@
 
     <meta charset="UTF-8">
 
-    <title>Banner Management</title>
+    <title>Quản lý banner</title>
 
     <!-- BOOTSTRAP -->
     <link
@@ -61,7 +61,7 @@
 
                 <div>
 
-                    <h3>Banner Management</h3>
+                    <h3>Quản lý banner</h3>
 
                 </div>
 
@@ -71,7 +71,7 @@
 
                     <i class="fa fa-plus me-2"></i>
 
-                    Create Banner
+                    Tạo Banner
 
                 </button>
 
@@ -98,7 +98,7 @@
                                 <input
                                         id="searchInput"
                                         class="form-control border-start-0"
-                                        placeholder="Search banner name..."
+                                        placeholder="Tìm kiếm banner theo tên..."
                                 >
 
                             </div>
@@ -112,7 +112,7 @@
 
                                 <span class="input-group-text bg-white">
 
-                                    <i class="fa fa-eye"></i>
+                                    <i class="fa fa-filter"></i>
 
                                 </span>
 
@@ -121,15 +121,15 @@
                                         class="form-select">
 
                                     <option value="">
-                                        All Status
+                                        Tất cả trạng thái
                                     </option>
 
                                     <option value="1">
-                                        Active
+                                        Đang hiển thị
                                     </option>
 
                                     <option value="0">
-                                        Inactive
+                                        Đã ẩn
                                     </option>
 
                                 </select>
@@ -147,7 +147,7 @@
 
                                 <i class="fa fa-rotate-right me-1"></i>
 
-                                Reset
+                                Làm mới
 
                             </button>
 
@@ -173,19 +173,19 @@
 
                             <th>ID</th>
 
-                            <th>Thumbnail</th>
+                            <th>Hình ảnh</th>
 
-                            <th>Name</th>
+                            <th>Tên banner</th>
 
-                            <th>Position</th>
+                            <th>Vị trí</th>
 
-                            <th>Type</th>
+                            <th>Loại</th>
 
-                            <th>Sort</th>
+                            <th>Thứ tự</th>
 
-                            <th>Status</th>
+                            <th>Trạng thái</th>
 
-                            <th>Action</th>
+                            <th>Thao tác</th>
 
                         </tr>
 
@@ -227,7 +227,7 @@
                         class="modal-title"
                         id="bannerModalTitle">
 
-                    Create Banner
+                    Tạo banner
 
                 </h5>
 
@@ -249,7 +249,7 @@
                         <div class="col-md-6 mb-3">
 
                             <label class="form-label">
-                                Banner Name
+                                Tên banner
                             </label>
 
                             <input
@@ -264,7 +264,7 @@
                         <div class="col-md-6 mb-3">
 
                             <label class="form-label">
-                                Position
+                                Vị trí
                             </label>
 
                             <input
@@ -278,7 +278,7 @@
                         <div class="col-md-12 mb-3">
 
                             <label class="form-label">
-                                Thumbnail URL
+                                Ảnh banner
                             </label>
 
                             <input
@@ -294,7 +294,7 @@
                         <div class="col-md-12 mb-3">
 
                             <label class="form-label">
-                                Redirect Link
+                                Liên kết chuyển hướng
                             </label>
 
                             <input
@@ -308,7 +308,7 @@
                         <div class="col-md-4 mb-3">
 
                             <label class="form-label">
-                                Type
+                                Loại banner
                             </label>
 
                             <input
@@ -322,7 +322,7 @@
                         <div class="col-md-4 mb-3">
 
                             <label class="form-label">
-                                Sort Order
+                                Thứ tự hiển thị
                             </label>
 
                             <input
@@ -338,15 +338,20 @@
                         <div class="col-md-4 mb-3">
 
                             <label class="form-label">
-                                Status
+                                Trạng thái
                             </label>
 
                             <select
                                     id="status"
                                     class="form-select">
 
-                                <option value="ACTIVE">Active</option>
-                                <option value="INACTIVE">Inactive</option>
+                                <option value="ACTIVE">
+                                    Đang hiển thị
+                                </option>
+
+                                <option value="INACTIVE">
+                                    Đã ẩn
+                                </option>
 
                             </select>
 
@@ -356,7 +361,7 @@
                         <div class="col-md-6 mb-3">
 
                             <label class="form-label">
-                                Start Date
+                                Ngày bắt đầu
                             </label>
 
                             <input
@@ -371,7 +376,7 @@
                         <div class="col-md-6 mb-3">
 
                             <label class="form-label">
-                                End Date
+                                Ngày kết thúc
                             </label>
 
                             <input
@@ -387,7 +392,7 @@
 
                             <img
                                     id="thumbnailPreview"
-                                    src="https://placehold.co/1200x300?text=Banner+Preview"
+                                    src="https://placehold.co/1200x300?text=Xem+trước+Banner"
                                     class="img-fluid rounded border"
                             >
 
@@ -405,7 +410,7 @@
                         class="btn btn-secondary"
                         data-bs-dismiss="modal">
 
-                    Cancel
+                    Đóng
 
                 </button>
 
@@ -413,7 +418,7 @@
                         class="btn btn-primary"
                         onclick="BannerController.submit()">
 
-                    Save Banner
+                    Lưu banner
 
                 </button>
 

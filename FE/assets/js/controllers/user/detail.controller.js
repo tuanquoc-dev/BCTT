@@ -7,7 +7,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (!slug) return;
 
-    await loadDetail(slug);
+    // GET PRODUCT
+    const product =
+        await loadDetail(slug);
+
+    // INIT COMMENT
+    await DetailCommentController.init(
+        product.id
+    );
 
 });
 
@@ -20,13 +27,16 @@ async function loadDetail(slug) {
         const res =
             await UserModel.getProductDetail(slug);
 
-        DetailView.render(
-            res.data.data
-        );
+        const product =
+            res.data.data;
+
+        DetailView.render(product);
+
+        // RETURN PRODUCT
+        return product;
 
     } catch (err) {
 
-        console.log(err);
 
     } finally {
 

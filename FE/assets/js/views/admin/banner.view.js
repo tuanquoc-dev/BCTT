@@ -9,7 +9,7 @@ const BannerView = {
             tbody.innerHTML = `
                 <tr>
                     <td colspan="9">
-                        No banners found
+                        Không có banner
                     </td>
                 </tr>
             `;
@@ -52,34 +52,37 @@ const BannerView = {
                 </td>
 
                 <td>
-                    ${banner.status === "ACTIVE"
-            ? `<span class="badge bg-success">Active</span>`
-            : `<span class="badge bg-secondary">Inactive</span>`
+                   ${banner.status === "ACTIVE"
+            ? `<span class="badge bg-success">Đang hiển thị</span>`
+            : `<span class="badge bg-secondary">Đã ẩn</span>`
         }
                 </td>
 
                 <td>
 
-                    <div class="d-flex gap-2 justify-content-center">
+    <div class="d-flex gap-2 justify-content-center">
 
-                        <button class="btn btn-sm"
-               
-                            onclick="BannerController.openUpdateModal(${banner.id})">
+        <!-- SỬA -->
+        <button
+            class="btn btn-sm btn-light border"
+            title="Chỉnh sửa banner"
+            onclick="BannerController.openUpdateModal(${banner.id})"
+        >
+            <i class="fa fa-edit text-dark"></i>
+        </button>
 
-                            <i class="fa fa-edit"></i>
+        <!-- XÓA -->
+        <button
+            class="btn btn-sm btn-light border"
+            title="Xóa banner"
+            onclick="BannerController.delete(${banner.id})"
+        >
+            <i class="fa fa-trash text-dark"></i>
+        </button>
 
-                        </button>
+    </div>
 
-                       <button class="btn btn-sm"
-                            onclick="BannerController.delete(${banner.id})">
-
-                            <i class="fa fa-trash"></i>
-
-                        </button>
-
-                    </div>
-
-                </td>
+</td>
 
             </tr>
 
@@ -96,7 +99,7 @@ const BannerView = {
 
         html += `
             <li class="page-item ${currentPage === 0 ? "disabled" : ""}">
-                <a class="page-link" href="#" data-page="${currentPage - 1}">Previous</a>
+                <a class="page-link" href="#" data-page="${currentPage - 1}">Trước</a>
             </li>
         `;
 
@@ -110,7 +113,7 @@ const BannerView = {
 
         html += `
             <li class="page-item ${currentPage === totalPages - 1 ? "disabled" : ""}">
-                <a class="page-link" href="#" data-page="${currentPage + 1}">Next</a>
+                <a class="page-link" href="#" data-page="${currentPage + 1}">Sau</a>
             </li>
         `;
 

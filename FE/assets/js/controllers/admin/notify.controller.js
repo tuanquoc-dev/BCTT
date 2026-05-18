@@ -54,10 +54,6 @@ const NotifyController = (() => {
 
             () => {
 
-                console.log(
-                    "ADMIN WS CONNECTED"
-                );
-
                 stompClient.subscribe(
 
                     "/topic/admin/notifications",

@@ -72,3 +72,11 @@ function formatTime(date) {
     return new Date(date)
         .toLocaleString("vi-VN");
 }
+
+function formatDateTime(date) {
+
+    if (!date) return "";
+
+    return new Date(date)
+        .toLocaleString("vi-VN");
+}

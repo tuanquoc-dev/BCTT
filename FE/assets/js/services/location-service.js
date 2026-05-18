@@ -22,7 +22,6 @@ const LocationService = {
             p => Number(p.code) === Number(provinceCode)
         );
 
-
         return province?.districts || [];
     },
 
@@ -35,7 +34,8 @@ const LocationService = {
             d => Number(d.code) === Number(districtCode)
         );
 
-
         return district?.wards || [];
     }
 };
+
+window.LocationService = LocationService;

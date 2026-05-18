@@ -80,3 +80,52 @@ const PublicBannerModel = {
         api.get("/public/banners", { params })
 
 };
+
+const CommentModel = {
+
+    // ======================================
+    // GET COMMENTS
+    // ======================================
+
+    getByProduct(productId) {
+
+        return api.get(
+            `/public/comments/product/${productId}`
+        );
+    },
+
+    // ======================================
+    // CREATE COMMENT
+    // ======================================
+
+    create(data) {
+
+        return api.post(
+            "/users/comments",
+            data
+        );
+    },
+
+    // ======================================
+    // UPDATE COMMENT
+    // ======================================
+
+    update(id, data) {
+
+        return api.put(
+            `/users/comments/${id}`,
+            data
+        );
+    },
+
+    // ======================================
+    // DELETE COMMENT
+    // ======================================
+
+    delete(id) {
+
+        return api.delete(
+            `/users/comments/${id}`
+        );
+    }
+};

@@ -7,9 +7,18 @@ const CartController = {
 
         CartView.render(cart);
 
-        if (!LocationService.data.length) {
+        // CHECK SERVICE
+        if (!window.LocationService) {
 
-            await LocationService.init();
+            console.error("LocationService undefined");
+
+            return;
+        }
+
+        // INIT DATA
+        if (!window.LocationService.data.length) {
+
+            await window.LocationService.init();
         }
 
         this.loadProvinces();
@@ -129,7 +138,7 @@ const CartController = {
     loadProvinces() {
 
         const provinces =
-            LocationService.getProvinces();
+            window.LocationService.getProvinces();
 
         const provinceSelect =
             document.getElementById("province");
@@ -159,7 +168,7 @@ const CartController = {
     loadDistricts(provinceCode) {
 
         const districts =
-            LocationService.getDistricts(provinceCode);
+            window.LocationService.getDistricts(provinceCode);
 
 
         const districtSelect =
@@ -188,7 +197,7 @@ const CartController = {
     loadWards(provinceCode, districtCode) {
 
         const wards =
-            LocationService.getWards(
+            window.LocationService.getWards(
                 provinceCode,
                 districtCode
             );
@@ -253,7 +262,7 @@ const CartController = {
     }
 };
 
-document.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("load", () => {
 
     CartController.load();
 });
