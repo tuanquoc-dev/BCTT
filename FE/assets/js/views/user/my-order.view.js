@@ -76,7 +76,6 @@ const MyOrderView = {
 >
     Hủy đơn
 </button>
-
                     </div>
 
                 </div>
@@ -115,6 +114,24 @@ const MyOrderView = {
                             <div class="price">
                                 ${formatPrice(item.totalPrice)}
                             </div>
+                            
+                                ${order.status === "COMPLETED" ? `
+
+        <button
+            class="btn btn-sm btn-outline-danger"
+
+            onclick="
+                MyOrderController.openReviewModal(
+                     ${item.productId},
+                    ${item.id}
+                )
+            "
+        >
+            Đánh giá
+        </button>
+
+    ` : ""}
+
 
                         </div>
 

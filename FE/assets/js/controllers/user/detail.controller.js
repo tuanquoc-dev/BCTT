@@ -20,10 +20,13 @@ async function loadDetail(slug) {
         const res =
             await UserModel.getProductDetail(slug);
 
+        const product = res.data.data;
+
         DetailView.render(
             res.data.data
         );
 
+        await ReviewController.init(product.id);
     } catch (err) {
 
         console.log(err);

@@ -69,6 +69,61 @@ const UserModel = {
             `/users/my-orders/${code}/cancel`,
             data
         );
+    },
+
+    // ======================================
+// REVIEW
+// ======================================
+
+// PUBLIC
+    getReviews(productId, star = null) {
+
+        let url =
+            `/public/reviews/product/${productId}`;
+
+        if (star) {
+            url += `?star=${star}`;
+        }
+
+        return api.get(url);
+    },
+
+    getAverageStar(productId) {
+
+        return api.get(
+            `/public/reviews/product/${productId}/average-star`
+        );
+    },
+
+    getTotalReview(productId) {
+
+        return api.get(
+            `/public/reviews/product/${productId}/total`
+        );
+    },
+
+// USER
+    createReview(data) {
+
+        return api.post(
+            `/users/reviews`,
+            data
+        );
+    },
+
+    updateReview(id, data) {
+
+        return api.put(
+            `/users/reviews/${id}`,
+            data
+        );
+    },
+
+    deleteReview(id) {
+
+        return api.delete(
+            `/users/reviews/${id}`
+        );
     }
 };
 

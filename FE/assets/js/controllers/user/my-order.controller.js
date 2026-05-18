@@ -297,6 +297,82 @@ const MyOrderController = {
                 hideLoading();
             }
         };
+    },
+
+    reviewProductId: null,
+    reviewOrderItemId: null,
+
+    openReviewModal(productId,orderItemId) {
+
+        this.reviewProductId = productId;
+
+        this.reviewOrderItemId = orderItemId;
+
+        const modal =
+            new bootstrap.Modal(
+                document.getElementById(
+                    "reviewModal"
+                )
+            );
+
+        modal.show();
+    },
+
+    bindReviewSubmit() {
+
+        document.getElementById(
+            "submitReviewBtn"
+        ).onclick = async () => {
+
+            try {
+
+                const body = {
+
+                    productId: this.reviewProductId,
+
+                    orderItemId: this.reviewOrderItemId,
+
+                    star:
+                        Number(
+                            document.getElementById(
+                                "reviewStar"
+                            ).value
+                        ),
+
+                    content:
+                    document.getElementById(
+                        "reviewContent"
+                    ).value
+
+                };
+
+                console.log(body);
+                await UserModel.createReview(body);
+
+
+                showToast(
+                    "Đánh giá thành công",
+                    "success"
+                );
+
+                bootstrap.Modal
+                    .getInstance(
+                        document.getElementById(
+                            "reviewModal"
+                        )
+                    )
+                    .hide();
+
+            } catch (e) {
+
+                console.log(e.response.data);
+
+                showToast(
+                    e.response?.data?.message || "Lỗi",
+                    "danger"
+                );
+            }
+        };
     }
 };
 
@@ -363,6 +439,7 @@ function formatDate(date) {
 document.addEventListener(
     "DOMContentLoaded",
     () => {
+        MyOrderController.bindReviewSubmit();
         MyOrderController.load();
     }
 );
